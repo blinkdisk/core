@@ -7,10 +7,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 // RecoverIndexFromPackBlob attempts to recover index blob entries from a given pack file.

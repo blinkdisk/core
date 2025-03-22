@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandLogsList struct {

@@ -14,6 +14,6 @@ Subject: {{.EventArgs.OverallStatus}} on {{.Hostname}}
 {{ range .Manifest.RootEntry.DirSummary.FailedEntries }}
   - {{.EntryPath}}: {{.Error}}{{ end }}{{ end }}{{ end }}
 {{ end }}
-{{ end }}Generated at {{ .EventTime | formatTime }} by Kopia {{ .KopiaBuildVersion }}.
+{{ end }}Generated at {{ .EventTime | formatTime }} by BlinkDisk {{ .BlinkDiskBuildVersion }}.
 
-https://kopia.io/
+https://blinkdisk.com/

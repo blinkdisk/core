@@ -6,9 +6,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type commandBlobStats struct {

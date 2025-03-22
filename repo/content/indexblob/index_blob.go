@@ -5,9 +5,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 // Manager is the API of index blob manager as used by content manager.

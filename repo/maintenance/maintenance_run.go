@@ -9,12 +9,12 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("maintenance")

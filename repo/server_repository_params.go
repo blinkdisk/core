@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 // immutableServerRepositoryParameters contains immutable parameters shared between HTTP and GRPC clients.

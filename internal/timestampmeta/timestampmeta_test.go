@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/timestampmeta"
+	"github.com/blinkdisk/core/internal/timestampmeta"
 )
 
 var (

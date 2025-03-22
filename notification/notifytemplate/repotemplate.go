@@ -8,8 +8,8 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/exp/maps"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 // ManifestType is the manifest type of notification templates.

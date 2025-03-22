@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/sender"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/sender"
 )
 
 func TestNotificationProfileAutocomplete(t *testing.T) {

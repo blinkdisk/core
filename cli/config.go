@@ -13,10 +13,10 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/repo"
 )
 
 func deprecatedFlag(w io.Writer, help string) func(_ *kingpin.ParseContext) error {
@@ -66,7 +66,7 @@ func (c *App) openRepository(ctx context.Context, required bool) (repo.Repositor
 
 	r, err := repo.Open(ctx, c.repositoryConfigFileName(), pass, c.optionsFromFlags(ctx))
 	if os.IsNotExist(err) {
-		return nil, errors.New("not connected to a repository, use 'kopia connect'")
+		return nil, errors.New("not connected to a repository, use 'blinkdisk connect'")
 	}
 
 	return r, errors.Wrap(err, "unable to open repository")

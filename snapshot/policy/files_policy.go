@@ -1,6 +1,6 @@
 package policy
 
-import "github.com/kopia/kopia/snapshot"
+import "github.com/blinkdisk/core/snapshot"
 
 // FilesPolicy describes files to be ignored when taking snapshots.
 type FilesPolicy struct {

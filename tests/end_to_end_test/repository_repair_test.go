@@ -3,12 +3,12 @@ package endtoend_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
-// when password change is enabled, replicas of kopia.repository are not embedded in blobs
-// so `kopia repository repair` will not work.
+// when password change is enabled, replicas of blinkdisk.repository are not embedded in blobs
+// so `blinkdisk repository repair` will not work.
 func (s *formatSpecificTestSuite) TestRepositoryRepair(t *testing.T) {
 	t.Parallel()
 
@@ -26,8 +26,8 @@ func (s *formatSpecificTestSuite) TestRepositoryRepair(t *testing.T) {
 	e.RunAndExpectSuccess(t, "snapshot", "create", sharedTestDataDir2)
 	e.RunAndExpectSuccess(t, "snapshot", "create", sharedTestDataDir2)
 
-	// remove kopia.repository
-	e.RunAndExpectSuccess(t, "blob", "rm", "kopia.repository")
+	// remove blinkdisk.repository
+	e.RunAndExpectSuccess(t, "blob", "rm", "blinkdisk.repository")
 	e.RunAndExpectSuccess(t, "repo", "disconnect")
 
 	// this will fail because the format blob in the repository is not found

@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 func TestIDValid(t *testing.T) {

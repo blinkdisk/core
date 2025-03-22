@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/readonly"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/readonly"
 )
 
 type gcsPointInTimeStorage struct {

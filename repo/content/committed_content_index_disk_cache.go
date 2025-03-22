@@ -10,11 +10,11 @@ import (
 	"github.com/edsrzf/mmap-go"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (

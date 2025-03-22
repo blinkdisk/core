@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 var errRetriable = errors.New("retriable")

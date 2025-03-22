@@ -9,7 +9,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 func TestSimpleBasic(t *testing.T) {

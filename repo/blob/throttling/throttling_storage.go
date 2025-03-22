@@ -5,7 +5,7 @@ package throttling
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // assume we will need to download ~20 MB for blobs of unknown length, we will refund the difference

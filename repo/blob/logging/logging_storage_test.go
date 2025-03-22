@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/logging"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/logging"
 )
 
 func TestLoggingStorage(t *testing.T) {

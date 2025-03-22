@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 // GetLockingStoragePrefixes Return all prefixes that may be maintained by Object Locking.
@@ -15,8 +15,8 @@ func GetLockingStoragePrefixes() []string {
 		prefixes = append(prefixes, string(prefix))
 	}
 
-	prefixes = append(prefixes, indexblob.V0IndexBlobPrefix, epoch.EpochManagerIndexUberPrefix, format.KopiaRepositoryBlobID,
-		format.KopiaBlobCfgBlobID)
+	prefixes = append(prefixes, indexblob.V0IndexBlobPrefix, epoch.EpochManagerIndexUberPrefix, format.BlinkDiskRepositoryBlobID,
+		format.BlinkDiskBlobCfgBlobID)
 
 	return prefixes
 }

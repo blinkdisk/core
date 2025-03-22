@@ -18,9 +18,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
 )
 
 const (

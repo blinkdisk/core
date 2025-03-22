@@ -3,7 +3,7 @@ package azure
 import (
 	"time"
 
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for Azure blob storage storage.
@@ -18,10 +18,10 @@ type Options struct {
 	StorageAccount string `json:"storageAccount"`
 
 	// Storage account access key
-	StorageKey string `json:"storageKey"     kopia:"sensitive"`
+	StorageKey string `json:"storageKey"     blinkdisk:"sensitive"`
 
 	// Alternatively provide SAS Token
-	SASToken string `json:"sasToken" kopia:"sensitive"`
+	SASToken string `json:"sasToken" blinkdisk:"sensitive"`
 
 	// the tenant-ID/client-ID/client-Secret of the service principal
 	TenantID     string

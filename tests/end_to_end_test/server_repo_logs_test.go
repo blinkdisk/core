@@ -8,12 +8,12 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 // Verify that the "diagnostic/log" blobs are uploaded to the  repository when
@@ -51,7 +51,7 @@ func TestServerRepoLogsUploadedOnShutdown(t *testing.T) {
 
 	require.NotEmpty(t, sp.BaseURL, "server base URL")
 
-	controlCli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlCli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:  sp.BaseURL,
 		Username: defaultServerControlUsername,
 		Password: sp.ServerControlPassword,

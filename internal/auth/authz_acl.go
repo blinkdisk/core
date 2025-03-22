@@ -6,13 +6,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kopia/kopia/internal/acl"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/user"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/acl"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/user"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 const defaultACLRefreshFrequency = 10 * time.Second

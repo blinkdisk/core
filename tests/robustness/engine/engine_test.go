@@ -25,15 +25,15 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
-	"github.com/kopia/kopia/tests/tools/fio"
-	"github.com/kopia/kopia/tests/tools/fswalker"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/tests/tools/fio"
+	"github.com/blinkdisk/core/tests/tools/fswalker"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 var (
@@ -57,7 +57,7 @@ func TestEngineWritefilesBasicFS(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, fsDataRepoPath, fsMetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -174,7 +174,7 @@ func TestWriteFilesBasicS3(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, s3DataRepoPath, s3MetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -221,7 +221,7 @@ func TestDeleteSnapshotS3(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, s3DataRepoPath, s3MetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -269,7 +269,7 @@ func TestSnapshotVerificationFail(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, s3DataRepoPath, s3MetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -340,7 +340,7 @@ func TestDataPersistency(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, dataRepoPath, metadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -508,7 +508,7 @@ func TestActionsFilesystem(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, fsDataRepoPath, fsMetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -557,7 +557,7 @@ func TestActionsS3(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, s3DataRepoPath, s3MetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -604,7 +604,7 @@ func TestIOLimitPerWriteAction(t *testing.T) {
 	ctx := testlogging.Context(t)
 
 	th, eng, err := newTestHarness(ctx, t, fsDataRepoPath, fsMetadataRepoPath)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) || errors.Is(err, fio.ErrEnvNotSet) {
 		t.Skip(err)
 	}
 
@@ -701,7 +701,7 @@ func TestStatsPersist(t *testing.T) {
 	defer os.RemoveAll(tmpDir)
 
 	snapStore, err := snapmeta.NewPersister(tmpDir)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
 		t.Skip(err)
 	}
 
@@ -771,7 +771,7 @@ func TestLogsPersist(t *testing.T) {
 	defer os.RemoveAll(tmpDir)
 
 	snapStore, err := snapmeta.NewPersister(tmpDir)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
 		t.Skip(err)
 	}
 
@@ -833,8 +833,8 @@ func TestLogsPersist(t *testing.T) {
 
 type testHarness struct {
 	fw *fiofilewriter.FileWriter
-	ks *snapmeta.KopiaSnapshotter
-	kp *snapmeta.KopiaPersister
+	ks *snapmeta.BlinkDiskSnapshotter
+	kp *snapmeta.BlinkDiskPersister
 
 	baseDir string
 
@@ -913,7 +913,7 @@ func (th *testHarness) Cleanup(ctx context.Context) error {
 	if th.ks != nil {
 		if sc := th.ks.ServerCmd(); sc != nil {
 			if err = sc.Process.Signal(syscall.SIGTERM); err != nil {
-				log.Println("Failed to send termination signal to kopia server process:", err)
+				log.Println("Failed to send termination signal to blinkdisk server process:", err)
 			}
 		}
 

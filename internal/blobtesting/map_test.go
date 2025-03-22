@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func TestMapStorage(t *testing.T) {

@@ -11,7 +11,7 @@ type fakeTimeInfoStruct struct {
 	ValidFor time.Duration `json:"validFor"`
 }
 
-// FakeTimeServer serves fake time signal to instances of Kopia.
+// FakeTimeServer serves fake time signal to instances of BlinkDisk.
 type FakeTimeServer struct {
 	Now func() time.Time
 }

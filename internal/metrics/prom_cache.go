@@ -10,7 +10,7 @@ import (
 
 const (
 	prometheusCounterSuffix = "_total"
-	prometheusPrefix        = "kopia_"
+	prometheusPrefix        = "blinkdisk_"
 )
 
 //nolint:gochecknoglobals

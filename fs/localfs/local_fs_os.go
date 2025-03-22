@@ -11,7 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 type filesystemDirectoryIterator struct {

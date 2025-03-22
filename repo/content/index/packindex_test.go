@@ -12,8 +12,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
 )
 
 const fakeEncryptionOverhead = 27

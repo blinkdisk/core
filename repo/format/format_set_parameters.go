@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/feature"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/feature"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // SetParameters sets the mutable repository parameters.
@@ -39,15 +39,15 @@ func (m *Manager) SetParameters(
 	}
 
 	// At this point the new blobcfg is persisted in the blob layer. Setting this
-	// here also ensures the call below properly sets retention on the kopia
+	// here also ensures the call below properly sets retention on the blinkdisk
 	// repository blob.
 	m.blobCfgBlob = blobcfg
 
-	if err := m.j.WriteKopiaRepositoryBlob(ctx, m.blobs, m.blobCfgBlob); err != nil {
+	if err := m.j.WriteBlinkDiskRepositoryBlob(ctx, m.blobs, m.blobCfgBlob); err != nil {
 		return errors.Wrap(err, "unable to write format blob")
 	}
 
-	m.cache.Remove(ctx, []blob.ID{KopiaRepositoryBlobID, KopiaBlobCfgBlobID})
+	m.cache.Remove(ctx, []blob.ID{BlinkDiskRepositoryBlobID, BlinkDiskBlobCfgBlobID})
 
 	return nil
 }

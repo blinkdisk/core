@@ -7,15 +7,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
-// KopiaBlobCfgBlobID is the identifier of a BLOB that describes BLOB retention
+// BlinkDiskBlobCfgBlobID is the identifier of a BLOB that describes BLOB retention
 // settings for the repository.
-const KopiaBlobCfgBlobID = "kopia.blobcfg"
+const BlinkDiskBlobCfgBlobID = "blinkdisk.blobcfg"
 
-// BlobStorageConfiguration is the content for `kopia.blobcfg` blob which contains the blob
+// BlobStorageConfiguration is the content for `blinkdisk.blobcfg` blob which contains the blob
 // storage configuration options.
 type BlobStorageConfiguration struct {
 	RetentionMode   blob.RetentionMode `json:"retentionMode,omitempty"`
@@ -41,7 +41,7 @@ func (r *BlobStorageConfiguration) Validate() error {
 	return nil
 }
 
-func serializeBlobCfgBytes(f *KopiaRepositoryJSON, r BlobStorageConfiguration, formatEncryptionKey []byte) ([]byte, error) {
+func serializeBlobCfgBytes(f *BlinkDiskRepositoryJSON, r BlobStorageConfiguration, formatEncryptionKey []byte) ([]byte, error) {
 	data, err := json.Marshal(r)
 	if err != nil {
 		return nil, errors.Wrap(err, "can't marshal blobCfgBlob to JSON")
@@ -60,7 +60,7 @@ func serializeBlobCfgBytes(f *KopiaRepositoryJSON, r BlobStorageConfiguration, f
 }
 
 // deserializeBlobCfgBytes decrypts and deserializes the given bytes into BlobStorageConfiguration.
-func deserializeBlobCfgBytes(j *KopiaRepositoryJSON, encryptedBlobCfgBytes, formatEncryptionKey []byte) (BlobStorageConfiguration, error) {
+func deserializeBlobCfgBytes(j *BlinkDiskRepositoryJSON, encryptedBlobCfgBytes, formatEncryptionKey []byte) (BlobStorageConfiguration, error) {
 	var (
 		plainText []byte
 		r         BlobStorageConfiguration
@@ -92,18 +92,18 @@ func deserializeBlobCfgBytes(j *KopiaRepositoryJSON, encryptedBlobCfgBytes, form
 	return r, nil
 }
 
-// WriteBlobCfgBlob writes `kopia.blobcfg` encrypted using the provided key.
-func (f *KopiaRepositoryJSON) WriteBlobCfgBlob(ctx context.Context, st blob.Storage, blobcfg BlobStorageConfiguration, formatEncryptionKey []byte) error {
+// WriteBlobCfgBlob writes `blinkdisk.blobcfg` encrypted using the provided key.
+func (f *BlinkDiskRepositoryJSON) WriteBlobCfgBlob(ctx context.Context, st blob.Storage, blobcfg BlobStorageConfiguration, formatEncryptionKey []byte) error {
 	blobCfgBytes, err := serializeBlobCfgBytes(f, blobcfg, formatEncryptionKey)
 	if err != nil {
 		return errors.Wrap(err, "unable to encrypt blobcfg bytes")
 	}
 
-	if err := st.PutBlob(ctx, KopiaBlobCfgBlobID, gather.FromSlice(blobCfgBytes), blob.PutOptions{
+	if err := st.PutBlob(ctx, BlinkDiskBlobCfgBlobID, gather.FromSlice(blobCfgBytes), blob.PutOptions{
 		RetentionMode:   blobcfg.RetentionMode,
 		RetentionPeriod: blobcfg.RetentionPeriod,
 	}); err != nil {
-		return errors.Wrapf(err, "PutBlob() failed for %q", KopiaBlobCfgBlobID)
+		return errors.Wrapf(err, "PutBlob() failed for %q", BlinkDiskBlobCfgBlobID)
 	}
 
 	return nil

@@ -1,8 +1,8 @@
 package rclone
 
 import (
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for RClone storage.

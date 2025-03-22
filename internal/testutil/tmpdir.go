@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 const (
@@ -24,7 +24,7 @@ var interestingLengths = []int{10, 50, 100, 240, 250, 260, 270}
 
 // GetInterestingTempDirectoryName returns interesting directory name used for testing.
 func GetInterestingTempDirectoryName() (string, error) {
-	td, err := os.MkdirTemp("", "kopia-test")
+	td, err := os.MkdirTemp("", "blinkdisk-test")
 	if err != nil {
 		return "", errors.Wrap(err, "unable to create temp directory")
 	}
@@ -73,7 +73,7 @@ func TempDirectory(tb testing.TB) string {
 func TempDirectoryShort(tb testing.TB) string {
 	tb.Helper()
 
-	d, err := os.MkdirTemp("", "kopia-test")
+	d, err := os.MkdirTemp("", "blinkdisk-test")
 	if err != nil {
 		tb.Fatal(errors.Wrap(err, "unable to create temp directory"))
 	}
@@ -90,7 +90,7 @@ func TempDirectoryShort(tb testing.TB) string {
 }
 
 // TempLogDirectory returns a temporary directory used for storing logs.
-// If KOPIA_LOGS_DIR is provided.
+// If BLINKDISK_LOGS_DIR is provided.
 func TempLogDirectory(t *testing.T) string {
 	t.Helper()
 
@@ -98,9 +98,9 @@ func TempLogDirectory(t *testing.T) string {
 
 	t.Helper()
 
-	logsBaseDir := os.Getenv("KOPIA_LOGS_DIR")
+	logsBaseDir := os.Getenv("BLINKDISK_LOGS_DIR")
 	if logsBaseDir == "" {
-		logsBaseDir = filepath.Join(os.TempDir(), "kopia-logs")
+		logsBaseDir = filepath.Join(os.TempDir(), "blinkdisk-logs")
 	}
 
 	logsDir := filepath.Join(logsBaseDir, cleanName+"."+clock.Now().Local().Format("20060102150405"))
@@ -108,12 +108,12 @@ func TempLogDirectory(t *testing.T) string {
 	require.NoError(t, os.MkdirAll(logsDir, logsDirPermissions))
 
 	t.Cleanup(func() {
-		if os.Getenv("KOPIA_KEEP_LOGS") != "" {
+		if os.Getenv("BLINKDISK_KEEP_LOGS") != "" {
 			t.Logf("logs preserved in %v", logsDir)
 			return
 		}
 
-		if t.Failed() && os.Getenv("KOPIA_DISABLE_LOG_DUMP_ON_FAILURE") == "" {
+		if t.Failed() && os.Getenv("BLINKDISK_DISABLE_LOG_DUMP_ON_FAILURE") == "" {
 			dumpLogs(t, logsDir)
 		}
 

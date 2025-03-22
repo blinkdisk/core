@@ -1,15 +1,15 @@
 package webdav
 
 import (
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for Filesystem-backed storage.
 type Options struct {
 	URL                                 string `json:"url"`
 	Username                            string `json:"username,omitempty"`
-	Password                            string `json:"password,omitempty"                            kopia:"sensitive"`
+	Password                            string `json:"password,omitempty"                            blinkdisk:"sensitive"`
 	TrustedServerCertificateFingerprint string `json:"trustedServerCertificateFingerprint,omitempty"`
 	AtomicWrites                        bool   `json:"atomicWrites"`
 

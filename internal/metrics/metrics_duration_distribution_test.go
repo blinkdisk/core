@@ -7,7 +7,7 @@ import (
 	prommodel "github.com/prometheus/client_model/go"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/metrics"
+	"github.com/blinkdisk/core/internal/metrics"
 )
 
 func TestDurationDistribution_Nil(t *testing.T) {
@@ -30,13 +30,13 @@ func TestDurationDistribution_NoLabels(t *testing.T) {
 	cnt := e.DurationDistribution("some_dur_dist", "some-help", metrics.IOLatencyThresholds, nil)
 	cnt.Observe(time.Second)
 
-	h1 := mustFindMetric(t, "kopia_some_dur_dist_ms", prommodel.MetricType_HISTOGRAM, nil)
+	h1 := mustFindMetric(t, "blinkdisk_some_dur_dist_ms", prommodel.MetricType_HISTOGRAM, nil)
 	require.Equal(t, uint64(1), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 1000.0, h1.GetHistogram().GetSampleSum())
 
 	cnt.Observe(30 * time.Second)
 
-	h1 = mustFindMetric(t, "kopia_some_dur_dist_ms", prommodel.MetricType_HISTOGRAM, nil)
+	h1 = mustFindMetric(t, "blinkdisk_some_dur_dist_ms", prommodel.MetricType_HISTOGRAM, nil)
 	require.Equal(t, uint64(2), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 31000.0, h1.GetHistogram().GetSampleSum())
 }
@@ -57,8 +57,8 @@ func TestDurationDistribution_WithLabels(t *testing.T) {
 	cnt1.Observe(time.Second)
 	cnt2.Observe(time.Hour)
 
-	h1 := mustFindMetric(t, "kopia_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
-	h2 := mustFindMetric(t, "kopia_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
+	h1 := mustFindMetric(t, "blinkdisk_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
+	h2 := mustFindMetric(t, "blinkdisk_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
 	require.Equal(t, uint64(1), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 1000.0, h1.GetHistogram().GetSampleSum())
 	require.Equal(t, uint64(1), h2.GetHistogram().GetSampleCount())
@@ -67,8 +67,8 @@ func TestDurationDistribution_WithLabels(t *testing.T) {
 	cnt1.Observe(30 * time.Second)
 	cnt2.Observe(50 * time.Second)
 
-	h1 = mustFindMetric(t, "kopia_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
-	h2 = mustFindMetric(t, "kopia_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
+	h1 = mustFindMetric(t, "blinkdisk_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
+	h2 = mustFindMetric(t, "blinkdisk_some_dur_dist2_ms", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
 	require.Equal(t, uint64(2), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 31000.0, h1.GetHistogram().GetSampleSum())
 	require.Equal(t, uint64(2), h2.GetHistogram().GetSampleCount())
@@ -107,8 +107,8 @@ func TestSizeDistribution_WithLabels(t *testing.T) {
 	cnt1.Observe(1000)
 	cnt2.Observe(1e6)
 
-	h1 := mustFindMetric(t, "kopia_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
-	h2 := mustFindMetric(t, "kopia_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
+	h1 := mustFindMetric(t, "blinkdisk_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
+	h2 := mustFindMetric(t, "blinkdisk_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
 	require.Equal(t, uint64(1), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 1000.0, h1.GetHistogram().GetSampleSum())
 	require.Equal(t, uint64(1), h2.GetHistogram().GetSampleCount())
@@ -117,8 +117,8 @@ func TestSizeDistribution_WithLabels(t *testing.T) {
 	cnt1.Observe(300)
 	cnt2.Observe(50e6)
 
-	h1 = mustFindMetric(t, "kopia_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
-	h2 = mustFindMetric(t, "kopia_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
+	h1 = mustFindMetric(t, "blinkdisk_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label1"})
+	h2 = mustFindMetric(t, "blinkdisk_some_size_dist", prommodel.MetricType_HISTOGRAM, map[string]string{"key1": "label2"})
 	require.Equal(t, uint64(2), h1.GetHistogram().GetSampleCount())
 	require.Equal(t, 1300.0, h1.GetHistogram().GetSampleSum())
 	require.Equal(t, uint64(2), h2.GetHistogram().GetSampleCount())

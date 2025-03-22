@@ -17,10 +17,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
-var log = logging.Module("kopia/pproflogging")
+var log = logging.Module("blinkdisk/pproflogging")
 
 // ProfileName the name of the profile (see: runtime/pprof/Lookup).
 type ProfileName string
@@ -40,18 +40,18 @@ const (
 )
 
 const (
-	// EnvVarKopiaDebugPprof environment variable that contains the pprof dump configuration.
-	EnvVarKopiaDebugPprof = "KOPIA_PPROF_LOGGING_CONFIG"
+	// EnvVarBlinkDiskDebugPprof environment variable that contains the pprof dump configuration.
+	EnvVarBlinkDiskDebugPprof = "BLINKDISK_PPROF_LOGGING_CONFIG"
 )
 
-// flags used to configure profiling in EnvVarKopiaDebugPprof.
+// flags used to configure profiling in EnvVarBlinkDiskDebugPprof.
 const (
-	// KopiaDebugFlagForceGc force garbage collection before dumping heap data.
-	KopiaDebugFlagForceGc = "forcegc"
-	// KopiaDebugFlagDebug value of the profiles `debug` parameter.
-	KopiaDebugFlagDebug = "debug"
-	// KopiaDebugFlagRate rate setting for the named profile (if available). always an integer.
-	KopiaDebugFlagRate = "rate"
+	// BlinkDiskDebugFlagForceGc force garbage collection before dumping heap data.
+	BlinkDiskDebugFlagForceGc = "forcegc"
+	// BlinkDiskDebugFlagDebug value of the profiles `debug` parameter.
+	BlinkDiskDebugFlagDebug = "debug"
+	// BlinkDiskDebugFlagRate rate setting for the named profile (if available). always an integer.
+	BlinkDiskDebugFlagRate = "rate"
 )
 
 const (
@@ -211,7 +211,7 @@ func setupProfileFractions(ctx context.Context, profileBuffers map[ProfileName]*
 			continue
 		}
 
-		s, _ := v.GetValue(KopiaDebugFlagRate)
+		s, _ := v.GetValue(BlinkDiskDebugFlagRate)
 		if s == "" {
 			// flag without an argument - set to default
 			pprofset.setter(pprofset.defaultValue)
@@ -237,7 +237,7 @@ func clearProfileFractions(profileBuffers map[ProfileName]*ProfileConfig) {
 			continue
 		}
 
-		_, ok := v.GetValue(KopiaDebugFlagRate)
+		_, ok := v.GetValue(BlinkDiskDebugFlagRate)
 		if !ok { // only care if a value might have been set before
 			continue
 		}
@@ -248,9 +248,9 @@ func clearProfileFractions(profileBuffers map[ProfileName]*ProfileConfig) {
 
 // StartProfileBuffers start profile buffers for enabled profiles/trace.  Buffers
 // are returned in an slice of buffers: CPU, Heap and trace respectively.  class is used to distinguish profiles
-// external to kopia.
+// external to blinkdisk.
 func StartProfileBuffers(ctx context.Context) {
-	ppconfigs := os.Getenv(EnvVarKopiaDebugPprof)
+	ppconfigs := os.Getenv(EnvVarBlinkDiskDebugPprof)
 	// if empty, then don't bother configuring but emit a log message - use might be expecting them to be configured
 	if ppconfigs == "" {
 		log(ctx).Warn("no profile buffers enabled")
@@ -359,7 +359,7 @@ func DumpPem(bs []byte, types string, wrt *os.File) error {
 }
 
 func parseDebugNumber(v *ProfileConfig) (int, error) {
-	debugs, ok := v.GetValue(KopiaDebugFlagDebug)
+	debugs, ok := v.GetValue(BlinkDiskDebugFlagDebug)
 	if !ok {
 		return 0, nil
 	}
@@ -397,7 +397,7 @@ func StopProfileBuffers(ctx context.Context) {
 			continue
 		}
 
-		_, ok := v.GetValue(KopiaDebugFlagForceGc)
+		_, ok := v.GetValue(BlinkDiskDebugFlagForceGc)
 		if ok {
 			log(ctx).Debug("performing GC before PPROF dump ...")
 			runtime.GC()

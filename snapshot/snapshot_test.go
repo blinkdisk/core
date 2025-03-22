@@ -10,11 +10,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func TestSnapshotsAPI(t *testing.T) {

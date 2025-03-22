@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	"github.com/blinkdisk/core/tests/testenv"
 
 	"github.com/stretchr/testify/require"
 )

@@ -8,9 +8,9 @@ import (
 
 	"go.opentelemetry.io/otel"
 
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var tracer = otel.Tracer("BlobStorage")

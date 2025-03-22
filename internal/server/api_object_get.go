@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 func handleObjectGet(ctx context.Context, rc requestContext) {

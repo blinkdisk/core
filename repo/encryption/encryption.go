@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/hkdf"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 const (

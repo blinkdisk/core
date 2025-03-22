@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type commandPolicyList struct {

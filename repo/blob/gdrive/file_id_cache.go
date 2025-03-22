@@ -3,7 +3,7 @@ package gdrive
 import (
 	"sync"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 const (

@@ -2,13 +2,13 @@ style: github
 template: CHANGELOG.tpl.md
 info:
   title: CHANGELOG
-  repository_url: https://github.com/kopia/kopia
+  repository_url: https://github.com/blinkdisk/core
 options:
   commits:
     filters:
       Scope:
       - cli
-      - kopiaui
+      - blinkdiskui
       - general
       - repository
       - server
@@ -28,7 +28,7 @@ options:
     title_maps:
       # must match .github/workflows/check-pr-title.yml
       # app|cli|ui|repository|server|providers|deps|deps-dev|site|ci|infra|general
-      kopiaui: KopiaUI App
+      blinkdiskui: BlinkDiskUI App
       cli: Command-Line Interface
       ui: Graphical User Interface
       lint: Linter
@@ -42,7 +42,7 @@ options:
       ci: CI/CD
     title_order:
       - cli
-      - kopiaui
+      - blinkdiskui
       - general
       - repository
       - server

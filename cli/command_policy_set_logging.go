@@ -7,7 +7,7 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type policyLoggingFlags struct {

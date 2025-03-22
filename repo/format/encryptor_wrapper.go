@@ -1,8 +1,8 @@
 package format
 
 import (
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/encryption"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/encryption"
 )
 
 type encryptorWrapper struct {

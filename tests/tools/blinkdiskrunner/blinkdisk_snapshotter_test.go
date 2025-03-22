@@ -1,4 +1,4 @@
-package kopiarunner
+package blinkdiskrunner
 
 import "testing"
 

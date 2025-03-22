@@ -6,15 +6,15 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobcrypto"
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/blobcrypto"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 type failingEncryptor struct {

@@ -17,15 +17,15 @@ import (
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 
-	"github.com/kopia/kopia/internal/connection"
-	"github.com/kopia/kopia/internal/dirutil"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/connection"
+	"github.com/blinkdisk/core/internal/dirutil"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("sftp")
@@ -346,7 +346,7 @@ func (s *sftpStorage) Close(ctx context.Context) error {
 }
 
 func writeKnownHostsDataStringToTempFile(data string) (string, error) {
-	tf, err := os.CreateTemp("", "kopia-known-hosts")
+	tf, err := os.CreateTemp("", "blinkdisk-known-hosts")
 	if err != nil {
 		return "", errors.Wrap(err, "error creating temp file")
 	}

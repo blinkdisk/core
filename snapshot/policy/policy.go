@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // ErrPolicyNotFound is returned when the policy is not found.

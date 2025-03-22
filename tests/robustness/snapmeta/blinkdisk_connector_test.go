@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestKopiaConnector(t *testing.T) {
+func TestBlinkDiskConnector(t *testing.T) {
 	require := require.New(t) //nolint:gocritic
 
-	t.Setenv("KOPIA_EXE", "kopia.exe")
+	t.Setenv("BLINKDISK_EXE", "blinkdisk.exe")
 
 	tc := &testConnector{}
 
@@ -66,7 +66,7 @@ func TestKopiaConnector(t *testing.T) {
 }
 
 type testConnector struct {
-	kopiaConnector
+	blinkdiskConnector
 	tcRepoPath                     string
 	tcBucketName                   string
 	tcAddr                         string

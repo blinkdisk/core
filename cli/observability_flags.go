@@ -23,8 +23,8 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo"
 )
 
 // DirMode is the directory mode for output directories.
@@ -67,16 +67,16 @@ func (c *observabilityFlags) setup(svc appServices, app *kingpin.Application) {
 	app.Flag("enable-pprof", "Expose pprof handlers").Hidden().BoolVar(&c.enablePProf)
 
 	// push gateway parameters
-	app.Flag("metrics-push-addr", "Address of push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_ADDR")).Hidden().StringVar(&c.metricsPushAddr)
-	app.Flag("metrics-push-interval", "Frequency of metrics push").Envar(svc.EnvName("KOPIA_METRICS_PUSH_INTERVAL")).Hidden().Default("5s").DurationVar(&c.metricsPushInterval)
-	app.Flag("metrics-push-job", "Job ID for to push gateway").Envar(svc.EnvName("KOPIA_METRICS_JOB")).Hidden().Default("kopia").StringVar(&c.metricsJob)
-	app.Flag("metrics-push-grouping", "Grouping for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_GROUPING")).Hidden().StringsVar(&c.metricsGroupings)
-	app.Flag("metrics-push-username", "Username for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_USERNAME")).Hidden().StringVar(&c.metricsPushUsername)
-	app.Flag("metrics-push-password", "Password for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_PASSWORD")).Hidden().StringVar(&c.metricsPushPassword)
+	app.Flag("metrics-push-addr", "Address of push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_ADDR")).Hidden().StringVar(&c.metricsPushAddr)
+	app.Flag("metrics-push-interval", "Frequency of metrics push").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_INTERVAL")).Hidden().Default("5s").DurationVar(&c.metricsPushInterval)
+	app.Flag("metrics-push-job", "Job ID for to push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_JOB")).Hidden().Default("blinkdisk").StringVar(&c.metricsJob)
+	app.Flag("metrics-push-grouping", "Grouping for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_GROUPING")).Hidden().StringsVar(&c.metricsGroupings)
+	app.Flag("metrics-push-username", "Username for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_USERNAME")).Hidden().StringVar(&c.metricsPushUsername)
+	app.Flag("metrics-push-password", "Password for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_PASSWORD")).Hidden().StringVar(&c.metricsPushPassword)
 
 	// tracing (OTLP) parameters
-	app.Flag("enable-jaeger-collector", "(DEPRECATED) Emit OpenTelemetry traces to Jaeger collector").Hidden().Envar(svc.EnvName("KOPIA_ENABLE_JAEGER_COLLECTOR")).BoolVar(&c.enableJaeger)
-	app.Flag("otlp-trace", "Send OpenTelemetry traces to OTLP collector using gRPC").Hidden().Envar(svc.EnvName("KOPIA_ENABLE_OTLP_TRACE")).BoolVar(&c.otlpTrace)
+	app.Flag("enable-jaeger-collector", "(DEPRECATED) Emit OpenTelemetry traces to Jaeger collector").Hidden().Envar(svc.EnvName("BLINKDISK_ENABLE_JAEGER_COLLECTOR")).BoolVar(&c.enableJaeger)
+	app.Flag("otlp-trace", "Send OpenTelemetry traces to OTLP collector using gRPC").Hidden().Envar(svc.EnvName("BLINKDISK_ENABLE_OTLP_TRACE")).BoolVar(&c.otlpTrace)
 
 	var formats []string
 
@@ -86,9 +86,9 @@ func (c *observabilityFlags) setup(svc appServices, app *kingpin.Application) {
 
 	sort.Strings(formats)
 
-	app.Flag("metrics-push-format", "Format to use for push gateway").Envar(svc.EnvName("KOPIA_METRICS_FORMAT")).Hidden().EnumVar(&c.metricsPushFormat, formats...)
+	app.Flag("metrics-push-format", "Format to use for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_FORMAT")).Hidden().EnumVar(&c.metricsPushFormat, formats...)
 
-	app.Flag("metrics-directory", "Directory where the metrics should be saved when kopia exits. A file per process execution will be created in this directory").Hidden().StringVar(&c.metricsOutputDir)
+	app.Flag("metrics-directory", "Directory where the metrics should be saved when blinkdisk exits. A file per process execution will be created in this directory").Hidden().StringVar(&c.metricsOutputDir)
 
 	app.PreAction(c.initialize)
 }
@@ -196,7 +196,7 @@ func (c *observabilityFlags) maybeStartMetricsPusher(ctx context.Context) error 
 
 func (c *observabilityFlags) maybeStartTraceExporter(ctx context.Context) error {
 	if c.enableJaeger {
-		return errors.New("Flag '--enable-jaeger-collector' is no longer supported, use '--otlp' instead. See https://github.com/kopia/kopia/pull/3264 for more information")
+		return errors.New("Flag '--enable-jaeger-collector' is no longer supported, use '--otlp' instead. See https://github.com/blinkdisk/core/pull/3264 for more information")
 	}
 
 	if !c.otlpTrace {
@@ -208,7 +208,7 @@ func (c *observabilityFlags) maybeStartTraceExporter(ctx context.Context) error 
 
 	r := resource.NewWithAttributes(
 		semconv.SchemaURL,
-		semconv.ServiceNameKey.String("kopia"),
+		semconv.ServiceNameKey.String("blinkdisk"),
 		semconv.ServiceVersionKey.String(repo.BuildVersion),
 	)
 

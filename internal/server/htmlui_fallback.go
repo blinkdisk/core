@@ -1,6 +1,3 @@
-//go:build nohtmlui
-// +build nohtmlui
-
 package server
 
 import (
