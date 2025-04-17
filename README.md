@@ -1,6 +1,6 @@
 # BlinkDisk Core
 
-**This is the core library used by the [BlinkDisk](https://github.com/blinkdisk/blinkdisk) desktop app.**
+**This is the core library used by the [BlinkDisk desktop app](https://github.com/blinkdisk/blinkdisk).**
 
 ## Fork of Kopia
 
