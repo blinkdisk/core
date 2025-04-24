@@ -15,13 +15,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/cachedir"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/cachedir"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestSnapshotCreate(t *testing.T) {
@@ -235,7 +235,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_all_recursive",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"**",
 					},
@@ -253,7 +253,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_all_but_text_files",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"*",
 						"!*.txt",
@@ -281,7 +281,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_1",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"/A/",
 					},
@@ -293,7 +293,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "/B/A/file.txt"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"file.txt",
 				"B/A/file.txt",
 			},
@@ -302,7 +302,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_2",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"A/",
 					},
@@ -314,7 +314,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "/B/A/file.txt"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"file.txt",
 				"B/", // directory is empty because all contents are ignored, but the empty directory is still included.
 			},
@@ -323,7 +323,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_3",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"B/A/",
 					},
@@ -335,7 +335,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "/B/A/file.txt"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"file.txt",
 				"A/file.txt",
 				"A/AA/file.txt",
@@ -347,7 +347,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_4",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"/B/A/",
 					},
@@ -359,7 +359,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "/B/A/file.txt"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"file.txt",
 				"A/file.txt",
 				"A/AA/file.txt",
@@ -371,7 +371,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_5",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"**/B/A/",
 					},
@@ -383,7 +383,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "/B/A/file.txt"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"file.txt",
 				"A/file.txt",
 				"A/AA/file.txt",
@@ -395,7 +395,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "ignore_rooted_vs_unrooted_6",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"# This is a comment  ",
 						"/test1",
@@ -405,7 +405,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 				{Name: "test1"},
 			},
 			expected: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 				"A/test1",
 			},
 		},
@@ -413,7 +413,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "multiple_ignore_files_1",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"# Exclude everything except *.txt files anywhere.",
 						"*",
@@ -423,7 +423,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 					},
 				},
 				{
-					Name: "A/.kopiaignore",
+					Name: "A/.blinkdiskignore",
 					Content: []string{
 						"*.txt",
 						"# Negate *.go from the file above in the hierarchy.",
@@ -454,7 +454,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 			desc: "multiple_ignore_files_2",
 			files: []testFileEntry{
 				{
-					Name: "/.kopiaignore",
+					Name: "/.blinkdiskignore",
 					Content: []string{
 						"# Exclude everything except *.txt files anywhere.",
 						"*",
@@ -464,7 +464,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 					},
 				},
 				{
-					Name: "A/.kopiaignore",
+					Name: "A/.blinkdiskignore",
 					Content: []string{
 						"*.txt",
 						"# Negate *.go from the file above in the hierarchy.",
@@ -473,7 +473,7 @@ func TestSnapshotCreateWithIgnore(t *testing.T) {
 					},
 				},
 				{
-					Name: "A/AB/.kopiaignore",
+					Name: "A/AB/.blinkdiskignore",
 					Content: []string{
 						"!*.txt",
 					},

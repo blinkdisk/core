@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandRepositoryValidateProvider struct {
@@ -15,7 +15,7 @@ type commandRepositoryValidateProvider struct {
 }
 
 func (c *commandRepositoryValidateProvider) setup(svc advancedAppServices, parent commandParent) {
-	cmd := parent.Command("validate-provider", "Validates that a repository provider is compatible with Kopia")
+	cmd := parent.Command("validate-provider", "Validates that a repository provider is compatible with BlinkDisk")
 
 	c.opt = providervalidation.DefaultOptions
 

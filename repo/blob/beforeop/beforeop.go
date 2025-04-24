@@ -4,7 +4,7 @@ package beforeop
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type (

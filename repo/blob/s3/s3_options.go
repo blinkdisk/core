@@ -3,7 +3,7 @@ package s3
 import (
 	"time"
 
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for S3-based storage.
@@ -20,8 +20,8 @@ type Options struct {
 	RootCA         []byte `json:"rootCA,omitempty"`
 
 	AccessKeyID     string `json:"accessKeyID"`
-	SecretAccessKey string `json:"secretAccessKey" kopia:"sensitive"`
-	SessionToken    string `json:"sessionToken"    kopia:"sensitive"`
+	SecretAccessKey string `json:"secretAccessKey" blinkdisk:"sensitive"`
+	SessionToken    string `json:"sessionToken"    blinkdisk:"sensitive"`
 
 	// Region is an optional region to pass in authorization header.
 	Region string `json:"region,omitempty"`

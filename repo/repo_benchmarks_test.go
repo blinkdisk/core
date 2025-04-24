@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 func BenchmarkWriterDedup1M(b *testing.B) {

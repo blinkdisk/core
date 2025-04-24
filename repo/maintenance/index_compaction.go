@@ -3,7 +3,7 @@ package maintenance
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/content/indexblob"
 )
 
 // runTaskIndexCompactionQuick rewrites index blobs to reduce their count but does not drop any contents.

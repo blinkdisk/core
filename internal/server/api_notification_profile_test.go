@@ -7,13 +7,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/testsender"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/testsender"
 )
 
 func TestNotificationProfile(t *testing.T) {
@@ -36,7 +36,7 @@ func TestNotificationProfile(t *testing.T) {
 
 	srvInfo := servertesting.StartServerContext(ctx, t, env, false)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             srvInfo.BaseURL,
 		TrustedServerCertificateFingerprint: srvInfo.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUIUsername,

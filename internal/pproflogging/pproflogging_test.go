@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 func TestDebug_StartProfileBuffers(t *testing.T) {
@@ -36,7 +36,7 @@ func TestDebug_StartProfileBuffers(t *testing.T) {
 		lg := &bytes.Buffer{}
 		ctx := logging.WithLogger(context.Background(), logging.ToWriter(lg))
 
-		t.Setenv(EnvVarKopiaDebugPprof, tc.in)
+		t.Setenv(EnvVarBlinkDiskDebugPprof, tc.in)
 		StartProfileBuffers(ctx)
 		require.Regexp(t, tc.rx, lg.String())
 	}
@@ -306,11 +306,11 @@ func TestDebug_LoadProfileConfigs(t *testing.T) {
 func saveLockEnv(t *testing.T) {
 	t.Helper()
 
-	oldEnv := os.Getenv(EnvVarKopiaDebugPprof)
+	oldEnv := os.Getenv(EnvVarBlinkDiskDebugPprof)
 
 	t.Cleanup(func() {
 		// restore the old environment
-		t.Setenv(EnvVarKopiaDebugPprof, oldEnv)
+		t.Setenv(EnvVarBlinkDiskDebugPprof, oldEnv)
 	})
 }
 

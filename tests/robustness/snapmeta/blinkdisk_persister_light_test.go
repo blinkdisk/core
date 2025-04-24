@@ -20,7 +20,7 @@ var (
 func TestStoreLoadDelete(t *testing.T) {
 	ctx := context.Background()
 
-	repoPath, err := os.MkdirTemp("", "kopia-test-repo-")
+	repoPath, err := os.MkdirTemp("", "blinkdisk-test-repo-")
 	assertNoError(t, err)
 
 	defer os.RemoveAll(repoPath)
@@ -35,7 +35,7 @@ func TestStoreLoadDelete(t *testing.T) {
 func TestConcurrency(t *testing.T) {
 	ctx := context.Background()
 
-	repoPath, err := os.MkdirTemp("", "kopia-test-repo-")
+	repoPath, err := os.MkdirTemp("", "blinkdisk-test-repo-")
 	assertNoError(t, err)
 
 	defer os.RemoveAll(repoPath)
@@ -66,7 +66,7 @@ func TestConcurrency(t *testing.T) {
 }
 
 // Store and test that subsequent Load succeeds.
-func (kpl *KopiaPersisterLight) testStoreLoad(ctx context.Context, t *testing.T, key string, val []byte) { //nolint:thelper
+func (kpl *BlinkDiskPersisterLight) testStoreLoad(ctx context.Context, t *testing.T, key string, val []byte) { //nolint:thelper
 	err := kpl.Store(ctx, key, val)
 	assertNoError(t, err)
 
@@ -79,7 +79,7 @@ func (kpl *KopiaPersisterLight) testStoreLoad(ctx context.Context, t *testing.T,
 }
 
 // Delete and test that subsequent Load fails.
-func (kpl *KopiaPersisterLight) testDelete(ctx context.Context, t *testing.T, key string) { //nolint:thelper
+func (kpl *BlinkDiskPersisterLight) testDelete(ctx context.Context, t *testing.T, key string) { //nolint:thelper
 	kpl.Delete(ctx, key)
 
 	_, err := kpl.Load(ctx, key)
@@ -93,7 +93,7 @@ func (kpl *KopiaPersisterLight) testDelete(ctx context.Context, t *testing.T, ke
 func TestPersistence(t *testing.T) {
 	ctx := context.Background()
 
-	repoPath, err := os.MkdirTemp("", "kopia-test-repo-")
+	repoPath, err := os.MkdirTemp("", "blinkdisk-test-repo-")
 	assertNoError(t, err)
 
 	kpl := initKPL(t, repoPath)
@@ -129,7 +129,7 @@ func TestPersistence(t *testing.T) {
 }
 
 func TestS3Connect(t *testing.T) {
-	repoPath, err := os.MkdirTemp("", "kopia-test-repo-")
+	repoPath, err := os.MkdirTemp("", "blinkdisk-test-repo-")
 	assertNoError(t, err)
 
 	// Test the S3 code path by attempting to connect to a nonexistent bucket.
@@ -146,7 +146,7 @@ func TestS3Connect(t *testing.T) {
 	os.RemoveAll(repoPath)
 }
 
-func initKPL(t *testing.T, repoPath string) *KopiaPersisterLight { //nolint:thelper
+func initKPL(t *testing.T, repoPath string) *BlinkDiskPersisterLight { //nolint:thelper
 	os.Unsetenv(S3BucketNameEnvKey)
 
 	kpl, err := NewPersisterLight("")

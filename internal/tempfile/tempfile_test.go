@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/tempfile"
+	"github.com/blinkdisk/core/internal/tempfile"
 )
 
 func TestTempFile(t *testing.T) {

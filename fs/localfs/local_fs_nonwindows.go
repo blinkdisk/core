@@ -7,7 +7,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 func platformSpecificOwnerInfo(fi os.FileInfo) fs.OwnerInfo {

@@ -1,5 +1,5 @@
 // Package epoch manages repository epochs.
-// It implements protocol described https://github.com/kopia/kopia/issues/1090 and is intentionally
+// It implements protocol described https://github.com/blinkdisk/core/issues/1090 and is intentionally
 // separate from 'content' package to be able to test in isolation.
 package epoch
 
@@ -13,10 +13,10 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/completeset"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/completeset"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // LatestEpoch represents the current epoch number in GetCompleteIndexSet.

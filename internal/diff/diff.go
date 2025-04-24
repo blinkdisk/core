@@ -11,10 +11,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 const dirMode = 0o700
@@ -397,7 +397,7 @@ func (c *Comparer) output(msg string, args ...interface{}) {
 
 // NewComparer creates a comparer for a given repository that will output the results to a given writer.
 func NewComparer(out io.Writer) (*Comparer, error) {
-	tmp, err := os.MkdirTemp("", "kopia")
+	tmp, err := os.MkdirTemp("", "blinkdisk")
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating temp directory")
 	}

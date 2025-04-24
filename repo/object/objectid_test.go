@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 func TestMain(m *testing.M) { testutil.MyTestMain(m) }

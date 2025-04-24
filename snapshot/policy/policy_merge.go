@@ -3,8 +3,8 @@ package policy
 import (
 	"sort"
 
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // MergePolicies computes the policy by applying the specified list of policies in order from most

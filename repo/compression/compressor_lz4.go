@@ -7,8 +7,8 @@ import (
 	"github.com/pierrec/lz4"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/freepool"
-	"github.com/kopia/kopia/internal/iocopy"
+	"github.com/blinkdisk/core/internal/freepool"
+	"github.com/blinkdisk/core/internal/iocopy"
 )
 
 func init() {

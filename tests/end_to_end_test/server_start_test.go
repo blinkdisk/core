@@ -13,21 +13,21 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 const defaultServerControlUsername = "server-control"
@@ -64,9 +64,9 @@ func TestServerStart(t *testing.T) {
 
 	t.Logf("detected server parameters %#v", sp)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
-		Username:                            "kopia",
+		Username:                            "blinkdisk",
 		Password:                            sp.Password,
 		TrustedServerCertificateFingerprint: sp.SHA256Fingerprint,
 		LogRequests:                         true,
@@ -74,7 +74,7 @@ func TestServerStart(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, cli.FetchCSRFTokenForTesting(ctx))
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            defaultServerControlUsername,
 		Password:                            sp.ServerControlPassword,
@@ -219,7 +219,7 @@ func TestServerStartAsyncRepoConnect(t *testing.T) {
 
 	t.Logf("detected server parameters %#v", sp)
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            defaultServerControlUsername,
 		Password:                            sp.ServerControlPassword,
@@ -259,7 +259,7 @@ func TestServerCreateAndConnectViaAPI(t *testing.T) {
 	t.Parallel()
 
 	//nolint:tenv
-	os.Setenv("KOPIA_UPGRADE_LOCK_ENABLED", "true")
+	os.Setenv("BLINKDISK_UPGRADE_LOCK_ENABLED", "true")
 
 	ctx := testlogging.Context(t)
 
@@ -289,16 +289,16 @@ func TestServerCreateAndConnectViaAPI(t *testing.T) {
 
 	t.Logf("detected server parameters %#v", sp)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
-		Username:                            "kopia",
+		Username:                            "blinkdisk",
 		Password:                            sp.Password,
 		TrustedServerCertificateFingerprint: sp.SHA256Fingerprint,
 	})
 	require.NoError(t, err)
 	require.NoError(t, cli.FetchCSRFTokenForTesting(ctx))
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            defaultServerControlUsername,
 		Password:                            sp.ServerControlPassword,
@@ -377,7 +377,7 @@ func TestConnectToExistingRepositoryViaAPI(t *testing.T) {
 
 	t.Logf("detected server parameters %#v", sp)
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            defaultServerControlUsername,
 		Password:                            sp.ServerControlPassword,
@@ -390,9 +390,9 @@ func TestConnectToExistingRepositoryViaAPI(t *testing.T) {
 	waitUntilServerStarted(ctx, t, controlClient)
 	verifyServerConnected(t, controlClient, false)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
-		Username:                            "kopia",
+		Username:                            "blinkdisk",
 		Password:                            sp.Password,
 		TrustedServerCertificateFingerprint: sp.SHA256Fingerprint,
 	})
@@ -415,7 +415,7 @@ func TestConnectToExistingRepositoryViaAPI(t *testing.T) {
 	snaps := waitForSnapshotCount(ctx, t, cli, si, 3)
 
 	// we're reproducing the bug described in, after connecting to repo via API, next snapshot size becomes zero.
-	// https://kopia.discourse.group/t/kopia-0-7-0-not-backing-up-any-files-repro-needed/136/6?u=jkowalski
+	// https://blinkdisk.discourse.group/t/blinkdisk-0-7-0-not-backing-up-any-files-repro-needed/136/6?u=jkowalski
 	minSize := snaps[0].Summary.TotalFileSize
 	maxSize := snaps[0].Summary.TotalFileSize
 
@@ -522,7 +522,7 @@ func TestServerStartInsecure(t *testing.T) {
 
 	defer wait()
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL: sp.BaseURL,
 	})
 	require.NoError(t, err)
@@ -546,7 +546,7 @@ func TestServerStartInsecure(t *testing.T) {
 	e.RunAndExpectFailure(t, "server", "start", "--ui", "--address=localhost:0")
 }
 
-func verifyServerConnected(t *testing.T, cli *apiclient.KopiaAPIClient, want bool) *serverapi.StatusResponse {
+func verifyServerConnected(t *testing.T, cli *apiclient.BlinkDiskAPIClient, want bool) *serverapi.StatusResponse {
 	t.Helper()
 
 	st, err := serverapi.Status(testlogging.Context(t), cli)
@@ -559,7 +559,7 @@ func verifyServerConnected(t *testing.T, cli *apiclient.KopiaAPIClient, want boo
 	return st
 }
 
-func verifyUIServerConnected(t *testing.T, cli *apiclient.KopiaAPIClient, want bool) *serverapi.StatusResponse {
+func verifyUIServerConnected(t *testing.T, cli *apiclient.BlinkDiskAPIClient, want bool) *serverapi.StatusResponse {
 	t.Helper()
 
 	st, err := serverapi.RepoStatus(testlogging.Context(t), cli)
@@ -572,7 +572,7 @@ func verifyUIServerConnected(t *testing.T, cli *apiclient.KopiaAPIClient, want b
 	return st
 }
 
-func waitForSnapshotCount(ctx context.Context, t *testing.T, cli *apiclient.KopiaAPIClient, src snapshot.SourceInfo, want int) []*serverapi.Snapshot {
+func waitForSnapshotCount(ctx context.Context, t *testing.T, cli *apiclient.BlinkDiskAPIClient, src snapshot.SourceInfo, want int) []*serverapi.Snapshot {
 	t.Helper()
 
 	var result []*serverapi.Snapshot
@@ -597,7 +597,7 @@ func waitForSnapshotCount(ctx context.Context, t *testing.T, cli *apiclient.Kopi
 	return result
 }
 
-func estimateSnapshotSize(ctx context.Context, t *testing.T, cli *apiclient.KopiaAPIClient, dir string) *uitask.Info {
+func estimateSnapshotSize(ctx context.Context, t *testing.T, cli *apiclient.BlinkDiskAPIClient, dir string) *uitask.Info {
 	t.Helper()
 
 	estimateTask, err := serverapi.Estimate(ctx, cli, &serverapi.EstimateRequest{
@@ -618,7 +618,7 @@ func estimateSnapshotSize(ctx context.Context, t *testing.T, cli *apiclient.Kopi
 	return estimateTask
 }
 
-func uploadMatchingSnapshots(t *testing.T, cli *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) {
+func uploadMatchingSnapshots(t *testing.T, cli *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) {
 	t.Helper()
 
 	if _, err := serverapi.UploadSnapshots(testlogging.Context(t), cli, match); err != nil {
@@ -626,7 +626,7 @@ func uploadMatchingSnapshots(t *testing.T, cli *apiclient.KopiaAPIClient, match 
 	}
 }
 
-func verifySnapshotCount(t *testing.T, cli *apiclient.KopiaAPIClient, src snapshot.SourceInfo, all bool, want int) []*serverapi.Snapshot {
+func verifySnapshotCount(t *testing.T, cli *apiclient.BlinkDiskAPIClient, src snapshot.SourceInfo, all bool, want int) []*serverapi.Snapshot {
 	t.Helper()
 
 	snapshots, err := serverapi.ListSnapshots(testlogging.Context(t), cli, src, all)
@@ -639,7 +639,7 @@ func verifySnapshotCount(t *testing.T, cli *apiclient.KopiaAPIClient, src snapsh
 	return snapshots.Snapshots
 }
 
-func verifySourceCount(t *testing.T, cli *apiclient.KopiaAPIClient, match *snapshot.SourceInfo, want int) []*serverapi.SourceStatus {
+func verifySourceCount(t *testing.T, cli *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo, want int) []*serverapi.SourceStatus {
 	t.Helper()
 
 	sources, err := serverapi.ListSources(testlogging.Context(t), cli, match)
@@ -660,13 +660,13 @@ func verifySourceCount(t *testing.T, cli *apiclient.KopiaAPIClient, match *snaps
 	return sources.Sources
 }
 
-func verifyUIServedWithCorrectTitle(t *testing.T, cli *apiclient.KopiaAPIClient, sp testutil.ServerParameters) {
+func verifyUIServedWithCorrectTitle(t *testing.T, cli *apiclient.BlinkDiskAPIClient, sp testutil.ServerParameters) {
 	t.Helper()
 
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, sp.BaseURL, http.NoBody)
 	require.NoError(t, err)
 
-	req.SetBasicAuth("kopia", sp.Password)
+	req.SetBasicAuth("blinkdisk", sp.Password)
 
 	resp, err := cli.HTTPClient.Do(req)
 	require.NoError(t, err)
@@ -676,14 +676,14 @@ func verifyUIServedWithCorrectTitle(t *testing.T, cli *apiclient.KopiaAPIClient,
 	b, err := io.ReadAll(resp.Body)
 	require.NoError(t, err)
 
-	// make sure the UI correctly inserts prefix from KOPIA_UI_TITLE_PREFIX
+	// make sure the UI correctly inserts prefix from BLINKDISK_UI_TITLE_PREFIX
 	// and it's correctly HTML-escaped.
-	if !bytes.Contains(b, []byte(`<title>Blah: &lt;script&gt;bleh&lt;/script&gt; KopiaUI`)) {
+	if !bytes.Contains(b, []byte(`<title>Blah: &lt;script&gt;bleh&lt;/script&gt; BlinkDiskUI`)) {
 		t.Fatalf("invalid title served by the UI: %v.", string(b))
 	}
 }
 
-func waitUntilServerStarted(ctx context.Context, t *testing.T, cli *apiclient.KopiaAPIClient) {
+func waitUntilServerStarted(ctx context.Context, t *testing.T, cli *apiclient.BlinkDiskAPIClient) {
 	t.Helper()
 
 	require.NoError(t, retry.PeriodicallyNoValue(ctx, 1*time.Second, 180, "wait for server start", func() error {

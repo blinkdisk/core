@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 func TestSplitterStability(t *testing.T) {

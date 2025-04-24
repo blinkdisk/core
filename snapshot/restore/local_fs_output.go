@@ -11,13 +11,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/sparsefile"
-	"github.com/kopia/kopia/internal/stat"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/sparsefile"
+	"github.com/blinkdisk/core/internal/stat"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content/indexblob"
 )
 
 type commandIndexOptimize struct {

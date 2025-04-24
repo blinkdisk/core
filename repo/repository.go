@@ -9,22 +9,22 @@ import (
 	"github.com/pkg/errors"
 	"go.opentelemetry.io/otel"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/crypto"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/throttling"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/crypto"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
 )
 
-var tracer = otel.Tracer("kopia/repository")
+var tracer = otel.Tracer("blinkdisk/repository")
 
-// Repository exposes public API of Kopia repository, including objects and manifests.
+// Repository exposes public API of BlinkDisk repository, including objects and manifests.
 //
 //nolint:interfacebloat
 type Repository interface {
@@ -143,7 +143,7 @@ func (r *directRepository) DeriveKey(purpose []byte, keyLength int) []byte {
 		return crypto.DeriveKeyFromMasterKey(r.cmgr.ContentFormat().GetMasterKey(), r.UniqueID(), purpose, keyLength)
 	}
 
-	// version of kopia <v0.9 had a bug where certain keys were derived directly from
+	// version of blinkdisk <v0.9 had a bug where certain keys were derived directly from
 	// the password and not from the random master key. This made it impossible to change
 	// password.
 	return crypto.DeriveKeyFromMasterKey(r.fmgr.FormatEncryptionKey(), r.UniqueID(), purpose, keyLength)

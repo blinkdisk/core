@@ -3,9 +3,9 @@ package cli_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestRepoStatusJSON(t *testing.T) {

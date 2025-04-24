@@ -10,11 +10,11 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/internal/mockfs"
-	vsi "github.com/kopia/kopia/internal/volumesizeinfo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/internal/mockfs"
+	vsi "github.com/blinkdisk/core/internal/volumesizeinfo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 var errSimulated = errors.New("simulated error")

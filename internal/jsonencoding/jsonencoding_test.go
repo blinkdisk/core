@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/jsonencoding"
+	"github.com/blinkdisk/core/internal/jsonencoding"
 )
 
 type MyStruct struct {

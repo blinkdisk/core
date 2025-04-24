@@ -6,10 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/hmac"
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/repo/encryption"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/hmac"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/repo/encryption"
 )
 
 // encryptionProtectionAlgorithm is the authenticated encryption algorithm used by authenticatedEncryptionProtection.

@@ -9,20 +9,20 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/feature"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/feature"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
-var log = logging.Module("kopia/repo/format")
+var log = logging.Module("blinkdisk/repo/format")
 
 // UniqueIDLengthBytes is the length of random unique ID of each repository.
 const UniqueIDLengthBytes = 32
 
-// Manager manages the contents of `kopia.repository` and `kopia.blobcfg`.
+// Manager manages the contents of `blinkdisk.repository` and `blinkdisk.blobcfg`.
 type Manager struct {
 	blobs         blob.Storage  // +checklocksignore
 	validDuration time.Duration // +checklocksignore
@@ -39,7 +39,7 @@ type Manager struct {
 	// +checklocks:mu
 	formatEncryptionKey []byte
 	// +checklocks:mu
-	j *KopiaRepositoryJSON
+	j *BlinkDiskRepositoryJSON
 	// +checklocks:mu
 	repoConfig *RepositoryConfig
 	// +checklocks:mu
@@ -121,17 +121,17 @@ func (m *Manager) RefreshCount() int {
 	return m.refreshCounter
 }
 
-// refresh reads `kopia.repository` blob, potentially from cache and decodes it.
+// refresh reads `blinkdisk.repository` blob, potentially from cache and decodes it.
 func (m *Manager) refresh(ctx context.Context) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	b, cacheMTime, err := m.readAndCacheRepositoryBlobBytes(ctx, KopiaRepositoryBlobID)
+	b, cacheMTime, err := m.readAndCacheRepositoryBlobBytes(ctx, BlinkDiskRepositoryBlobID)
 	if err != nil {
 		return errors.Wrap(err, "unable to read format blob")
 	}
 
-	j, err := ParseKopiaRepositoryJSON(b)
+	j, err := ParseBlinkDiskRepositoryJSON(b)
 	if err != nil {
 		return errors.Wrap(err, "can't parse format blob")
 	}
@@ -157,7 +157,7 @@ func (m *Manager) refresh(ctx context.Context) error {
 
 	var blobCfg BlobStorageConfiguration
 
-	if b2, _, err2 := m.readAndCacheRepositoryBlobBytes(ctx, KopiaBlobCfgBlobID); err2 == nil {
+	if b2, _, err2 := m.readAndCacheRepositoryBlobBytes(ctx, BlinkDiskBlobCfgBlobID); err2 == nil {
 		var e2 error
 
 		blobCfg, e2 = deserializeBlobCfgBytes(j, b2, formatEncryptionKey)
@@ -237,7 +237,7 @@ func (m *Manager) SupportsPasswordChange() bool {
 	return m.immutable.SupportsPasswordChange()
 }
 
-// RepositoryFormatBytes returns the bytes of `kopia.repository` blob.
+// RepositoryFormatBytes returns the bytes of `blinkdisk.repository` blob.
 // This function blocks to refresh the format blob if necessary.
 func (m *Manager) RepositoryFormatBytes(ctx context.Context) ([]byte, error) {
 	f, err := m.getOrRefreshFormat(ctx)
@@ -305,18 +305,18 @@ func (m *Manager) LoadedTime() time.Time {
 	return m.loadedTime
 }
 
-// updateRepoConfigLocked updates repository config and rewrites kopia.repository blob.
+// updateRepoConfigLocked updates repository config and rewrites blinkdisk.repository blob.
 // +checklocks:m.mu
 func (m *Manager) updateRepoConfigLocked(ctx context.Context) error {
 	if err := m.j.EncryptRepositoryConfig(m.repoConfig, m.formatEncryptionKey); err != nil {
 		return errors.New("unable to encrypt format bytes")
 	}
 
-	if err := m.j.WriteKopiaRepositoryBlob(ctx, m.blobs, m.blobCfgBlob); err != nil {
+	if err := m.j.WriteBlinkDiskRepositoryBlob(ctx, m.blobs, m.blobCfgBlob); err != nil {
 		return errors.Wrap(err, "unable to write format blob")
 	}
 
-	m.cache.Remove(ctx, []blob.ID{KopiaRepositoryBlobID})
+	m.cache.Remove(ctx, []blob.ID{BlinkDiskRepositoryBlobID})
 
 	return nil
 }
@@ -423,12 +423,12 @@ func NewManagerWithCache(
 var ErrAlreadyInitialized = errors.New("repository already initialized")
 
 // Initialize initializes the format blob in a given storage.
-func Initialize(ctx context.Context, st blob.Storage, formatBlob *KopiaRepositoryJSON, repoConfig *RepositoryConfig, blobcfg BlobStorageConfiguration, password string) error {
+func Initialize(ctx context.Context, st blob.Storage, formatBlob *BlinkDiskRepositoryJSON, repoConfig *RepositoryConfig, blobcfg BlobStorageConfiguration, password string) error {
 	// get the blob - expect ErrNotFound
 	var tmp gather.WriteBuffer
 	defer tmp.Close()
 
-	err := st.GetBlob(ctx, KopiaRepositoryBlobID, 0, -1, &tmp)
+	err := st.GetBlob(ctx, BlinkDiskRepositoryBlobID, 0, -1, &tmp)
 	if err == nil {
 		return ErrAlreadyInitialized
 	}
@@ -437,7 +437,7 @@ func Initialize(ctx context.Context, st blob.Storage, formatBlob *KopiaRepositor
 		return errors.Wrap(err, "unexpected error when checking for format blob")
 	}
 
-	err = st.GetBlob(ctx, KopiaBlobCfgBlobID, 0, -1, &tmp)
+	err = st.GetBlob(ctx, BlinkDiskBlobCfgBlobID, 0, -1, &tmp)
 	if err == nil {
 		return errors.New("possible corruption: blobcfg blob exists, but format blob is not found")
 	}
@@ -451,7 +451,7 @@ func Initialize(ctx context.Context, st blob.Storage, formatBlob *KopiaRepositor
 	}
 
 	// In legacy versions, the KeyDerivationAlgorithm may not be present in the
-	// KopiaRepositoryJson. In those cases default to using Scrypt.
+	// BlinkDiskRepositoryJson. In those cases default to using Scrypt.
 	if formatBlob.KeyDerivationAlgorithm == "" {
 		formatBlob.KeyDerivationAlgorithm = DefaultKeyDerivationAlgorithm
 	}
@@ -481,7 +481,7 @@ func Initialize(ctx context.Context, st blob.Storage, formatBlob *KopiaRepositor
 		return errors.Wrap(err, "unable to write blobcfg blob")
 	}
 
-	if err := formatBlob.WriteKopiaRepositoryBlob(ctx, st, blobcfg); err != nil {
+	if err := formatBlob.WriteBlinkDiskRepositoryBlob(ctx, st, blobcfg); err != nil {
 		return errors.Wrap(err, "unable to write format blob")
 	}
 

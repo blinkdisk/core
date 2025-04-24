@@ -20,8 +20,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (
@@ -52,7 +52,7 @@ func GenerateServerCertificate(ctx context.Context, keySize int, certValid time.
 	template := x509.Certificate{
 		SerialNumber: serialNumber,
 		Subject: pkix.Name{
-			Organization: []string{"Kopia"},
+			Organization: []string{"BlinkDisk"},
 		},
 		NotBefore: notBefore,
 		NotAfter:  notAfter,

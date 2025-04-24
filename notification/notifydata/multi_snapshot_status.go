@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const durationPrecision = 100 * time.Millisecond

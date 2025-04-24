@@ -3,7 +3,7 @@ package localfs
 import (
 	"os"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 //nolint:revive

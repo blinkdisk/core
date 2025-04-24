@@ -16,11 +16,11 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
 )
 
 const (
@@ -169,8 +169,8 @@ func (s *s3Storage) putBlob(ctx context.Context, b blob.ID, data blob.Bytes, opt
 	}
 
 	uploadInfo, err := s.cli.PutObject(ctx, s.BucketName, s.getObjectNameString(b), data.Reader(), int64(data.Length()), minio.PutObjectOptions{
-		ContentType: "application/x-kopia",
-		// Kopia already splits snapshot contents into small blobs to improve
+		ContentType: "application/x-blinkdisk",
+		// BlinkDisk already splits snapshot contents into small blobs to improve
 		// upload throughput. There is no need for further splitting
 		// through multipart uploads.
 		DisableMultipart: true,
@@ -197,7 +197,7 @@ func (s *s3Storage) putBlob(ctx context.Context, b blob.ID, data blob.Bytes, opt
 	if errors.Is(err, io.EOF) && uploadInfo.Size == 0 {
 		// special case empty stream
 		_, err = s.cli.PutObject(ctx, s.BucketName, s.getObjectNameString(b), bytes.NewBuffer(nil), 0, minio.PutObjectOptions{
-			ContentType:     "application/x-kopia",
+			ContentType:     "application/x-blinkdisk",
 			StorageClass:    storageClass,
 			RetainUntilDate: retainUntilDate,
 			Mode:            retentionMode,

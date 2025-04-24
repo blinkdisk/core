@@ -8,9 +8,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestSnapshotMigrate(t *testing.T) {
@@ -52,12 +52,12 @@ func (s *formatSpecificTestSuite) TestSnapshotMigrate(t *testing.T) {
 
 	dstenv.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", dstenv.RepoDir)
 
-	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".kopia.config"), "--all", "--parallel=5", "--overwrite-policies")
+	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".blinkdisk.config"), "--all", "--parallel=5", "--overwrite-policies")
 	dstenv.RunAndVerifyOutputLineCount(t, sourceSnapshotCount, "snapshot", "list", ".", "-a")
 	dstenv.RunAndVerifyOutputLineCount(t, sourcePolicyCount, "policy", "list")
 
 	// migrate again, which should be a no-op, and should not create any more policies/snapshots
-	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".kopia.config"), "--all", "--overwrite-policies")
+	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".blinkdisk.config"), "--all", "--overwrite-policies")
 	dstenv.RunAndVerifyOutputLineCount(t, sourceSnapshotCount, "snapshot", "list", ".", "-a")
 	dstenv.RunAndVerifyOutputLineCount(t, sourcePolicyCount, "policy", "list")
 
@@ -88,7 +88,7 @@ func (s *formatSpecificTestSuite) TestSnapshotMigrateWithIgnores(t *testing.T) {
 
 	// now set policy to ignore file2.txt and migrate
 	dstenv.RunAndExpectSuccess(t, "policy", "set", sd, "--add-ignore", "file2.txt")
-	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".kopia.config"), "--all", "--apply-ignore-rules")
+	dstenv.RunAndExpectSuccess(t, "snapshot", "migrate", "--source-config", filepath.Join(e.ConfigDir, ".blinkdisk.config"), "--all", "--apply-ignore-rules")
 
 	var manifests []cli.SnapshotManifest
 

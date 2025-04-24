@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestACL(t *testing.T) {
@@ -75,7 +75,7 @@ func TestACL(t *testing.T) {
 
 	defer foobarClientEnvironment.RunAndExpectSuccess(t, "repo", "disconnect")
 
-	delete(foobarClientEnvironment.Environment, "KOPIA_PASSWORD")
+	delete(foobarClientEnvironment.Environment, "BLINKDISK_PASSWORD")
 
 	// connect as foo@bar with password baz
 	foobarClientEnvironment.RunAndExpectSuccess(t, "repo", "connect", "server",
@@ -91,7 +91,7 @@ func TestACL(t *testing.T) {
 
 	defer anotherBarClientEnvironment.RunAndExpectSuccess(t, "repo", "disconnect")
 
-	delete(anotherBarClientEnvironment.Environment, "KOPIA_PASSWORD")
+	delete(anotherBarClientEnvironment.Environment, "BLINKDISK_PASSWORD")
 
 	// connect as foo@bar with password baz
 	anotherBarClientEnvironment.RunAndExpectSuccess(t, "repo", "connect", "server",
@@ -107,7 +107,7 @@ func TestACL(t *testing.T) {
 
 	defer aliceInWonderlandClientEnvironment.RunAndExpectSuccess(t, "repo", "disconnect")
 
-	delete(aliceInWonderlandClientEnvironment.Environment, "KOPIA_PASSWORD")
+	delete(aliceInWonderlandClientEnvironment.Environment, "BLINKDISK_PASSWORD")
 
 	// connect as alice@wonderland with password baz
 	aliceInWonderlandClientEnvironment.RunAndExpectSuccess(t, "repo", "connect", "server",

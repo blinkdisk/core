@@ -6,8 +6,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/internal/zaplogutil"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/zaplogutil"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // Printf returns a logger that uses given printf-style function to print log output.

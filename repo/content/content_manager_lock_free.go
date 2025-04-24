@@ -12,14 +12,14 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const indexBlobCompactionWarningThreshold = 1000
@@ -29,7 +29,7 @@ func (sm *SharedManager) maybeCompressAndEncryptDataForPacking(data gather.Bytes
 
 	iv := getPackedContentIV(hashOutput[:0], contentID)
 
-	// If the content is prefixed (which represents Kopia's own metadata as opposed to user data),
+	// If the content is prefixed (which represents BlinkDisk's own metadata as opposed to user data),
 	// and we're on < V2 format, disable compression even when its requested.
 	if contentID.HasPrefix() && mp.IndexVersion < index.Version2 {
 		comp = NoCompression
@@ -99,7 +99,7 @@ func writeRandomBytesToBuffer(b *gather.WriteBuffer, count int) error {
 
 func contentCacheKeyForInfo(bi Info) string {
 	// append format-specific information
-	// see https://github.com/kopia/kopia/issues/1843 for an explanation
+	// see https://github.com/blinkdisk/core/issues/1843 for an explanation
 	return fmt.Sprintf("%v.%x.%x.%x", bi.ContentID, bi.CompressionHeaderID, bi.FormatVersion, bi.EncryptionKeyID)
 }
 

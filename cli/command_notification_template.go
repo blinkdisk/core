@@ -5,8 +5,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandNotificationTemplate struct {

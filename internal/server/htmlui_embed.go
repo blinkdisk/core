@@ -6,7 +6,7 @@ package server
 import (
 	"net/http"
 
-	"github.com/kopia/htmluibuild"
+	"github.com/blinkdisk/htmluibuild"
 )
 
 // AssetFile exposes HTML UI files.

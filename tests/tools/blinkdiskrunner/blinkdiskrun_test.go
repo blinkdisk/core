@@ -1,20 +1,20 @@
-package kopiarunner
+package blinkdiskrunner
 
 import (
 	"os"
 	"testing"
 )
 
-func TestKopiaRunner(t *testing.T) {
-	origEnv := os.Getenv("KOPIA_EXE")
+func TestBlinkDiskRunner(t *testing.T) {
+	origEnv := os.Getenv("BLINKDISK_EXE")
 	if origEnv == "" {
-		t.Skip("Skipping kopia runner test: 'KOPIA_EXE' is unset")
+		t.Skip("Skipping blinkdisk runner test: 'BLINKDISK_EXE' is unset")
 	}
 
 	defer func() {
-		envErr := os.Setenv("KOPIA_EXE", origEnv)
+		envErr := os.Setenv("BLINKDISK_EXE", origEnv)
 		if envErr != nil {
-			t.Fatal("Unable to reset env KOPIA_EXE to original value")
+			t.Fatal("Unable to reset env BLINKDISK_EXE to original value")
 		}
 	}()
 
@@ -40,14 +40,14 @@ func TestKopiaRunner(t *testing.T) {
 			expRunErr:       true,
 		},
 		{
-			name:            "kopia exe no args",
+			name:            "blinkdisk exe no args",
 			exe:             origEnv,
 			args:            []string{""},
 			expNewRunnerErr: false,
 			expRunErr:       true,
 		},
 		{
-			name:            "kopia exe help",
+			name:            "blinkdisk exe help",
 			exe:             origEnv,
 			args:            []string{"--help"},
 			expNewRunnerErr: false,
@@ -55,7 +55,7 @@ func TestKopiaRunner(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Setenv("KOPIA_EXE", tt.exe)
+			t.Setenv("BLINKDISK_EXE", tt.exe)
 
 			runner, err := NewRunner("")
 			if (err != nil) != tt.expNewRunnerErr {

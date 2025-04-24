@@ -8,7 +8,7 @@ import (
 	"github.com/petar/GoLLRB/llrb"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 // Less compares with another *Info by their ContentID and return true if the current one is smaller.

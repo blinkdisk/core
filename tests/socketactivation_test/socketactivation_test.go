@@ -13,14 +13,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestServerControlSocketActivated(t *testing.T) {
 	var port int
 
-	serverExe := os.Getenv("KOPIA_SERVER_EXE")
+	serverExe := os.Getenv("BLINKDISK_SERVER_EXE")
 	if serverExe == "" {
 		t.Skip("skipping socket-activation test")
 	}
@@ -33,7 +33,7 @@ func TestServerControlSocketActivated(t *testing.T) {
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir, "--override-username=another-user", "--override-hostname=another-host")
 	env.RunAndExpectSuccess(t, "snap", "create", dir0)
 
-	// The KOPIA_EXE wrapper will set the LISTEN_PID variable for us
+	// The BLINKDISK_EXE wrapper will set the LISTEN_PID variable for us
 	env.Environment["LISTEN_FDS"] = "1"
 
 	l1, err := net.Listen("tcp", ":0")
@@ -102,7 +102,7 @@ func TestServerControlSocketActivated(t *testing.T) {
 func TestServerControlSocketActivatedTooManyFDs(t *testing.T) {
 	var port int
 
-	serverExe := os.Getenv("KOPIA_SERVER_EXE")
+	serverExe := os.Getenv("BLINKDISK_SERVER_EXE")
 	if serverExe == "" {
 		t.Skip("skipping socket-activation test")
 	}
@@ -111,7 +111,7 @@ func TestServerControlSocketActivatedTooManyFDs(t *testing.T) {
 	env := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner)
 
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir, "--override-username=another-user", "--override-hostname=another-host")
-	// The KOPIA_EXE wrapper will set the LISTEN_PID variable for us
+	// The BLINKDISK_EXE wrapper will set the LISTEN_PID variable for us
 	env.Environment["LISTEN_FDS"] = "2"
 
 	l1, err := net.Listen("tcp", ":0")

@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // CompressionPolicy specifies compression policy.

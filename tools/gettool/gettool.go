@@ -17,7 +17,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/tools/gettool/autodownload"
+	"github.com/blinkdisk/core/tools/gettool/autodownload"
 )
 
 // ToolInfo encapsulates all information required to download a tool.
@@ -83,8 +83,8 @@ var tools = map[string]ToolInfo{
 			"arm": "armv6",
 		},
 	},
-	"kopia": {
-		urlTemplate: "https://github.com/kopia/kopia/releases/download/vVERSION/kopia-VERSION-GOOS-GOARCH.EXT",
+	"blinkdisk": {
+		urlTemplate: "https://github.com/blinkdisk/core/releases/download/vVERSION/blinkdisk-VERSION-GOOS-GOARCH.EXT",
 		archMap: map[string]string{
 			"amd64": "x64",
 		},

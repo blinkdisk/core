@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/connection"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/connection"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 var (

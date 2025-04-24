@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/metrics"
+	"github.com/blinkdisk/core/internal/metrics"
 )
 
 func TestAggregation(t *testing.T) {

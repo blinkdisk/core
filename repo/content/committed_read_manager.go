@@ -10,24 +10,24 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/cacheprot"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/listcache"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/internal/ownwrites"
-	"github.com/kopia/kopia/internal/repodiag"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/cacheprot"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/listcache"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/internal/ownwrites"
+	"github.com/blinkdisk/core/internal/repodiag"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // number of bytes to read from each pack index when recovering the index.
@@ -244,7 +244,7 @@ func (sm *SharedManager) loadPackIndexesLocked(ctx context.Context) error {
 			}
 
 			if len(indexBlobs) > indexBlobCompactionWarningThreshold {
-				sm.log.Errorf("Found too many index blobs (%v), this may result in degraded performance.\n\nPlease ensure periodic repository maintenance is enabled or run 'kopia maintenance'.", len(indexBlobs))
+				sm.log.Errorf("Found too many index blobs (%v), this may result in degraded performance.\n\nPlease ensure periodic repository maintenance is enabled or run 'blinkdisk maintenance'.", len(indexBlobs))
 			}
 
 			sm.refreshIndexesAfter = sm.timeNow().Add(indexRefreshFrequency)
@@ -622,7 +622,7 @@ func NewSharedManager(ctx context.Context, st blob.Storage, prov format.Provider
 		minPreambleLength:       defaultMinPreambleLength,
 		maxPreambleLength:       defaultMaxPreambleLength,
 		paddingUnit:             defaultPaddingUnit,
-		checkInvariantsOnUnlock: os.Getenv("KOPIA_VERIFY_INVARIANTS") != "",
+		checkInvariantsOnUnlock: os.Getenv("BLINKDISK_VERIFY_INVARIANTS") != "",
 		repoLogManager:          repoLogManager,
 		contextLogger:           logging.Module(FormatLogModule)(ctx),
 

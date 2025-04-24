@@ -148,10 +148,10 @@ linters:
       - text: "Line contains TODO"
         linters:
           - godox
-      - text: "error returned from external package is unwrapped: sig: func github.com/kopia/kopia/internal/retry"
+      - text: "error returned from external package is unwrapped: sig: func github.com/blinkdisk/core/internal/retry"
         linters:
           - wrapcheck
-      - text: "error returned from external package is unwrapped: sig: func github.com/kopia/kopia/internal/connection.UsingConnection"
+      - text: "error returned from external package is unwrapped: sig: func github.com/blinkdisk/core/internal/connection.UsingConnection"
         linters:
           - wrapcheck
       - text: timeCmpSimplify
@@ -163,7 +163,7 @@ linters:
       - text: "Errors unhandled"
         linters:
           - gosec
-      - text: "unwrapped: sig: func github.com/kopia/kopia/fs.GetAllEntries"
+      - text: "unwrapped: sig: func github.com/blinkdisk/core/fs.GetAllEntries"
         linters:
           - wrapcheck
       - text: "float-compare: use require.InEpsilon"
@@ -192,7 +192,7 @@ formatters:
       sections:
         - standard
         - default
-        - prefix(github.com/kopia/kopia)
+        - prefix(github.com/blinkdisk/core)
 
 output:
   show-stats: false
