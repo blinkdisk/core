@@ -3,13 +3,16 @@
 
 package server
 
-import (
-	"net/http"
 
-	"github.com/blinkdisk/htmluibuild"
+import (
+	"embed"
+	"net/http"
 )
 
-// AssetFile exposes HTML UI files.
+//go:embed index.html
+var data embed.FS
+
+// AssetFile return a http.FileSystem instance that data backend by asset.
 func AssetFile() http.FileSystem {
-	return htmluibuild.AssetFile()
+	return http.FS(data)
 }
