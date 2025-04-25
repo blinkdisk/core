@@ -678,7 +678,7 @@ func verifyUIServedWithCorrectTitle(t *testing.T, cli *apiclient.BlinkDiskAPICli
 
 	// make sure the UI correctly inserts prefix from BLINKDISK_UI_TITLE_PREFIX
 	// and it's correctly HTML-escaped.
-	if !bytes.Contains(b, []byte(`<title>Blah: &lt;script&gt;bleh&lt;/script&gt; BlinkDiskUI`)) {
+	if !bytes.Contains(b, []byte(`<title>Blah: &lt;script&gt;bleh&lt;/script&gt; BlinkDisk UI`)) {
 		t.Fatalf("invalid title served by the UI: %v.", string(b))
 	}
 }
