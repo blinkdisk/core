@@ -122,6 +122,11 @@ type CheckRepositoryExistsRequest struct {
 	Storage blob.ConnectionInfo `json:"storage"`
 }
 
+// CheckRepositoryExistsResponse contains the repository blob data when a repository exists.
+type CheckRepositoryExistsResponse struct {
+	UniqueID string `json:"uniqueID"`
+}
+
 // ConnectRepositoryRequest contains request to connect to a repository.
 type ConnectRepositoryRequest struct {
 	Storage             blob.ConnectionInfo `json:"storage"`
