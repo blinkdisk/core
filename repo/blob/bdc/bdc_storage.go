@@ -5,10 +5,12 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -82,12 +84,82 @@ func generateRequestID() string {
 	return fmt.Sprintf("%x", b)
 }
 
+// isConnectionError checks if the error is related to connection issues that should trigger reconnection
+func isConnectionError(err error) bool {
+	if err == nil {
+		return false
+	}
+	
+	errStr := err.Error()
+	
+	// Check for broken pipe errors
+	if strings.Contains(errStr, "broken pipe") || strings.Contains(errStr, "write: broken pipe") {
+		return true
+	}
+	
+	// Check for connection refused errors
+	if strings.Contains(errStr, "connection refused") {
+		return true
+	}
+	
+	// Check for connection reset errors
+	if strings.Contains(errStr, "connection reset") {
+		return true
+	}
+	
+	// Check for network unreachable errors
+	if strings.Contains(errStr, "network is unreachable") {
+		return true
+	}
+	
+	// Check for timeout errors
+	if strings.Contains(errStr, "timeout") {
+		return true
+	}
+	
+	// Check for WebSocket close errors
+	if websocket.IsCloseError(err, websocket.CloseAbnormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived) {
+		return true
+	}
+	
+	// Check for underlying network errors
+	if netErr, ok := err.(*net.OpError); ok {
+		if netErr.Err == syscall.EPIPE || netErr.Err == syscall.ECONNRESET || netErr.Err == syscall.ECONNREFUSED {
+			return true
+		}
+	}
+	
+	return false
+}
+
+// closeConnection closes the current WebSocket connection and cleans up state
+func (s *bdcStorage) closeConnection() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	
+	if s.conn != nil {
+		s.conn.Close()
+		s.conn = nil
+	}
+	
+	// Clean up response channels
+	s.responseMu.Lock()
+	for _, ch := range s.responseChans {
+		select {
+		case ch <- nil: // Signal connection closed
+		default:
+		}
+	}
+	s.responseChans = make(map[string]chan *Response)
+	s.responseMu.Unlock()
+}
+
 // connect establishes WebSocket connection to BlinkDisk Cloud
 func (s *bdcStorage) connect(ctx context.Context) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.conn != nil {
+	if s.conn != nil && !s.closed {
 		return nil
 	}
 
@@ -145,6 +217,11 @@ func (s *bdcStorage) responseReader() {
 		var resp Response
 		if err := conn.ReadJSON(&resp); err != nil {
 			// Connection closed or error occurred
+			if isConnectionError(err) {
+				// Close connection and signal reconnection needed
+				s.closeConnection()
+			}
+			
 			s.responseMu.Lock()
 			// Send error to all pending channels
 			for _, ch := range s.responseChans {
@@ -173,16 +250,9 @@ func (s *bdcStorage) responseReader() {
 
 // sendRequest sends a request and waits for response
 func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, error) {
+	// Try to connect first
 	if err := s.connect(ctx); err != nil {
 		return nil, err
-	}
-
-	s.mu.RLock()
-	conn := s.conn
-	s.mu.RUnlock()
-
-	if conn == nil {
-		return nil, errors.New("not connected")
 	}
 
 	// Create response channel for this request
@@ -201,30 +271,71 @@ func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, e
 		s.responseMu.Unlock()
 	}()
 
-	// Use write mutex to ensure only one goroutine can write to websocket at a time
-	s.writeMu.Lock()
-	if err := conn.WriteJSON(req); err != nil {
-		s.writeMu.Unlock()
-		return nil, errors.Wrap(err, "failed to send request")
-	}
-	s.writeMu.Unlock()
+	// Retry logic for connection errors
+	maxRetries := 3
+	for attempt := 0; attempt < maxRetries; attempt++ {
+		s.mu.RLock()
+		conn := s.conn
+		s.mu.RUnlock()
 
-	// Wait for response with timeout
-	select {
-	case resp := <-responseCh:
-		if resp == nil {
-			return nil, errors.New("connection closed")
+		if conn == nil {
+			// Try to reconnect
+			if err := s.connect(ctx); err != nil {
+				return nil, err
+			}
+			s.mu.RLock()
+			conn = s.conn
+			s.mu.RUnlock()
 		}
-		// Check if the response contains an error
-		if resp.Error != "" {
-			return nil, errors.New(resp.Error)
+
+		if conn == nil {
+			return nil, errors.New("not connected")
 		}
-		return resp, nil
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	case <-time.After(30 * time.Second): // 30 second timeout
-		return nil, errors.New("request timeout")
+
+		// Use write mutex to ensure only one goroutine can write to websocket at a time
+		s.writeMu.Lock()
+		err := conn.WriteJSON(req)
+		s.writeMu.Unlock()
+		
+		if err != nil {
+			if isConnectionError(err) {
+				// Connection error detected, close connection and retry
+				s.closeConnection()
+				
+				if attempt < maxRetries-1 {
+					// Wait a bit before retrying
+					time.Sleep(time.Duration(attempt+1) * time.Second)
+					continue
+				}
+			}
+			return nil, errors.Wrap(err, "failed to send request")
+		}
+
+		// Wait for response with timeout
+		select {
+		case resp := <-responseCh:
+			if resp == nil {
+				// Connection was closed during request
+				if attempt < maxRetries-1 {
+					// Wait a bit before retrying
+					time.Sleep(time.Duration(attempt+1) * time.Second)
+					continue
+				}
+				return nil, errors.New("connection closed")
+			}
+			// Check if the response contains an error
+			if resp.Error != "" {
+				return nil, errors.New(resp.Error)
+			}
+			return resp, nil
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(30 * time.Second): // 30 second timeout
+			return nil, errors.New("request timeout")
+		}
 	}
+
+	return nil, errors.New("max retries exceeded")
 }
 
 func (s *bdcStorage) GetBlob(ctx context.Context, id blob.ID, offset, length int64, output blob.OutputBuffer) error {
@@ -489,9 +600,9 @@ func translateError(err error) error {
 		return nil
 	}
 
-	// Check for common WebSocket errors
-	if strings.Contains(err.Error(), "connection refused") {
-		return errors.Wrap(err, "connection refused")
+	// Check for connection errors that should trigger reconnection
+	if isConnectionError(err) {
+		return errors.Wrap(err, "connection error")
 	}
 
 	if strings.Contains(err.Error(), "authentication") {
