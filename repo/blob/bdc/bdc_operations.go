@@ -23,6 +23,8 @@ func (s *bdcStorage) GetBlob(ctx context.Context, id blob.ID, offset, length int
 		RequestID: generateRequestID(),
 		Type:      msgTypeGetBlob,
 		Key:       string(id),
+		Offset:    offset,
+		Length:    length,
 	}
 
 	resp, err := s.sendRequest(ctx, req)

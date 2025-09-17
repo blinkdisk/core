@@ -13,6 +13,8 @@ type Request struct {
 	Type      string `json:"type"`
 	Key       string `json:"key,omitempty"`
 	Size      int64  `json:"size,omitempty"`
+	Offset    int64  `json:"offset,omitempty"`
+	Length    int64  `json:"length,omitempty"`
 	Prefix    string `json:"prefix,omitempty"`
 	Marker    string `json:"marker,omitempty"`
 }
