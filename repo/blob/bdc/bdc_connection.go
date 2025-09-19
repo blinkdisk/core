@@ -3,10 +3,12 @@ package bdc
 import (
 	"context"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"syscall"
 	"time"
@@ -25,51 +27,51 @@ func isConnectionError(err error) bool {
 	if err == nil {
 		return false
 	}
-	
+
 	errStr := err.Error()
-	
+
 	if strings.Contains(errStr, "broken pipe") || strings.Contains(errStr, "write: broken pipe") {
 		return true
 	}
-	
+
 	if strings.Contains(errStr, "connection refused") {
 		return true
 	}
-	
+
 	if strings.Contains(errStr, "connection reset") {
 		return true
 	}
-	
+
 	if strings.Contains(errStr, "network is unreachable") {
 		return true
 	}
-	
+
 	if strings.Contains(errStr, "timeout") {
 		return true
 	}
-	
+
 	if websocket.IsCloseError(err, websocket.CloseAbnormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived) {
 		return true
 	}
-	
+
 	if netErr, ok := err.(*net.OpError); ok {
 		if netErr.Err == syscall.EPIPE || netErr.Err == syscall.ECONNRESET || netErr.Err == syscall.ECONNREFUSED {
 			return true
 		}
 	}
-	
+
 	return false
 }
 
 func (s *bdcStorage) closeConnection() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	
+
 	if s.conn != nil {
 		s.conn.Close()
 		s.conn = nil
 	}
-	
+
 	s.responseMu.Lock()
 	for _, ch := range s.responseChans {
 		select {
@@ -113,31 +115,31 @@ func (s *bdcStorage) connect(ctx context.Context) error {
 	s.conn = conn
 	s.responseChans = make(map[string]chan *Response)
 	s.responseReaderDone = make(chan struct{})
-	
+
 	go s.responseReader()
-	
+
 	return nil
 }
 
 func (s *bdcStorage) responseReader() {
 	defer close(s.responseReaderDone)
-	
+
 	for {
 		s.mu.RLock()
 		conn := s.conn
 		closed := s.closed
 		s.mu.RUnlock()
-		
+
 		if conn == nil || closed {
 			return
 		}
-		
+
 		var resp Response
 		if err := conn.ReadJSON(&resp); err != nil {
 			if isConnectionError(err) {
 				s.closeConnection()
 			}
-			
+
 			s.responseMu.Lock()
 			for _, ch := range s.responseChans {
 				select {
@@ -148,7 +150,15 @@ func (s *bdcStorage) responseReader() {
 			s.responseMu.Unlock()
 			return
 		}
-		
+
+		// Log space updates if present
+		if resp.Space != nil {
+			spaceJSON, err := json.Marshal(resp.Space)
+			if err == nil {
+				fmt.Fprintln(os.Stderr, "BDC SPACE UPDATE:", string(spaceJSON))
+			}
+		}
+
 		s.responseMu.Lock()
 		ch, exists := s.responseChans[resp.ResponseID]
 		if exists {
@@ -167,11 +177,11 @@ func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, e
 	}
 
 	responseCh := make(chan *Response, 1)
-	
+
 	s.responseMu.Lock()
 	s.responseChans[req.RequestID] = responseCh
 	s.responseMu.Unlock()
-	
+
 	defer func() {
 		s.responseMu.Lock()
 		delete(s.responseChans, req.RequestID)
@@ -201,11 +211,11 @@ func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, e
 		s.writeMu.Lock()
 		err := conn.WriteJSON(req)
 		s.writeMu.Unlock()
-		
+
 		if err != nil {
 			if isConnectionError(err) {
 				s.closeConnection()
-				
+
 				if attempt < maxRetries-1 {
 					time.Sleep(time.Duration(attempt+1) * time.Second)
 					continue

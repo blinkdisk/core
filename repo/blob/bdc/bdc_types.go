@@ -19,6 +19,12 @@ type Request struct {
 	Marker    string `json:"marker,omitempty"`
 }
 
+// SpaceStats represents space information in responses
+type SpaceStats struct {
+	Capacity int64 `json:"capacity"`
+	Used     int64 `json:"used"`
+}
+
 // Response represents a WebSocket response message
 type Response struct {
 	ResponseID string     `json:"responseId"`
@@ -28,6 +34,7 @@ type Response struct {
 	Size       int64      `json:"size,omitempty"`
 	Modified   string     `json:"modified,omitempty"`
 	Error      string     `json:"error,omitempty"`
+	Space      *SpaceStats `json:"space,omitempty"`
 }
 
 // BlobInfo represents blob information in list responses

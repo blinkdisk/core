@@ -1,9 +1,11 @@
 package bdc
 
 import (
+	"bufio"
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -412,4 +414,110 @@ func TestBdcStorageInterface(t *testing.T) {
 	var _ blob.Storage = storage
 	var _ blob.Reader = storage
 	var _ blob.Volume = storage
+}
+
+func TestBdcSpaceLogging(t *testing.T) {
+	// Create a pipe to capture stderr output
+	oldStderr := os.Stderr
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("Failed to create pipe: %v", err)
+	}
+	os.Stderr = w
+	defer func() {
+		os.Stderr = oldStderr
+		w.Close()
+	}()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		auth := r.Header.Get("Authorization")
+		if !strings.HasPrefix(auth, "Bearer ") {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		upgrader := websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool { return true },
+		}
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			t.Fatalf("Failed to upgrade to WebSocket: %v", err)
+		}
+		defer conn.Close()
+
+		for {
+			var req Request
+			err := conn.ReadJSON(&req)
+			if err != nil {
+				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+					t.Errorf("WebSocket error: %v", err)
+				}
+				return
+			}
+
+			var resp Response
+			resp.ResponseID = req.RequestID
+
+			// Add space information to the response
+			resp.Space = &SpaceStats{
+				Capacity: 1000000,
+				Used:     50000,
+			}
+
+			switch req.Type {
+			case msgTypeGetBlob:
+				resp.URL = "https://s3.blinkdisk.com/download/" + req.Key
+			}
+
+			if err := conn.WriteJSON(resp); err != nil {
+				t.Errorf("Failed to send response: %v", err)
+				return
+			}
+		}
+	}))
+	defer server.Close()
+
+	opts := &Options{
+		URL:   server.URL,
+		Token: "test-token",
+	}
+
+	storage, err := New(context.Background(), opts, true)
+	if err != nil {
+		t.Fatalf("Failed to create storage: %v", err)
+	}
+	defer storage.Close(context.Background())
+
+	// Perform an operation that will trigger a response with space info
+	output := &gather.WriteBuffer{}
+	err = storage.GetBlob(context.Background(), blob.ID("test-blob"), 0, 0, output)
+	if err != nil {
+		t.Fatalf("Failed to get blob: %v", err)
+	}
+
+	// Close the write end of the pipe to signal EOF
+	w.Close()
+
+	// Read the captured stderr output
+	scanner := bufio.NewScanner(r)
+	var foundSpaceLog bool
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "BDC SPACE UPDATE:") {
+			foundSpaceLog = true
+			expected := `BDC SPACE UPDATE: {"capacity":1000000,"used":50000}`
+			if line != expected {
+				t.Errorf("Expected space log line %q, got %q", expected, line)
+			}
+			break
+		}
+	}
+
+	if !foundSpaceLog {
+		t.Error("Expected to find BDC SPACE UPDATE log message in stderr")
+	}
+
+	if err := scanner.Err(); err != nil {
+		t.Errorf("Error reading stderr: %v", err)
+	}
 }
