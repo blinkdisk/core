@@ -10,5 +10,8 @@ type Options struct {
 	// Token is used for authentication with the BlinkDisk Cloud service.
 	Token string `json:"token" blinkdisk:"sensitive"`
 
+	// Version is used to specify the BlinkDisk Cloud API version.
+	Version int `json:"version"`
+
 	throttling.Limits
 }
