@@ -151,12 +151,15 @@ func (s *bdcStorage) responseReader() {
 			return
 		}
 
-		// Log space updates if present
 		if resp.Space != nil {
 			spaceJSON, err := json.Marshal(resp.Space)
 			if err == nil {
 				fmt.Fprintln(os.Stderr, "BDC SPACE UPDATE:", string(spaceJSON))
 			}
+		}
+
+		if resp.Error == "STORAGE_DELETED" {
+			fmt.Fprintln(os.Stderr, "BDC STORAGE DELETED: ")
 		}
 
 		s.responseMu.Lock()
