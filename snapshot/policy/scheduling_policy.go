@@ -80,6 +80,9 @@ type SchedulingPolicyDefinition struct {
 	RunMissed       snapshot.SourceInfo `json:"runMissed,omitempty"`
 }
 
+// defaultIntervalSeconds is the value for IntervalSeconds.
+const defaultIntervalSeconds = 86400
+
 // defaultRunMissed is the value for RunMissed.
 const defaultRunMissed = true
 
