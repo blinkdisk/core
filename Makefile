@@ -216,11 +216,7 @@ endif
 
 # goreleaser - builds packages for all platforms when on linux/amd64,
 # but don't publish here, we'll upload to GitHub separately.
-GORELEASER_OPTIONS=--rm-dist --parallelism=6 --skip-publish --skip-sign
-
-ifeq ($(CI_TAG),)
-	GORELEASER_OPTIONS+=--snapshot
-endif
+GORELEASER_OPTIONS=--rm-dist --parallelism=6 --skip-publish --skip-sign --snapshot
 
 print_build_info:
 	@echo CI_TAG: $(CI_TAG)
