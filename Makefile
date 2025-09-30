@@ -182,7 +182,7 @@ endif
 # On Linux use use goreleaser which will build BlinkDisk for all supported Linux architectures
 # and creates .tar.gz, rpm and deb packages.
 dist/blinkdisk_linux_x64/blinkdisk dist/blinkdisk_linux_arm64/blinkdisk dist/blinkdisk_linux_armv7l/blinkdisk: $(all_go_sources)
-go build $(BLINKDISK_BUILD_FLAGS) -o $(blinkdisk_ui_embedded_exe) -tags "$(BLINKDISK_BUILD_TAGS)" github.com/blinkdisk/core
+	go build $(BLINKDISK_BUILD_FLAGS) -o $(blinkdisk_ui_embedded_exe) -tags "$(BLINKDISK_BUILD_TAGS)" github.com/blinkdisk/core
 
 # builds blinkdisk CLI binary that will be later used as a server for blinkdisk-ui.
 blinkdisk: $(blinkdisk_ui_embedded_exe)
