@@ -179,13 +179,11 @@ endif
 # and creates .tar.gz, rpm and deb packages.
 dist/blinkdisk_linux_x64/blinkdisk dist/blinkdisk_linux_arm64/blinkdisk dist/blinkdisk_linux_armv7l/blinkdisk: $(all_go_sources)
 	$(MAKE) goreleaser
-	mv dist/core_linux_arm64 dist/blinkdisk_linux_arm64
-	mv dist/core_linux_amd64 dist/blinkdisk_linux_amd64
-	mv dist/core_linux_arm_6 dist/blinkdisk_linux_arm_6
-	rm -f dist/blinkdisk_linux_x64
-	ln -sf blinkdisk_linux_amd64 dist/blinkdisk_linux_x64
-	rm -f dist/blinkdisk_linux_armv7l
-	ln -sf blinkdisk_linux_arm_6 dist/blinkdisk_linux_armv7l
+	cd dist/
+	mv core_linux_arm64 blinkdisk_linux_arm64
+	mv core_linux_amd64 blinkdisk_linux_x64
+	mv core_linux_arm_6 blinkdisk_linux_armv7l
+	cd ..
 
 # builds blinkdisk CLI binary that will be later used as a server for blinkdisk-ui.
 blinkdisk: $(blinkdisk_ui_embedded_exe)
