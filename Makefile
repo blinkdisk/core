@@ -180,8 +180,8 @@ endif
 dist/blinkdisk_linux_x64/blinkdisk dist/blinkdisk_linux_arm64/blinkdisk dist/blinkdisk_linux_armv7l/blinkdisk: $(all_go_sources)
 	$(MAKE) goreleaser
 	mv dist/core_linux_arm64 dist/blinkdisk_linux_arm64
-	mv dist/core_linux_amd64/core dist/blinkdisk_linux_amd64
-	mv dist/core_linux_arm_6/core dist/blinkdisk_linux_arm_6
+	mv dist/core_linux_amd64 dist/blinkdisk_linux_amd64
+	mv dist/core_linux_arm_6 dist/blinkdisk_linux_arm_6
 	rm -f dist/blinkdisk_linux_x64
 	ln -sf blinkdisk_linux_amd64 dist/blinkdisk_linux_x64
 	rm -f dist/blinkdisk_linux_armv7l
