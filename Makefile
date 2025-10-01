@@ -189,6 +189,8 @@ blinkdisk: $(blinkdisk_ui_embedded_exe)
 
 ci-build:
 	$(MAKE) blinkdisk
+	mkdir -p ../electron/binaries
+	cp $(blinkdisk_ui_embedded_exe) ../electron/binaries/core$(exe_suffix)
 
 download-rclone:
 	go run ./tools/gettool --tool rclone:$(RCLONE_VERSION) --output-dir dist/blinkdisk_linux_amd64/ --goos=linux --goarch=amd64
