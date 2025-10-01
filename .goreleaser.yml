@@ -1,18 +1,16 @@
 # This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
 builds:
-- env:
-  - CGO_ENABLED=0
-  goos:
-  - linux
-  - freebsd
-  - openbsd
-  goarch:
-    - amd64
-    - arm
-    - arm64
-  ldflags:
-  - -s -w -X "github.com/blinkdisk/core/repo.BuildVersion={{.Version}}" -X "github.com/blinkdisk/core/repo.BuildInfo={{.Commit}}" -X "github.com/blinkdisk/core/repo.BuildGitHubRepo={{.Env.GITHUB_REPOSITORY}}"
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    ldflags:
+      - -s -w -X "github.com/blinkdisk/core/repo.BuildVersion={{.Version}}" -X "github.com/blinkdisk/core/repo.BuildInfo={{.Commit}}" -X "github.com/blinkdisk/core/repo.BuildGitHubRepo={{.Env.GITHUB_REPOSITORY}}"
 release:
   draft: false
 archives:
@@ -27,15 +25,15 @@ archives:
     name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
     wrap_in_directory: true
     format_overrides:
-    - goos: windows
-      format: zip
+      - goos: windows
+        format: zip
     files:
       - LICENSE
       - README.md
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
-  name_template: '{{ .Env.BLINKDISK_VERSION_NO_PREFIX }}'
+  name_template: "{{ .Env.BLINKDISK_VERSION_NO_PREFIX }}"
 nfpms:
   - homepage: https://blinkdisk.com
     vendor: BlinkDisk Project
@@ -46,8 +44,8 @@ nfpms:
     replacements:
       arm: armhf
     formats:
-    - deb
-    - rpm
+      - deb
+      - rpm
     bindir: /usr/bin
     overrides:
       rpm:
@@ -64,5 +62,5 @@ signs:
 changelog:
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - "^docs:"
+      - "^test:"

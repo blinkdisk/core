@@ -182,15 +182,17 @@ endif
 # On Linux use use goreleaser which will build BlinkDisk for all supported Linux architectures
 # and creates .tar.gz, rpm and deb packages.
 dist/blinkdisk_linux_x64/blinkdisk dist/blinkdisk_linux_arm64/blinkdisk dist/blinkdisk_linux_armv7l/blinkdisk: $(all_go_sources)
-	go build $(BLINKDISK_BUILD_FLAGS) -o $(blinkdisk_ui_embedded_exe) -tags "$(BLINKDISK_BUILD_TAGS)" github.com/blinkdisk/core
+	$(MAKE) goreleaser
+	rm -f dist/blinkdisk_linux_x64
+	ln -sf blinkdisk_linux_amd64 dist/blinkdisk_linux_x64
+	rm -f dist/blinkdisk_linux_armv7l
+	ln -sf blinkdisk_linux_arm_6 dist/blinkdisk_linux_armv7l
 
 # builds blinkdisk CLI binary that will be later used as a server for blinkdisk-ui.
 blinkdisk: $(blinkdisk_ui_embedded_exe)
 
 ci-build:
 	$(MAKE) blinkdisk
-	mkdir -p ../electron/binaries
-	cp $(blinkdisk_ui_embedded_exe) ../electron/binaries/core$(exe_suffix)
 
 download-rclone:
 	go run ./tools/gettool --tool rclone:$(RCLONE_VERSION) --output-dir dist/blinkdisk_linux_amd64/ --goos=linux --goarch=amd64
@@ -207,6 +209,15 @@ ci-publish-coverage:
 ifeq ($(GOOS)/$(GOARCH),linux/amd64)
 	-bash -c "bash <(curl -s https://codecov.io/bash) -f coverage.txt"
 endif
+
+# goreleaser - builds packages for all platforms when on linux/amd64,
+# but don't publish here, we'll upload to GitHub separately.
+GORELEASER_OPTIONS=--rm-dist --parallelism=6 --skip-publish --skip-sign --snapshot
+
+goreleaser: export GITHUB_REPOSITORY:=$(GITHUB_REPOSITORY)
+goreleaser: $(goreleaser) print_build_info
+	-git diff | cat
+	$(goreleaser) release $(GORELEASER_OPTIONS)
 
 print_build_info:
 	@echo CI_TAG: $(CI_TAG)
