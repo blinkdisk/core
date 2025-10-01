@@ -104,44 +104,11 @@ endif
 # tool versions
 GOLANGCI_LINT_VERSION=2.1.2
 CHECKLOCKS_VERSION=release-20241104.0
-NODE_VERSION=20.15.1
 HUGO_VERSION=0.113.0
 GOTESTSUM_VERSION=1.11.0
 GORELEASER_VERSION=v0.176.0
 RCLONE_VERSION=1.68.2
 GITCHGLOG_VERSION=0.15.1
-
-# nodejs / npm
-node_base_dir=$(TOOLS_DIR)$(slash)node-$(NODE_VERSION)
-ifeq ($(GOOS),windows)
-node_dir=$(node_base_dir)
-else
-node_dir=$(node_base_dir)$(slash)bin
-endif
-npm=$(node_dir)$(slash)npm$(cmd_suffix)
-npm_flags=--scripts-prepend-node-path=auto
-
-npm_install_or_ci:=install
-ifneq ($(CI),)
-npm_install_or_ci:=ci
-endif
-
-# put NPM in the path
-PATH:=$(node_dir)$(path_separator)$(PATH)
-ifeq ($(GOOS),$(filter $(GOOS),openbsd freebsd))
-npm=/usr/local/bin/npm
-endif
-
-$(npm):
-ifeq ($(GOOS),openbsd)
-	@echo Use pkg_add to install node
-	@exit 1
-else ifeq ($(GOOS),freebsd)
-	@echo Use pkg to install npm
-	@exit 1
-else
-	go run github.com/blinkdisk/core/tools/gettool -tool node:$(NODE_VERSION) --output-dir $(node_base_dir)
-endif
 
 # linter
 linter_dir=$(TOOLS_DIR)$(slash)golangci-lint-$(GOLANGCI_LINT_VERSION)
@@ -307,7 +274,7 @@ else
 maybehugo=
 endif
 
-ALL_TOOL_VERSIONS=node:$(NODE_VERSION),linter:$(GOLANGCI_LINT_VERSION),hugo:$(HUGO_VERSION),rclone:$(RCLONE_VERSION),gotestsum:$(GOTESTSUM_VERSION),goreleaser:$(GORELEASER_VERSION),blinkdisk:0.8.4,blinkdisk:0.17.0,gitchglog:$(GITCHGLOG_VERSION)
+ALL_TOOL_VERSIONS=linter:$(GOLANGCI_LINT_VERSION),hugo:$(HUGO_VERSION),rclone:$(RCLONE_VERSION),gotestsum:$(GOTESTSUM_VERSION),goreleaser:$(GORELEASER_VERSION),blinkdisk:0.8.4,blinkdisk:0.17.0,gitchglog:$(GITCHGLOG_VERSION)
 
 verify-all-tool-checksums:
 	go run github.com/blinkdisk/core/tools/gettool --test-all \

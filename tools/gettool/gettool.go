@@ -116,12 +116,6 @@ var tools = map[string]ToolInfo{
 			"arm": "armv6",
 		},
 	},
-	"node": {
-		urlTemplate:         "https://nodejs.org/dist/vVERSION/node-vVERSION-GOOS-GOARCH.EXT",
-		osMap:               map[string]string{"windows": "win"},
-		archMap:             map[string]string{"arm": "armv7l", "amd64": "x64"},
-		stripPathComponents: 1,
-	},
 }
 
 //nolint:gochecknoglobals
