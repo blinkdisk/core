@@ -174,10 +174,6 @@ dist/blinkdisk_windows_amd64/blinkdisk.exe: $(all_go_sources)
 ifneq ($(WINDOWS_SIGN_TOOL),)
 	tools/.tools/signtool.exe sign //sha1 $(WINDOWS_CERT_SHA1) //fd sha256 //tr "http://timestamp.digicert.com" //v dist/blinkdisk_windows_amd64/blinkdisk.exe
 endif
-	mkdir -p dist/blinkdisk-$(BLINKDISK_VERSION_NO_PREFIX)-windows-x64
-	cp dist/blinkdisk_windows_amd64/blinkdisk.exe LICENSE README.md dist/blinkdisk-$(BLINKDISK_VERSION_NO_PREFIX)-windows-x64
-	(cd dist && zip -r blinkdisk-$(BLINKDISK_VERSION_NO_PREFIX)-windows-x64.zip blinkdisk-$(BLINKDISK_VERSION_NO_PREFIX)-windows-x64)
-	rm -rf dist/blinkdisk-$(BLINKDISK_VERSION_NO_PREFIX)-windows-x64
 
 # On Linux use use goreleaser which will build BlinkDisk for all supported Linux architectures
 # and creates .tar.gz, rpm and deb packages.
