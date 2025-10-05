@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"runtime"
 
 	"github.com/pkg/errors"
 
@@ -26,7 +27,12 @@ func (s *Server) getMountController(ctx context.Context, rep repo.Repository, oi
 
 	log(ctx).Debugf("mount controller for %v not found, starting", oid)
 
-	c, err := mount.Directory(ctx, snapshotfs.DirectoryEntry(rep, oid, nil), "*", mount.Options{})
+	webdav := false
+	if runtime.GOOS == "darwin" {
+		webdav = true
+	}
+
+    c, err := mount.Directory(ctx, snapshotfs.DirectoryEntry(rep, oid, nil), "*", mount.Options{PreferWebDAV: webdav})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to mount")
 	}
