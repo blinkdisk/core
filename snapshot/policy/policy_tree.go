@@ -55,8 +55,7 @@ var (
 	}
 
 	defaultSchedulingPolicy = SchedulingPolicy{
-		IntervalSeconds: defaultIntervalSeconds,
-		RunMissed:       NewOptionalBool(defaultRunMissed),
+		RunMissed: NewOptionalBool(defaultRunMissed),
 	}
 
 	defaultOSSnapshotPolicy = OSSnapshotPolicy{

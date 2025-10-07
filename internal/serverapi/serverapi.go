@@ -115,6 +115,8 @@ type MultipleSourceActionResponse struct {
 type CreateRepositoryRequest struct {
 	ConnectRepositoryRequest
 	NewRepositoryOptions repo.NewRepositoryOptions `json:"options"`
+	GlobalPolicy         *policy.Policy            `json:"globalPolicy,omitempty"`
+	UserPolicy           *policy.Policy            `json:"userPolicy,omitempty"`
 }
 
 // CheckRepositoryExistsRequest returns success if a repository exists in a given storage, ErrorNotInitialized if not.

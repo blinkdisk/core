@@ -22,6 +22,7 @@ import (
 	"github.com/blinkdisk/core/repo/hashing"
 	"github.com/blinkdisk/core/repo/maintenance"
 	"github.com/blinkdisk/core/repo/splitter"
+	"github.com/blinkdisk/core/snapshot"
 	"github.com/blinkdisk/core/snapshot/policy"
 )
 
@@ -130,8 +131,21 @@ func handleRepoCreate(ctx context.Context, rc requestContext) (interface{}, *api
 	if err := repo.WriteSession(ctx, newRepo, repo.WriteSessionOptions{
 		Purpose: "handleRepoCreate",
 	}, func(ctx context.Context, w repo.RepositoryWriter) error {
-		if err := policy.SetPolicy(ctx, w, policy.GlobalPolicySourceInfo, policy.DefaultPolicy); err != nil {
+		if req.UserPolicy == nil {
+			req.GlobalPolicy = policy.DefaultPolicy
+		}
+
+		if err := policy.SetPolicy(ctx, w, policy.GlobalPolicySourceInfo, req.GlobalPolicy); err != nil {
 			return errors.Wrap(err, "set global policy")
+		}
+
+		if req.UserPolicy != nil {
+			if err := policy.SetPolicy(ctx, w, snapshot.SourceInfo{
+				Host:     w.ClientOptions().Hostname,
+				UserName: w.ClientOptions().Username,
+			}, req.UserPolicy); err != nil {
+				return errors.Wrap(err, "set user policy")
+			}
 		}
 
 		p := maintenance.DefaultParams()
