@@ -20,6 +20,8 @@ var omittedDefinitionFields = map[string]bool{
 	"SchedulingPolicyDefinition.NoParentTimesOfDay":     true, // special
 	"CompressionPolicyDefinition.NoParentOnlyCompress":  true,
 	"CompressionPolicyDefinition.NoParentNeverCompress": true,
+	"Definition.Name":                                   true,
+	"Definition.Emoji":                                  true,
 }
 
 func TestPolicyDefinition(t *testing.T) {

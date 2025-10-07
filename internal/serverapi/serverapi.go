@@ -52,6 +52,8 @@ type SourcesResponse struct {
 
 // SourceStatus describes the status of a single source.
 type SourceStatus struct {
+	Name             string                  `json:"name,omitempty"`
+	Emoji            string                  `json:"emoji,omitempty"`
 	Source           snapshot.SourceInfo     `json:"source"`
 	Status           string                  `json:"status"`
 	SchedulingPolicy policy.SchedulingPolicy `json:"schedule"`

@@ -18,6 +18,14 @@ func MergePolicies(policies []*Policy, si snapshot.SourceInfo) (*Policy, *Defini
 	merged.Labels = LabelsForSource(si)
 
 	for _, p := range policies {
+		if p.Name != "" && merged.Name == "" {
+			merged.Name = p.Name
+		}
+
+		if p.Emoji != "" && merged.Emoji == "" {
+			merged.Emoji = p.Emoji
+		}
+
 		merged.RetentionPolicy.Merge(p.RetentionPolicy, &def.RetentionPolicy, p.Target())
 		merged.FilesPolicy.Merge(p.FilesPolicy, &def.FilesPolicy, p.Target())
 		merged.ErrorHandlingPolicy.Merge(p.ErrorHandlingPolicy, &def.ErrorHandlingPolicy, p.Target())
