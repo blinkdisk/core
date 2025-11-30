@@ -49,6 +49,11 @@ type sourceManager struct {
 	snapshotRequests chan struct{}
 	wg               sync.WaitGroup
 
+	// +checklocks:sourceMutex
+	name string
+	// +checklocks:sourceMutex
+	emoji string
+
 	sourceMutex sync.RWMutex
 	// +checklocks:sourceMutex
 	uploader *upload.Uploader
@@ -81,6 +86,8 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 	defer s.sourceMutex.RUnlock()
 
 	st := &serverapi.SourceStatus{
+		Name:             s.name,
+		Emoji:            s.emoji,
 		Source:           s.src,
 		Status:           s.state,
 		NextSnapshotTime: s.nextSnapshotTime,
@@ -448,6 +455,8 @@ func (s *sourceManager) refreshStatus(ctx context.Context) {
 	s.sourceMutex.Lock()
 	defer s.sourceMutex.Unlock()
 
+	s.name = pol.Name
+	s.emoji = pol.Emoji
 	s.pol = pol.SchedulingPolicy
 	s.manifestsSinceLastCompleteSnapshot = nil
 	s.lastCompleteSnapshot = nil
