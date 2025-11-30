@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"sort"
 	"time"
@@ -173,7 +174,16 @@ func handleRepoExists(ctx context.Context, rc requestContext) (any, *apiError) {
 		return nil, internalServerError(err)
 	}
 
-	return serverapi.Empty{}, nil
+	blobData := tmp.ToByteSlice()
+
+	var repoJSON format.KopiaRepositoryJSON
+	if err := json.Unmarshal(blobData, &repoJSON); err != nil {
+		return nil, internalServerError(errors.Wrap(err, "failed to decode repository JSON"))
+	}
+
+	return &serverapi.CheckRepositoryExistsResponse{
+		UniqueID: base64.StdEncoding.EncodeToString(repoJSON.UniqueID),
+	}, nil
 }
 
 func handleRepoConnect(ctx context.Context, rc requestContext) (any, *apiError) {
