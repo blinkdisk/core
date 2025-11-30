@@ -37,7 +37,8 @@ import (
 )
 
 // DefaultCheckpointInterval is the default frequency of mid-upload checkpointing.
-const DefaultCheckpointInterval = 45 * time.Minute
+const DefaultCheckpointInterval = 5 * time.Minute
+const MaximumCheckpointInterval = 45 * time.Minute
 
 var (
 	uploadLog    = logging.Module("uploader")
@@ -1278,8 +1279,8 @@ func (u *Uploader) Upload(
 	u.Progress.UploadStarted()
 	defer u.Progress.UploadFinished()
 
-	if u.CheckpointInterval > DefaultCheckpointInterval {
-		return nil, errors.Errorf("checkpoint interval cannot be greater than %v", DefaultCheckpointInterval)
+	if u.CheckpointInterval > MaximumCheckpointInterval {
+		return nil, errors.Errorf("checkpoint interval cannot be greater than %v", MaximumCheckpointInterval)
 	}
 
 	parallel := u.effectiveParallelFileReads(policyTree.EffectivePolicy())
