@@ -103,12 +103,7 @@ vet:
 go-modules:
 	go mod download
 
-app-node-modules: $(npm)
-ifeq ($(GOARCH),amd64)
-	$(MAKE) -C app deps
-endif
-
-ci-setup: go-modules all-tools app-node-modules
+ci-setup: go-modules all-tools
 ifeq ($(CI),true)
 	-git checkout go.mod go.sum
 endif
@@ -182,53 +177,24 @@ dist/kopia_windows_amd64/kopia.exe: $(all_go_sources)
 ifneq ($(WINDOWS_SIGN_TOOL),)
 	tools/.tools/signtool.exe sign //sha1 $(WINDOWS_CERT_SHA1) //fd sha256 //tr "http://timestamp.digicert.com" //v dist/kopia_windows_amd64/kopia.exe
 endif
-	mkdir -p dist/kopia-$(KOPIA_VERSION_NO_PREFIX)-windows-x64
-	cp dist/kopia_windows_amd64/kopia.exe LICENSE README.md dist/kopia-$(KOPIA_VERSION_NO_PREFIX)-windows-x64
-	(cd dist && zip -r kopia-$(KOPIA_VERSION_NO_PREFIX)-windows-x64.zip kopia-$(KOPIA_VERSION_NO_PREFIX)-windows-x64)
-	rm -rf dist/kopia-$(KOPIA_VERSION_NO_PREFIX)-windows-x64
 
 # On Linux use use goreleaser which will build Kopia for all supported Linux architectures
 # and creates .tar.gz, rpm and deb packages.
 dist/kopia_linux_x64/kopia dist/kopia_linux_arm64/kopia dist/kopia_linux_armv7l/kopia: $(all_go_sources)
 ifeq ($(GOARCH),amd64)
 	$(MAKE) goreleaser
-	rm -f dist/kopia_linux_x64
-	ln -sf kopia_linux_amd64 dist/kopia_linux_x64
-	rm -f dist/kopia_linux_armv7l
-	ln -sf kopia_linux_arm_6 dist/kopia_linux_armv7l
-else
-	go build $(KOPIA_BUILD_FLAGS) -o $(kopia_ui_embedded_exe) -tags "$(KOPIA_BUILD_TAGS)" github.com/kopia/kopia
-endif
+	mv dist/core_linux_arm64/core dist/core_linux_arm64/kopia
+	mv dist/core_linux_arm64 dist/kopia_linux_arm64
+	mv dist/core_linux_amd64/core dist/core_linux_amd64/kopia
+	mv dist/core_linux_amd64 dist/kopia_linux_x64
+	mv dist/core_linux_arm_6/core dist/core_linux_arm_6/kopia
+	mv dist/core_linux_arm_6 dist/kopia_linux_armv7l
 
 # builds kopia CLI binary that will be later used as a server for kopia-ui.
 kopia: $(kopia_ui_embedded_exe)
 
 ci-build:
-# install Apple API key needed to notarize Apple binaries
-ifeq ($(GOOS),darwin)
-ifneq ($(APPLE_API_KEY_BASE64),)
-ifneq ($(APPLE_API_KEY),)
-	@ echo "$(APPLE_API_KEY_BASE64)" | base64 -d > "$(APPLE_API_KEY)"
-endif
-endif
-endif
 	$(MAKE) kopia
-ifneq ($(GOOS)/$(GOARCH),linux/arm64)
-	$(retry) $(MAKE) kopia-ui
-	$(retry) $(MAKE) kopia-ui-test
-endif
-ifeq ($(GOOS)/$(GOARCH),linux/amd64)
-	$(MAKE) generate-change-log
-	$(MAKE) download-rclone
-endif
-
-# remove API key
-ifeq ($(GOOS),darwin)
-ifneq ($(APPLE_API_KEY),)
-	@ rm -f "$(APPLE_API_KEY)"
-endif
-endif
-
 
 download-rclone:
 	go run ./tools/gettool --tool rclone:$(RCLONE_VERSION) --output-dir dist/kopia_linux_amd64/ --goos=linux --goarch=amd64
@@ -248,11 +214,7 @@ endif
 
 # goreleaser - builds packages for all platforms when on linux/amd64,
 # but don't publish here, we'll upload to GitHub separately.
-GORELEASER_OPTIONS=--rm-dist --parallelism=6 --skip-publish --skip-sign
-
-ifeq ($(CI_TAG),)
-	GORELEASER_OPTIONS+=--snapshot
-endif
+GORELEASER_OPTIONS=--rm-dist --parallelism=6 --skip-publish --skip-sign --snapshot
 
 print_build_info:
 	@echo CI_TAG: $(CI_TAG)
