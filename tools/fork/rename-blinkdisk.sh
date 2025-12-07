@@ -65,3 +65,8 @@ rename_files "Kopia UI" "BlinkDisk UI"
 rename_files "Kopia" "BlinkDisk"
 rename_files "kopia-ui" "blinkdisk-ui"
 rename_files "kopia" "blinkdisk"
+
+cd internal/grpcapi/
+echo "Generating repository_server.pb.go"
+protoc --go_out=paths=source_relative:. ./repository_server.proto
+cd ../..
