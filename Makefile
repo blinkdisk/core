@@ -189,6 +189,7 @@ ifeq ($(GOARCH),amd64)
 	mv dist/core_linux_amd64 dist/kopia_linux_x64
 	mv dist/core_linux_arm_6/core dist/core_linux_arm_6/kopia
 	mv dist/core_linux_arm_6 dist/kopia_linux_armv7l
+endif
 
 # builds kopia CLI binary that will be later used as a server for kopia-ui.
 kopia: $(kopia_ui_embedded_exe)
