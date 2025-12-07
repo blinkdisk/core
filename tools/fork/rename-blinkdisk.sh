@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXCLUDES=("./README.md" "./tools/fork/rename-blinkdisk.sh")
+EXCLUDES=("./README.md" "./tools/fork/rename-blinkdisk.sh" "./.github/workflows/rename-blinkdisk.yml")
 
 build_exclude_expr() {
   local expr=()
