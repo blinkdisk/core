@@ -3,9 +3,9 @@ package endtoend_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestSnapshotCopy(t *testing.T) {

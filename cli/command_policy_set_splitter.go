@@ -6,8 +6,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/repo/splitter"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/repo/splitter"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type policySplitterFlags struct {

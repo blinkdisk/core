@@ -9,12 +9,12 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/kopia/kopia/internal/apiclient"
+	"github.com/blinkdisk/core/internal/apiclient"
 )
 
-// kopiaSessionCookie is the name of the session cookie that Kopia server will generate for all
+// blinkdiskSessionCookie is the name of the session cookie that BlinkDisk server will generate for all
 // UI sessions.
-const kopiaSessionCookie = "Kopia-Session-Cookie"
+const blinkdiskSessionCookie = "BlinkDisk-Session-Cookie"
 
 func (s *Server) generateCSRFToken(sessionID string) string {
 	h := hmac.New(sha256.New, s.authCookieSigningKey)
@@ -34,7 +34,7 @@ func (s *Server) validateCSRFToken(r *http.Request) bool {
 	ctx := r.Context()
 	path := r.URL.Path
 
-	sessionCookie, err := r.Cookie(kopiaSessionCookie)
+	sessionCookie, err := r.Cookie(blinkdiskSessionCookie)
 	if err != nil {
 		userLog(ctx).Warnf("missing or invalid session cookie for %q: %v", path, err)
 

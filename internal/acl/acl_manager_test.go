@@ -5,11 +5,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/acl"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/acl"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 const (

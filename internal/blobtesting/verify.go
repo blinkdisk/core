@@ -11,9 +11,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // VerifyStorage verifies the behavior of the specified storage.
@@ -28,7 +28,7 @@ func VerifyStorage(ctx context.Context, t *testing.T, r blob.Storage, opts blob.
 		{blk: "zxce0e35630770c54668a8cfb4e414c6bf8f", contents: []byte{1}},
 		{blk: "abff4585856ebf0748fd989e1dd623a8963d", contents: bytes.Repeat([]byte{1}, 1000)},
 		{blk: "abgc3dca496d510f492c858a2df1eb824e62", contents: bytes.Repeat([]byte{1}, 10000)},
-		{blk: "kopia.repository", contents: bytes.Repeat([]byte{2}, 100)},
+		{blk: "blinkdisk.repository", contents: bytes.Repeat([]byte{2}, 100)},
 	}
 
 	// First verify that blocks don't exist.

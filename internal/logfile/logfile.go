@@ -19,12 +19,12 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/cachedir"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/internal/zaplogutil"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/cachedir"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/internal/zaplogutil"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const logsDirMode = 0o700
@@ -64,23 +64,23 @@ func (c *loggingFlags) setup(cliApp *cli.App, app *kingpin.Application) {
 	app.Flag("disable-file-logging", "Disable file-based logging.").BoolVar(&c.disableFileLogging)
 	app.Flag("disable-content-log", "Disable creation of content logs.").BoolVar(&c.disableContentLogs)
 
-	app.Flag("log-dir", "Directory where log files should be written.").Envar(cliApp.EnvName("KOPIA_LOG_DIR")).Default(ospath.LogsDir()).StringVar(&c.logDir)
-	app.Flag("log-dir-max-files", "Maximum number of log files to retain").Envar(cliApp.EnvName("KOPIA_LOG_DIR_MAX_FILES")).Default("1000").Hidden().IntVar(&c.logDirMaxFiles)
-	app.Flag("log-dir-max-age", "Maximum age of log files to retain").Envar(cliApp.EnvName("KOPIA_LOG_DIR_MAX_AGE")).Hidden().Default("720h").DurationVar(&c.logDirMaxAge)
-	app.Flag("log-dir-max-total-size-mb", "Maximum total size of log files to retain").Envar(cliApp.EnvName("KOPIA_LOG_DIR_MAX_SIZE_MB")).Hidden().Default("1000").Float64Var(&c.logDirMaxTotalSizeMB)
-	app.Flag("max-log-file-segment-size", "Maximum size of a single log file segment").Envar(cliApp.EnvName("KOPIA_LOG_FILE_MAX_SEGMENT_SIZE")).Default("50000000").Hidden().IntVar(&c.logFileMaxSegmentSize)
+	app.Flag("log-dir", "Directory where log files should be written.").Envar(cliApp.EnvName("BLINKDISK_LOG_DIR")).Default(ospath.LogsDir()).StringVar(&c.logDir)
+	app.Flag("log-dir-max-files", "Maximum number of log files to retain").Envar(cliApp.EnvName("BLINKDISK_LOG_DIR_MAX_FILES")).Default("1000").Hidden().IntVar(&c.logDirMaxFiles)
+	app.Flag("log-dir-max-age", "Maximum age of log files to retain").Envar(cliApp.EnvName("BLINKDISK_LOG_DIR_MAX_AGE")).Hidden().Default("720h").DurationVar(&c.logDirMaxAge)
+	app.Flag("log-dir-max-total-size-mb", "Maximum total size of log files to retain").Envar(cliApp.EnvName("BLINKDISK_LOG_DIR_MAX_SIZE_MB")).Hidden().Default("1000").Float64Var(&c.logDirMaxTotalSizeMB)
+	app.Flag("max-log-file-segment-size", "Maximum size of a single log file segment").Envar(cliApp.EnvName("BLINKDISK_LOG_FILE_MAX_SEGMENT_SIZE")).Default("50000000").Hidden().IntVar(&c.logFileMaxSegmentSize)
 	app.Flag("wait-for-log-sweep", "Wait for log sweep before program exit").Default("true").Hidden().BoolVar(&c.waitForLogSweep)
-	app.Flag("content-log-dir-max-files", "Maximum number of content log files to retain").Envar(cliApp.EnvName("KOPIA_CONTENT_LOG_DIR_MAX_FILES")).Default("5000").Hidden().IntVar(&c.contentLogDirMaxFiles)
-	app.Flag("content-log-dir-max-age", "Maximum age of content log files to retain").Envar(cliApp.EnvName("KOPIA_CONTENT_LOG_DIR_MAX_AGE")).Default("720h").Hidden().DurationVar(&c.contentLogDirMaxAge)
-	app.Flag("content-log-dir-max-total-size-mb", "Maximum total size of log files to retain").Envar(cliApp.EnvName("KOPIA_CONTENT_LOG_DIR_MAX_SIZE_MB")).Hidden().Default("1000").Float64Var(&c.contentLogDirMaxTotalSizeMB)
+	app.Flag("content-log-dir-max-files", "Maximum number of content log files to retain").Envar(cliApp.EnvName("BLINKDISK_CONTENT_LOG_DIR_MAX_FILES")).Default("5000").Hidden().IntVar(&c.contentLogDirMaxFiles)
+	app.Flag("content-log-dir-max-age", "Maximum age of content log files to retain").Envar(cliApp.EnvName("BLINKDISK_CONTENT_LOG_DIR_MAX_AGE")).Default("720h").Hidden().DurationVar(&c.contentLogDirMaxAge)
+	app.Flag("content-log-dir-max-total-size-mb", "Maximum total size of log files to retain").Envar(cliApp.EnvName("BLINKDISK_CONTENT_LOG_DIR_MAX_SIZE_MB")).Hidden().Default("1000").Float64Var(&c.contentLogDirMaxTotalSizeMB)
 	app.Flag("log-level", "Console log level").Default("info").EnumVar(&c.logLevel, logLevels...)
 	app.Flag("json-log-console", "JSON log file").Hidden().BoolVar(&c.jsonLogConsole)
 	app.Flag("json-log-file", "JSON log file").Hidden().BoolVar(&c.jsonLogFile)
 	app.Flag("file-log-level", "File log level").Default("debug").EnumVar(&c.fileLogLevel, logLevels...)
-	app.Flag("file-log-local-tz", "When logging to a file, use local timezone").Default("false").Hidden().Envar(cliApp.EnvName("KOPIA_FILE_LOG_LOCAL_TZ")).BoolVar(&c.fileLogLocalTimezone)
-	app.Flag("force-color", "Force color output").Hidden().Envar(cliApp.EnvName("KOPIA_FORCE_COLOR")).BoolVar(&c.forceColor)
-	app.Flag("disable-color", "Disable color output").Hidden().Envar(cliApp.EnvName("KOPIA_DISABLE_COLOR")).BoolVar(&c.disableColor)
-	app.Flag("console-timestamps", "Log timestamps to stderr.").Hidden().Default("false").Envar(cliApp.EnvName("KOPIA_CONSOLE_TIMESTAMPS")).BoolVar(&c.consoleLogTimestamps)
+	app.Flag("file-log-local-tz", "When logging to a file, use local timezone").Default("false").Hidden().Envar(cliApp.EnvName("BLINKDISK_FILE_LOG_LOCAL_TZ")).BoolVar(&c.fileLogLocalTimezone)
+	app.Flag("force-color", "Force color output").Hidden().Envar(cliApp.EnvName("BLINKDISK_FORCE_COLOR")).BoolVar(&c.forceColor)
+	app.Flag("disable-color", "Disable color output").Hidden().Envar(cliApp.EnvName("BLINKDISK_DISABLE_COLOR")).BoolVar(&c.disableColor)
+	app.Flag("console-timestamps", "Log timestamps to stderr.").Hidden().Default("false").Envar(cliApp.EnvName("BLINKDISK_CONSOLE_TIMESTAMPS")).BoolVar(&c.consoleLogTimestamps)
 
 	app.PreAction(c.initialize)
 	c.cliApp = cliApp
@@ -92,10 +92,10 @@ func Attach(cliApp *cli.App, app *kingpin.Application) {
 	lf.setup(cliApp, app)
 }
 
-var log = logging.Module("kopia")
+var log = logging.Module("blinkdisk")
 
 const (
-	logFileNamePrefix = "kopia-"
+	logFileNamePrefix = "blinkdisk-"
 	logFileNameSuffix = ".log"
 )
 

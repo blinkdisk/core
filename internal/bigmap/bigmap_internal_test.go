@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestInternalMap(t *testing.T) {

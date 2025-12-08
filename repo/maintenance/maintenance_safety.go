@@ -40,7 +40,7 @@ type SafetyParameters struct {
 //nolint:gochecknoglobals
 var (
 	// SafetyNone has safety parameters which allow full garbage collection without unnecessary
-	// delays, but it is safe only if no other kopia clients are running and storage backend is
+	// delays, but it is safe only if no other blinkdisk clients are running and storage backend is
 	// strongly consistent.
 	SafetyNone = SafetyParameters{
 		PackDeleteMinAge:                 0,
@@ -54,7 +54,7 @@ var (
 	}
 
 	// SafetyFull has default safety parameters which allow safe GC concurrent with snapshotting
-	// by other Kopia clients.
+	// by other BlinkDisk clients.
 	SafetyFull = SafetyParameters{
 		PackDeleteMinAge:                24 * time.Hour, //nolint:mnd
 		DropContentFromIndexExtraMargin: time.Hour,

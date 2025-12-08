@@ -8,8 +8,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type storageFromConfigFlags struct {
@@ -63,7 +63,7 @@ func (c *storageFromConfigFlags) connectToStorageFromConfigFile(ctx context.Cont
 	}
 
 	if cfg.Storage == nil {
-		return nil, errors.New("connection file does not specify blob storage connection parameters, kopia server connections are not supported")
+		return nil, errors.New("connection file does not specify blob storage connection parameters, blinkdisk server connections are not supported")
 	}
 
 	//nolint:wrapcheck

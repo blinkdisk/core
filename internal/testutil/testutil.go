@@ -13,15 +13,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/releasable"
+	"github.com/blinkdisk/core/internal/releasable"
 )
 
 // ProviderTest marks the test method so that it only runs in provider-tests suite.
 func ProviderTest(t *testing.T) {
 	t.Helper()
 
-	if os.Getenv("KOPIA_PROVIDER_TEST") == "" {
-		t.Skip("skipping because KOPIA_PROVIDER_TEST is not set")
+	if os.Getenv("BLINKDISK_PROVIDER_TEST") == "" {
+		t.Skip("skipping because BLINKDISK_PROVIDER_TEST is not set")
 	}
 }
 
@@ -29,7 +29,7 @@ func ProviderTest(t *testing.T) {
 func SkipNonDeterministicTestUnderCodeCoverage(t *testing.T) {
 	t.Helper()
 
-	if os.Getenv("KOPIA_COVERAGE_TEST") != "" {
+	if os.Getenv("BLINKDISK_COVERAGE_TEST") != "" {
 		t.Skip("Skipping non-deterministic test in code coverage run")
 	}
 }

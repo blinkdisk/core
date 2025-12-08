@@ -3,8 +3,8 @@ package cli_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 func TestMain(m *testing.M) { testutil.MyTestMain(m) }

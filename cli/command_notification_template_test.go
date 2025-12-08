@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/editor"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/editor"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestNotificationTemplates(t *testing.T) {

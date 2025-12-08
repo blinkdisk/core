@@ -5,15 +5,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/blobcrypto"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/internal/blobcrypto"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 // Refresh reloads the committed content indexes.

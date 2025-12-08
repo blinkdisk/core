@@ -7,8 +7,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/internal/releasable"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/releasable"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // RunSubcommand executes the subcommand asynchronously in current process

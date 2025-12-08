@@ -8,7 +8,7 @@ import (
 	"context"
 	"os/exec"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 // ClientSnapshotter is an interface that wraps robustness.Snapshotter with

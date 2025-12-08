@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/completeset"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/completeset"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func TestFindFirstAndAll(t *testing.T) {

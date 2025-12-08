@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // ConfigName is the name of the hidden storage config file in a S3 bucket.

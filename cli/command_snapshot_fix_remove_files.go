@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 type commandSnapshotFixRemoveFiles struct {

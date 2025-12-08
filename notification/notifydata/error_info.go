@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kopia/kopia/internal/grpcapi"
+	"github.com/blinkdisk/core/internal/grpcapi"
 )
 
 // ErrorInfo represents information about errors.

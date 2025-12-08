@@ -12,15 +12,15 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/zeebo/blake3"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/diff"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/diff"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const statsOnly = false

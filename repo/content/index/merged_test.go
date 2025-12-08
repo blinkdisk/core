@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func TestMerged(t *testing.T) {

@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 var defaultTestOptions = notifytemplate.Options{

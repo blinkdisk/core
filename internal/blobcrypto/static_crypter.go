@@ -1,8 +1,8 @@
 package blobcrypto
 
 import (
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 // StaticCrypter implements Crypter interface with static hash and encryption functions.

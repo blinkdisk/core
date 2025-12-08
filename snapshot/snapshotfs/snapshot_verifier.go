@@ -11,14 +11,14 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 var verifierLog = logging.Module("verifier")

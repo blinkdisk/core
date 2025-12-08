@@ -11,20 +11,20 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 const goroutineCount = 16
 
 func TestStressBlockManager(t *testing.T) {
-	if os.Getenv("KOPIA_STRESS_TEST") == "" {
+	if os.Getenv("BLINKDISK_STRESS_TEST") == "" {
 		t.Skip("skipping stress test")
 	}
 

@@ -3,7 +3,7 @@ package restore
 import (
 	"path/filepath"
 
-	"github.com/kopia/kopia/fs/localfs"
+	"github.com/blinkdisk/core/fs/localfs"
 )
 
 // MaxFilenameLength is set for compatibility with Linux and MacOS.

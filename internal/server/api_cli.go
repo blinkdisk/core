@@ -5,13 +5,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 func handleCLIInfo(_ context.Context, rc requestContext) (any, *apiError) {
 	executable, err := os.Executable()
 	if err != nil {
-		executable = "kopia"
+		executable = "blinkdisk"
 	}
 
 	return &serverapi.CLIInfo{

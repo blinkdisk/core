@@ -5,9 +5,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 type commandServerThrottleSet struct {
@@ -24,7 +24,7 @@ func (c *commandServerThrottleSet) setup(svc appServices, parent commandParent) 
 	cmd.Action(svc.serverAction(&c.sf, c.run))
 }
 
-func (c *commandServerThrottleSet) run(ctx context.Context, cli *apiclient.KopiaAPIClient) error {
+func (c *commandServerThrottleSet) run(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error {
 	var limits throttling.Limits
 
 	if err := cli.Get(ctx, "control/throttle", nil, &limits); err != nil {

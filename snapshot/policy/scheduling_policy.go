@@ -12,8 +12,8 @@ import (
 	"github.com/hashicorp/cronexpr"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // TimeOfDay represents the time of day (hh:mm) using 24-hour time format.

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/osexec"
+	"github.com/blinkdisk/core/internal/osexec"
 )
 
 func TestDisableInterruptSignal(t *testing.T) {

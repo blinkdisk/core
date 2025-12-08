@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // ParametersFile is the name of the hidden parameters file in a sharded storage.

@@ -9,15 +9,15 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 // User-visible log output.

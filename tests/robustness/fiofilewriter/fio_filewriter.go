@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/tools/fio"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/tools/fio"
 )
 
 // Option field names.

@@ -5,10 +5,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 type commandSnapshotPin struct {

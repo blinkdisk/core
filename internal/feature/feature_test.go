@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/feature"
+	"github.com/blinkdisk/core/internal/feature"
 )
 
 func TestFeature(t *testing.T) {
@@ -54,13 +54,13 @@ func TestFeatureUnsupportedMessage(t *testing.T) {
 		{
 			Feature:         "f1",
 			IfNotUnderstood: feature.IfNotUnderstood{},
-		}: "This version of Kopia does not support feature 'f1'.",
+		}: "This version of BlinkDisk does not support feature 'f1'.",
 		{
 			Feature: "f2",
 			IfNotUnderstood: feature.IfNotUnderstood{
 				URL: "http://some-url",
 			},
-		}: "This version of Kopia does not support feature 'f2'.\nSee: http://some-url",
+		}: "This version of BlinkDisk does not support feature 'f2'.\nSee: http://some-url",
 		{
 			Feature: "f3",
 			IfNotUnderstood: feature.IfNotUnderstood{
@@ -68,7 +68,7 @@ func TestFeatureUnsupportedMessage(t *testing.T) {
 				URL:              "http://some-url",
 				UpgradeToVersion: "2.3.4",
 			},
-		}: "This version of Kopia does not support feature 'f3'.\nUpgrade is required for better performance.\nSee: http://some-url\nPlease upgrade to version 2.3.4 or newer.",
+		}: "This version of BlinkDisk does not support feature 'f3'.\nUpgrade is required for better performance.\nSee: http://some-url\nPlease upgrade to version 2.3.4 or newer.",
 	}
 
 	for input, want := range cases {

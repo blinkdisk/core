@@ -11,11 +11,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestSnapshotActionsBeforeSnapshotRoot(t *testing.T) {
@@ -68,12 +68,12 @@ func TestSnapshotActionsBeforeSnapshotRoot(t *testing.T) {
 	env3 := mustReadEnvFile(t, envFile3)
 
 	// make sure snapshot IDs are different between two attempts
-	require.NotEqual(t, env1["KOPIA_SNAPSHOT_ID"], env2["KOPIA_SNAPSHOT_ID"], "KOPIA_SNAPSHOT_ID passed to action was not different between runs")
+	require.NotEqual(t, env1["BLINKDISK_SNAPSHOT_ID"], env2["BLINKDISK_SNAPSHOT_ID"], "BLINKDISK_SNAPSHOT_ID passed to action was not different between runs")
 
-	require.Equal(t, "before-snapshot-root", env1["KOPIA_ACTION"])
-	require.Equal(t, "after-snapshot-root", env3["KOPIA_ACTION"])
-	require.NotEmpty(t, env1["KOPIA_VERSION"])
-	require.NotEmpty(t, env3["KOPIA_VERSION"])
+	require.Equal(t, "before-snapshot-root", env1["BLINKDISK_ACTION"])
+	require.Equal(t, "after-snapshot-root", env3["BLINKDISK_ACTION"])
+	require.NotEmpty(t, env1["BLINKDISK_VERSION"])
+	require.NotEmpty(t, env3["BLINKDISK_VERSION"])
 
 	// Now set up the action again, in optional mode,
 	e.RunAndExpectSuccess(t,
@@ -122,7 +122,7 @@ func TestSnapshotActionsBeforeSnapshotRoot(t *testing.T) {
 	e.RunAndExpectSuccess(t,
 		"policy", "set", sharedTestDataDir1,
 		"--before-snapshot-root-action",
-		th+" --stdout-file="+tmpfileWithContents(t, "KOPIA_SNAPSHOT_PATH=/no/such/directory\n"))
+		th+" --stdout-file="+tmpfileWithContents(t, "BLINKDISK_SNAPSHOT_PATH=/no/such/directory\n"))
 
 	e.RunAndExpectFailure(t, "snapshot", "create", sharedTestDataDir1)
 
@@ -130,7 +130,7 @@ func TestSnapshotActionsBeforeSnapshotRoot(t *testing.T) {
 	e.RunAndExpectSuccess(t,
 		"policy", "set", sharedTestDataDir1,
 		"--before-snapshot-root-action",
-		th+" --stdout-file="+tmpfileWithContents(t, "KOPIA_SNAPSHOT_PATH="+sharedTestDataDir2+"\n"))
+		th+" --stdout-file="+tmpfileWithContents(t, "BLINKDISK_SNAPSHOT_PATH="+sharedTestDataDir2+"\n"))
 
 	e.RunAndExpectSuccess(t, "snapshot", "create", sharedTestDataDir1)
 
@@ -147,12 +147,12 @@ func TestSnapshotActionsBeforeSnapshotRoot(t *testing.T) {
 		t.Fatalf("invalid snapshot ID after redirection %v, wanted %v", got, want)
 	}
 
-	// not setup the same redirection but in async mode - will be ignored because Kopia does not wait for asynchronous
+	// not setup the same redirection but in async mode - will be ignored because BlinkDisk does not wait for asynchronous
 	// actions at all or parse their output.
 	e.RunAndExpectSuccess(t,
 		"policy", "set", sharedTestDataDir1,
 		"--before-snapshot-root-action",
-		th+" --stdout-file="+tmpfileWithContents(t, "KOPIA_SNAPSHOT_PATH="+sharedTestDataDir2+"\n"),
+		th+" --stdout-file="+tmpfileWithContents(t, "BLINKDISK_SNAPSHOT_PATH="+sharedTestDataDir2+"\n"),
 		"--action-command-mode=async")
 	e.RunAndExpectSuccess(t, "snapshot", "create", sharedTestDataDir1)
 
@@ -238,11 +238,11 @@ func TestSnapshotActionsBeforeAfterFolder(t *testing.T) {
 	env1 := mustReadEnvFile(t, envFile1)
 	env2 := mustReadEnvFile(t, envFile2)
 
-	require.Equal(t, "before-folder", env1["KOPIA_ACTION"])
-	require.Equal(t, "after-folder", env2["KOPIA_ACTION"])
-	require.Equal(t, sd2, env1["KOPIA_SOURCE_PATH"])
-	require.NotEmpty(t, env1["KOPIA_VERSION"])
-	require.NotEmpty(t, env2["KOPIA_VERSION"])
+	require.Equal(t, "before-folder", env1["BLINKDISK_ACTION"])
+	require.Equal(t, "after-folder", env2["BLINKDISK_ACTION"])
+	require.Equal(t, sd2, env1["BLINKDISK_SOURCE_PATH"])
+	require.NotEmpty(t, env1["BLINKDISK_VERSION"])
+	require.NotEmpty(t, env2["BLINKDISK_VERSION"])
 
 	// the action will fail to run the next time since all 'actionRan*' files already exist.
 	e.RunAndExpectFailure(t, "snapshot", "create", rootDir)
@@ -261,8 +261,8 @@ func TestSnapshotActionsEmbeddedScript(t *testing.T) {
 		successScript      = tmpfileWithContents(t, "echo Hello world!")
 		successScript2     string
 		failingScript      string
-		goodRedirectScript = tmpfileWithContents(t, "echo KOPIA_SNAPSHOT_PATH="+sharedTestDataDir2)
-		badRedirectScript  = tmpfileWithContents(t, "echo KOPIA_SNAPSHOT_PATH=/no/such/directory")
+		goodRedirectScript = tmpfileWithContents(t, "echo BLINKDISK_SNAPSHOT_PATH="+sharedTestDataDir2)
+		badRedirectScript  = tmpfileWithContents(t, "echo BLINKDISK_SNAPSHOT_PATH=/no/such/directory")
 	)
 
 	if runtime.GOOS == windowsOSName {
@@ -351,7 +351,7 @@ func TestSnapshotActionsEnable(t *testing.T) {
 func tmpfileWithContents(t *testing.T, contents string) string {
 	t.Helper()
 
-	f, err := os.CreateTemp("", "kopia-test")
+	f, err := os.CreateTemp("", "blinkdisk-test")
 	verifyNoError(t, err)
 
 	f.WriteString(contents)
@@ -417,7 +417,7 @@ func TestSnapshotActionsHonorIgnoreRules(t *testing.T) {
 
 	os.WriteFile(filepath.Join(redirectedDir, "some-file"), []byte{1, 2, 3}, 0o666)
 	os.WriteFile(filepath.Join(redirectedDir, "some-ignored-file"), []byte{1, 2, 3}, 0o666)
-	os.WriteFile(filepath.Join(redirectedDir, ".kopiaignore"), []byte(`
+	os.WriteFile(filepath.Join(redirectedDir, ".blinkdiskignore"), []byte(`
 some-ignored-file
 `), 0o666)
 
@@ -426,17 +426,17 @@ some-ignored-file
 	e.RunAndExpectSuccess(t,
 		"policy", "set", sourceDir,
 		"--before-snapshot-root-action",
-		th+" --stdout-file="+tmpfileWithContents(t, "KOPIA_SNAPSHOT_PATH="+redirectedDir+"\n"))
+		th+" --stdout-file="+tmpfileWithContents(t, "BLINKDISK_SNAPSHOT_PATH="+redirectedDir+"\n"))
 
 	var man snapshot.Manifest
 
 	testutil.MustParseJSONLines(t, e.RunAndExpectSuccess(t, "snapshot", "create", sourceDir, "--json"), &man)
 	entries := e.RunAndExpectSuccess(t, "ls", man.RootObjectID().String())
 
-	require.Contains(t, entries, ".kopiaignore")
+	require.Contains(t, entries, ".blinkdiskignore")
 	require.Contains(t, entries, "some-file")
 
-	// make sure .kopiaignore was honored
+	// make sure .blinkdiskignore was honored
 	require.NotContains(t, entries, "some-ignored-file")
 }
 

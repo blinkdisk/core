@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync/atomic"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 type scanResults struct {

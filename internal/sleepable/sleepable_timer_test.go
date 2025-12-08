@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 const testMaxSleepTime = 10 * time.Millisecond

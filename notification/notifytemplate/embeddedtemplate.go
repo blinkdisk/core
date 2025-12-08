@@ -12,8 +12,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/notification/notifydata"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/notification/notifydata"
 )
 
 //go:embed "*.html"

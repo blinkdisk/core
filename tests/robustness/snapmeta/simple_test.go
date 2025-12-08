@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 func TestSimpleBasic(t *testing.T) {

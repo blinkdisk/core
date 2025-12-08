@@ -1,6 +1,6 @@
 //go:build !linux
 
-package kopiarunner
+package blinkdiskrunner
 
 import "os/exec"
 

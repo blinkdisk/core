@@ -7,11 +7,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 // ManifestType is the value of the "type" label for snapshot manifests.
@@ -33,7 +33,7 @@ const (
 	loadSnapshotsConcurrency = 50 // number of snapshots to load in parallel
 )
 
-var log = logging.Module("kopia/snapshot")
+var log = logging.Module("blinkdisk/snapshot")
 
 // ListSources lists all snapshot sources in a given repository.
 func ListSources(ctx context.Context, rep repo.Repository) ([]SourceInfo, error) {

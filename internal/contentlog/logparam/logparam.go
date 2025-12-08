@@ -4,7 +4,7 @@ package logparam
 import (
 	"time"
 
-	"github.com/kopia/kopia/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog"
 )
 
 // String creates a string parameter.

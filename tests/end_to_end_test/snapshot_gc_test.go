@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestSnapshotGC(t *testing.T) {

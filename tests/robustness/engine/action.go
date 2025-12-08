@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 // ExecAction executes the action denoted by the provided ActionKey.

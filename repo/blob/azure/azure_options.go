@@ -3,7 +3,7 @@ package azure
 import (
 	"time"
 
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for Azure blob storage storage.
@@ -18,18 +18,18 @@ type Options struct {
 	StorageAccount string `json:"storageAccount,omitempty"`
 
 	// Storage account access key
-	StorageKey string `json:"storageKey,omitempty" kopia:"sensitive"`
+	StorageKey string `json:"storageKey,omitempty" blinkdisk:"sensitive"`
 
 	// Alternatively provide SAS Token
-	SASToken string `json:"sasToken,omitempty" kopia:"sensitive"`
+	SASToken string `json:"sasToken,omitempty" blinkdisk:"sensitive"`
 
 	// the tenant-ID/client-ID/client-Secret of the service principal
 	TenantID     string `json:",omitempty"`
 	ClientID     string `json:",omitempty"`
-	ClientSecret string `json:",omitempty" kopia:"sensitive"`
+	ClientSecret string `json:",omitempty" blinkdisk:"sensitive"`
 
 	// ClientCertificate are used for creating ClientCertificateCredentials
-	ClientCertificate string `json:"clientCertificate,omitempty" kopia:"sensitive"`
+	ClientCertificate string `json:"clientCertificate,omitempty" blinkdisk:"sensitive"`
 
 	// AzureFederatedTokenFile is the path to a file containing an Azure Federated Token.
 	AzureFederatedTokenFile string `json:"azureFederatedTokenFile,omitempty"`

@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 //nolint:gochecknoglobals
@@ -96,7 +96,7 @@ func GetParams(ctx context.Context, rep repo.Repository) (*Params, error) {
 	// arbitrarily pick first pick ID to return in case there's more than one
 	// this is possible when two repository clients independently create manifests at approximately the same time
 	// so it should not really matter which one we pick.
-	// see https://github.com/kopia/kopia/issues/391
+	// see https://github.com/blinkdisk/core/issues/391
 	manifestID := manifest.PickLatestID(md)
 
 	p := &Params{}

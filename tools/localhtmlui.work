@@ -2,4 +2,4 @@ go 1.21
 
 use ..
 
-replace github.com/kopia/htmluibuild => ../../htmluibuild
+replace github.com/blinkdisk/htmluibuild => ../../htmluibuild

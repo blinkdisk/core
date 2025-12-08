@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 func handleMountCreate(ctx context.Context, rc requestContext) (any, *apiError) {

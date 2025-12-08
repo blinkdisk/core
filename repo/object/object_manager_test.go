@@ -19,15 +19,15 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 var errSomeError = errors.New("some error")

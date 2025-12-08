@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestFilesystemFlat(t *testing.T) {
@@ -62,7 +62,7 @@ func TestFilesystemSupportsTildeToReferToHome(t *testing.T) {
 	e.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path=~/"+subdir)
 	defer e.RunAndExpectSuccess(t, "repo", "disconnect")
 
-	if _, err := os.Stat(filepath.Join(fullPath, "kopia.repository.f")); err != nil {
+	if _, err := os.Stat(filepath.Join(fullPath, "blinkdisk.repository.f")); err != nil {
 		t.Fatalf("error: %v", err)
 	}
 }
@@ -87,7 +87,7 @@ func TestReconnectUsingToken(t *testing.T) {
 
 	e.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", e.RepoDir)
 	lines := e.RunAndExpectSuccess(t, "repo", "status", "-t", "-s")
-	prefix := "$ kopia "
+	prefix := "$ blinkdisk "
 
 	var reconnectArgs []string
 
@@ -99,7 +99,7 @@ func TestReconnectUsingToken(t *testing.T) {
 	}
 
 	if reconnectArgs == nil {
-		t.Fatalf("can't find reonnect command in kopia repo status output")
+		t.Fatalf("can't find reonnect command in blinkdisk repo status output")
 	}
 
 	e.RunAndExpectSuccess(t, "repo", "disconnect")
@@ -119,11 +119,11 @@ func TestRepoConnectKeyDerivationAlgorithm(t *testing.T) {
 		e.RunAndExpectSuccess(t, "repo", "disconnect")
 		e.RunAndExpectSuccess(t, "repo", "connect", "filesystem", "--path", e.RepoDir)
 
-		kopiaRepoPath := filepath.Join(e.RepoDir, "kopia.repository.f")
-		dat, err := os.ReadFile(kopiaRepoPath)
+		blinkdiskRepoPath := filepath.Join(e.RepoDir, "blinkdisk.repository.f")
+		dat, err := os.ReadFile(blinkdiskRepoPath)
 		require.NoError(t, err)
 
-		var repoJSON format.KopiaRepositoryJSON
+		var repoJSON format.BlinkDiskRepositoryJSON
 
 		json.Unmarshal(dat, &repoJSON)
 		require.Equal(t, repoJSON.KeyDerivationAlgorithm, algorithm)
@@ -138,18 +138,18 @@ func TestRepoConnectBadKeyDerivationAlgorithm(t *testing.T) {
 	e.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", e.RepoDir, "--format-block-key-derivation-algorithm", format.DefaultKeyDerivationAlgorithm)
 	e.RunAndExpectSuccess(t, "repo", "disconnect")
 
-	kopiaRepoPath := filepath.Join(e.RepoDir, "kopia.repository.f")
-	dat, err := os.ReadFile(kopiaRepoPath)
+	blinkdiskRepoPath := filepath.Join(e.RepoDir, "blinkdisk.repository.f")
+	dat, err := os.ReadFile(blinkdiskRepoPath)
 	require.NoError(t, err)
 
-	var repoJSON format.KopiaRepositoryJSON
+	var repoJSON format.BlinkDiskRepositoryJSON
 
 	json.Unmarshal(dat, &repoJSON)
 
 	repoJSON.KeyDerivationAlgorithm = "badalgorithm"
 
 	jsonString, _ := json.Marshal(repoJSON)
-	os.WriteFile(kopiaRepoPath, jsonString, os.ModePerm)
+	os.WriteFile(blinkdiskRepoPath, jsonString, os.ModePerm)
 
 	e.RunAndExpectFailure(t, "repo", "connect", "filesystem", "--path", e.RepoDir)
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/s3"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/s3"
 )
 
 type storageS3Flags struct {

@@ -6,10 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandNotificationProfileList struct {

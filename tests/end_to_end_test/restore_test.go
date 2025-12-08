@@ -21,18 +21,18 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/diff"
-	"github.com/kopia/kopia/internal/fshasher"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/stat"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/diff"
+	"github.com/blinkdisk/core/internal/fshasher"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/stat"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 const (
@@ -569,12 +569,12 @@ func TestRestoreSnapshotOfSingleFile(t *testing.T) {
 		os.Chmod(sourceFile, overriddenFilePermissions)
 		e.RunAndExpectSuccess(t, "snapshot", "create", sourceFile)
 
-		// when restoring by root Kopia needs to pick which manifest to apply since they are conflicting
+		// when restoring by root BlinkDisk needs to pick which manifest to apply since they are conflicting
 		// We're passing --consistent-attributes which causes it to fail, since otherwise we'd restore arbitrary
 		// top-level object permissions.
 		e.RunAndExpectFailure(t, "snapshot", "restore", rootID, "--consistent-attributes", filepath.Join(restoreDir, "restored-3"))
 
-		// Without the flag kopia picks the attributes from the latest snapshot.
+		// Without the flag blinkdisk picks the attributes from the latest snapshot.
 		e.RunAndExpectSuccess(t, "snapshot", "restore", rootID, filepath.Join(restoreDir, "restored-3"))
 		verifyFileMode(t, filepath.Join(restoreDir, "restored-3"), overriddenFilePermissions)
 	}
@@ -791,7 +791,7 @@ func TestSnapshotSparseRestore(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			if c.name == "blk_hole_on_buf_boundary" && runtime.GOARCH == "arm64" {
-				t.Skip("skipping on arm64 due to a failure - https://github.com/kopia/kopia/issues/3178")
+				t.Skip("skipping on arm64 due to a failure - https://github.com/blinkdisk/core/issues/3178")
 			}
 
 			sourceFile := filepath.Join(sourceDir, c.name+"_source")

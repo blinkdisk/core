@@ -16,8 +16,8 @@ import (
 	"github.com/hanwen/go-fuse/v2/fuse"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("fuse")

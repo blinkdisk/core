@@ -13,11 +13,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 // committedManifestManager manages committed manifest entries stored in 'm' contents.
@@ -154,7 +154,7 @@ func (m *committedManifestManager) loadCommittedContentsLocked(ctx context.Conte
 			if err != nil {
 				// this can be used to allow corrupted repositories to still open and see the
 				// (incomplete) list of manifests.
-				if os.Getenv("KOPIA_IGNORE_MALFORMED_MANIFEST_CONTENTS") != "" {
+				if os.Getenv("BLINKDISK_IGNORE_MALFORMED_MANIFEST_CONTENTS") != "" {
 					log(ctx).Warnf("ignoring malformed manifest content %v: %v", ci.ContentID, err)
 
 					return nil
@@ -365,7 +365,7 @@ func loadManifestContent(ctx context.Context, b contentManager, contentID conten
 
 func newCommittedManager(b contentManager, autoCompactionThreshold int) *committedManifestManager {
 	debugID := ""
-	if os.Getenv("KOPIA_DEBUG_MANIFEST_MANAGER") != "" {
+	if os.Getenv("BLINKDISK_DEBUG_MANIFEST_MANAGER") != "" {
 		debugID = fmt.Sprintf("%x", rand.Int63()) //nolint:gosec
 	}
 

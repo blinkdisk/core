@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/maintenance"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/maintenance"
 )
 
 func maybeAutoUpgradeRepository(ctx context.Context, r repo.Repository) error {
@@ -44,10 +44,10 @@ func setDefaultMaintenanceParameters(ctx context.Context, rep repo.RepositoryWri
 	}
 
 	log(ctx).Infof(`
-NOTE: Kopia will perform quick maintenance of the repository automatically every %v
+NOTE: BlinkDisk will perform quick maintenance of the repository automatically every %v
 and full maintenance every %v when running as %v.
 
-See https://kopia.io/docs/advanced/maintenance/ for more information.
+See https://blinkdisk.com/docs/advanced/maintenance/ for more information.
 `, p.QuickCycle.Interval, p.FullCycle.Interval, p.Owner)
 
 	return nil

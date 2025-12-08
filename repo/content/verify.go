@@ -7,9 +7,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/stats"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/stats"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // VerifyOptions allows specifying the optional arguments for WriteManager.VerifyContent.

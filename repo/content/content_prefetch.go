@@ -6,12 +6,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/kopia/kopia/internal/blobparam"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/contentparam"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/blobparam"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/contentparam"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type prefetchOptions struct {

@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/testsender"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/testsender"
 )
 
 type commandNotificationConfigureTestSender struct {

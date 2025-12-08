@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/encryption"
+	"github.com/blinkdisk/core/repo/encryption"
 )
 
 // CreateECCFunc creates an ECC for given parameters.

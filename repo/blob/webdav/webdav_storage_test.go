@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/net/webdav"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/sharded"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/sharded"
 )
 
 func basicAuth(h http.Handler) http.HandlerFunc {
@@ -43,19 +43,19 @@ func TestWebDAVStorageExternalServer(t *testing.T) {
 	t.Parallel()
 	testutil.ProviderTest(t)
 
-	testURL := os.Getenv("KOPIA_WEBDAV_TEST_URL")
+	testURL := os.Getenv("BLINKDISK_WEBDAV_TEST_URL")
 	if testURL == "" {
-		t.Skip("KOPIA_WEBDAV_TEST_URL not provided")
+		t.Skip("BLINKDISK_WEBDAV_TEST_URL not provided")
 	}
 
-	testUsername := os.Getenv("KOPIA_WEBDAV_TEST_USERNAME")
+	testUsername := os.Getenv("BLINKDISK_WEBDAV_TEST_USERNAME")
 	if testUsername == "" {
-		t.Skip("KOPIA_WEBDAV_TEST_USERNAME not provided")
+		t.Skip("BLINKDISK_WEBDAV_TEST_USERNAME not provided")
 	}
 
-	testPassword := os.Getenv("KOPIA_WEBDAV_TEST_PASSWORD")
+	testPassword := os.Getenv("BLINKDISK_WEBDAV_TEST_PASSWORD")
 	if testPassword == "" {
-		t.Skip("KOPIA_WEBDAV_TEST_PASSWORD not provided")
+		t.Skip("BLINKDISK_WEBDAV_TEST_PASSWORD not provided")
 	}
 
 	verifyWebDAVStorage(t, testURL, testUsername, testPassword, nil)

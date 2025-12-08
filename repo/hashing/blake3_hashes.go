@@ -13,7 +13,7 @@ func newBlake3(key []byte) (hash.Hash, error) {
 	if len(key) < blake3KeySize {
 		var xKey [blake3KeySize]byte
 
-		blake3.DeriveKey("kopia blake3 derived key v1", key, xKey[:blake3KeySize])
+		blake3.DeriveKey("blinkdisk blake3 derived key v1", key, xKey[:blake3KeySize])
 		key = xKey[:blake3KeySize]
 	}
 

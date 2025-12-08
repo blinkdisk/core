@@ -8,11 +8,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 var log = logging.Module("object")
@@ -333,7 +333,7 @@ func (w *objectWriter) checkpointLocked() (ID, error) {
 
 func writeIndirectObject(w io.Writer, entries []IndirectObjectEntry) error {
 	ind := indirectObject{
-		StreamID: "kopia:indirect",
+		StreamID: "blinkdisk:indirect",
 		Entries:  entries,
 	}
 

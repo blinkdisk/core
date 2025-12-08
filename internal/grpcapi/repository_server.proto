@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package="github.com/kopia/kopia/internal/grpcapi";
+option go_package="github.com/blinkdisk/core/internal/grpcapi";
 
-package kopia_repository;
+package blinkdisk_repository;
 
 // corresponds to content.Info
 message ContentInfo {
@@ -207,7 +207,7 @@ message SessionResponse {
   }
 }
 
-service KopiaRepository {
+service BlinkDiskRepository {
   // Session starts a long-running repository session.
   rpc Session(stream SessionRequest) returns (stream SessionResponse);
 }

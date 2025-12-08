@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 // Open creates new ObjectReader for reading given object from a repository.

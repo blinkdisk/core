@@ -3,7 +3,7 @@ package epoch
 import (
 	"time"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // shouldAdvance determines if the current epoch should be advanced based on set of blobs in it.

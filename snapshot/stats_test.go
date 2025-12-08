@@ -3,9 +3,9 @@ package snapshot_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func TestStats(t *testing.T) {

@@ -6,11 +6,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/snapshot"
 )
 
-const directoryStreamType = "kopia:directory"
+const directoryStreamType = "blinkdisk:directory"
 
 // readDirEntries reads all directory entries from the specified reader.
 func readDirEntries(r io.Reader) ([]*snapshot.DirEntry, *fs.DirectorySummary, error) {
