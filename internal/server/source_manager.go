@@ -28,6 +28,7 @@ const (
 type sourceManagerServerInterface interface {
 	runSnapshotTask(ctx context.Context, src snapshot.SourceInfo, inner func(ctx context.Context, ctrl uitask.Controller, result *notifydata.ManifestWithError) error) error
 	refreshScheduler(reason string)
+	taskManager() *uitask.Manager
 }
 
 // sourceManager manages the state machine of each source
@@ -101,6 +102,11 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 		st.UploadCounters = &c
 
 		st.CurrentTask = s.currentTask
+		if s.currentTask != "" {
+			if taskInfo, ok := s.server.taskManager().GetTask(s.currentTask); ok {
+				st.CurrentTaskStatus = string(taskInfo.Status)
+			}
+		}
 	}
 
 	return st
