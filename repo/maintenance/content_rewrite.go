@@ -10,15 +10,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/blobparam"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/contentparam"
-	"github.com/kopia/kopia/internal/stats"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/internal/blobparam"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/contentparam"
+	"github.com/blinkdisk/core/internal/stats"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 const parallelContentRewritesCPUMultiplier = 2
@@ -115,7 +115,7 @@ func RewriteContents(ctx context.Context, rep repo.DirectRepositoryWriter, opt *
 				if err := rep.ContentManager().RewriteContent(ctx, c.ContentID); err != nil {
 					// provide option to ignore failures when rewriting deleted contents during maintenance
 					// this is for advanced use only
-					if os.Getenv("KOPIA_IGNORE_MAINTENANCE_REWRITE_ERROR") != "" && c.Deleted {
+					if os.Getenv("BLINKDISK_IGNORE_MAINTENANCE_REWRITE_ERROR") != "" && c.Deleted {
 						contentlog.Log2(ctx, log,
 							"IGNORED: unable to rewrite deleted content",
 							contentparam.ContentID("contentID", c.ContentID),

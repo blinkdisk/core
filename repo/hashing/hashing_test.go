@@ -5,8 +5,8 @@ import (
 	"crypto/rand"
 	"testing"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 type parameters struct {

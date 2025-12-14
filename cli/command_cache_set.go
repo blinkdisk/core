@@ -7,9 +7,9 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 type cacheSizeFlags struct {

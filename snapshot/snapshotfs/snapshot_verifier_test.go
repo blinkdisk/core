@@ -8,13 +8,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 func TestSnapshotVerifier(t *testing.T) {

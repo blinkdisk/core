@@ -1,6 +1,6 @@
 package policy
 
-import "github.com/kopia/kopia/snapshot"
+import "github.com/blinkdisk/core/snapshot"
 
 // ErrorHandlingPolicy controls error handling behavior when taking snapshots.
 type ErrorHandlingPolicy struct {

@@ -8,9 +8,9 @@ import (
 	smtpmock "github.com/mocktools/go-smtp-mock/v2"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/email"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/email"
 )
 
 func TestEmailProvider(t *testing.T) {

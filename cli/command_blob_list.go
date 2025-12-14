@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/repodiag"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/indexblob"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/repodiag"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/indexblob"
 )
 
 type commandBlobList struct {
@@ -70,7 +70,7 @@ func (c *commandBlobList) shouldInclude(b blob.Metadata) bool {
 			return false
 		}
 
-		if strings.HasPrefix(string(b.BlobID), "kopia.") {
+		if strings.HasPrefix(string(b.BlobID), "blinkdisk.") {
 			return false
 		}
 	}

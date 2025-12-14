@@ -19,11 +19,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/osexec"
-	"github.com/kopia/kopia/internal/tlsutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/webdav"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/osexec"
+	"github.com/blinkdisk/core/internal/tlsutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/webdav"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (
@@ -249,7 +249,7 @@ func (r *rcloneStorage) runRCloneAndWaitForServerAddress(ctx context.Context, c 
 //nolint:funlen
 func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error) {
 	// generate directory for all temp files.
-	td, err := os.MkdirTemp("", "kopia-rclone")
+	td, err := os.MkdirTemp("", "blinkdisk-rclone")
 	if err != nil {
 		return nil, errors.Wrap(err, "error getting temporary dir")
 	}
@@ -303,7 +303,7 @@ func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error)
 		rcloneExe = opt.RCloneExe
 	}
 
-	statsMarker := "STATS:KOPIA"
+	statsMarker := "STATS:BLINKDISK"
 
 	arguments := append([]string{
 		"-v",
@@ -342,7 +342,7 @@ func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error)
 	r.cmd = exec.CommandContext(context.WithoutCancel(ctx), rcloneExe, arguments...) //nolint:gosec
 	r.cmd.Env = append(r.cmd.Env, opt.RCloneEnv...)
 
-	// https://github.com/kopia/kopia/issues/1934
+	// https://github.com/blinkdisk/core/issues/1934
 	osexec.DisableInterruptSignal(r.cmd)
 
 	startupTimeout := defaultRcloneStartupTimeout

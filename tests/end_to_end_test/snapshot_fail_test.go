@@ -14,10 +14,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestSnapshotNonexistent(t *testing.T) {
@@ -48,7 +48,7 @@ func TestSnapshotFail_DefaultJSONOutput(t *testing.T) {
 
 func TestSnapshotFail_EnvOverride(t *testing.T) {
 	t.Parallel()
-	testSnapshotFailText(t, true, nil, map[string]string{"KOPIA_SNAPSHOT_FAIL_FAST": "true"})
+	testSnapshotFailText(t, true, nil, map[string]string{"BLINKDISK_SNAPSHOT_FAIL_FAST": "true"})
 }
 
 func TestSnapshotFail_NoFailFast(t *testing.T) {
@@ -312,7 +312,7 @@ func createSimplestFileTree(t *testing.T, dirDepth, currDepth int, currPath stri
 }
 
 // testPermissions iterates over readable and executable permission states, testing
-// files and directories (if present). It issues the kopia snapshot command
+// files and directories (if present). It issues the blinkdisk snapshot command
 // against "source" and will test permissions against all entries in "parentDir".
 // It returns the number of successful snapshot operations.
 //

@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 // Crypter encapsulates hashing and encryption.

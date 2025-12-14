@@ -3,8 +3,8 @@ package blobtesting
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/fault"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/fault"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // Supported faulty methods.

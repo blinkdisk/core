@@ -7,8 +7,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/user"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/user"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandServerUserAddSet struct {
@@ -102,7 +102,7 @@ func (c *commandServerUserAddSet) runServerUserAddSet(ctx context.Context, rep r
 
 	log(ctx).Infof(`
 Updated user credentials will take effect in 5-10 minutes or when the server is restarted.
-To refresh credentials in a running server use 'kopia server refresh' command.
+To refresh credentials in a running server use 'blinkdisk server refresh' command.
 `)
 
 	return nil

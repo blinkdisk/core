@@ -7,7 +7,7 @@ import (
 
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 type testingT interface {

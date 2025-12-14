@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 func TestLocalConfig_withCaching(t *testing.T) {

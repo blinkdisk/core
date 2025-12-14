@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/user"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/user"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandServerUserInfo struct {

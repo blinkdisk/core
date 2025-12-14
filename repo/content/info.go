@@ -3,7 +3,7 @@ package content
 import (
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 type (

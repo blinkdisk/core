@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/skratchdot/open-golang/open"
 
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandNotificationTemplateShow struct {
@@ -57,7 +57,7 @@ func (c *commandNotificationTemplateShow) run(ctx context.Context, rep repo.Repo
 	}
 
 	if c.htmlOutput {
-		tf := filepath.Join(os.TempDir(), "kopia-template-preview.html")
+		tf := filepath.Join(os.TempDir(), "blinkdisk-template-preview.html")
 
 		//nolint:gosec,mnd
 		if err := os.WriteFile(tf, []byte(text), 0o644); err != nil {

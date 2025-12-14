@@ -12,11 +12,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/engine"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/engine"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
 )
 
 const (
@@ -194,7 +194,7 @@ func TestMaintenanceAction(t *testing.T) {
 
 	// bypass the server to directly run maintenance on the repository
 	// under test.
-	// It launches a kopia process that directly accesses the repository
+	// It launches a blinkdisk process that directly accesses the repository
 	// under test using the repo configuration for the server. The
 	// server is concurrently running, since the framework starts
 	// the server at the beginning of an execution of the framework.

@@ -4,8 +4,8 @@ package loggingfs
 import (
 	"context"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/timetrack"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/timetrack"
 )
 
 type loggingOptions struct {

@@ -9,9 +9,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/editor"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/editor"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 const policyEditHelpText = `
@@ -36,7 +36,7 @@ const policyEditRetentionHelpText = `  # Retention for snapshots of this directo
 const policyEditFilesHelpText = `
   # Which files to include in snapshots. Options include:
   #   "ignore": ["*.ext", "*.ext2"]
-  #   "ignoreDotFiles": [".gitignore", ".kopiaignore"]
+  #   "ignoreDotFiles": [".gitignore", ".blinkdiskignore"]
   #   "maxFileSize": number
   #   "noParentDotFiles": true
   #   "noParentIgnore": true

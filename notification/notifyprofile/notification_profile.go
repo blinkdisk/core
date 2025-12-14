@@ -6,10 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 var log = logging.Module("notification/profile")

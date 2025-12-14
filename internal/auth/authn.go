@@ -8,8 +8,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/tg123/go-htpasswd"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("auth")

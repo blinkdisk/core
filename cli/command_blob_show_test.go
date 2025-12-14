@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestBlobShow(t *testing.T) {

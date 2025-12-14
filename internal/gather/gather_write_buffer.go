@@ -4,7 +4,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("gather") // +checklocksignore

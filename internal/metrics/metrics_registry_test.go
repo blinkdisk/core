@@ -10,8 +10,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 func TestMetricEmitter_Nil(t *testing.T) {

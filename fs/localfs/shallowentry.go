@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const (
 	// ShallowEntrySuffix is a suffix identifying placeholder files.
-	ShallowEntrySuffix = ".kopia-entry"
+	ShallowEntrySuffix = ".blinkdisk-entry"
 
 	// dirMode is the FileMode for placeholder directories.
 	dirMode = 0o700

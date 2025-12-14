@@ -8,9 +8,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 type commandContentVerify struct {

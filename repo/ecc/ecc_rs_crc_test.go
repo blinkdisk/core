@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/encryption"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/encryption"
 )
 
 func Test_RsCrc32_AssertSizeAlwaysGrow(t *testing.T) {

@@ -13,12 +13,12 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/blake2s"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
-var log = logging.Module("kopia/internal/fshasher")
+var log = logging.Module("blinkdisk/internal/fshasher")
 
 // Hash computes a recursive hash of e using the given hasher h.
 func Hash(ctx context.Context, e fs.Entry) ([]byte, error) {
@@ -94,7 +94,7 @@ func header(ctx context.Context, fullpath string, e os.FileInfo) (*tar.Header, e
 
 	// when hashing, compare time to within a second resolution because of
 	// filesystems that don't preserve full timestamp fidelity.
-	// https://travis-ci.org/github/kopia/kopia/jobs/732592885
+	// https://travis-ci.org/github/blinkdisk/blinkdisk/jobs/732592885
 	h.ModTime = h.ModTime.Truncate(time.Second).UTC()
 	h.AccessTime = h.ModTime.Truncate(time.Second).UTC()
 	h.ChangeTime = h.ModTime.Truncate(time.Second).UTC()

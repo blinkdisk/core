@@ -10,7 +10,7 @@ import (
 	"github.com/google/fswalker"
 	fspb "github.com/google/fswalker/proto/fswalker"
 
-	"github.com/kopia/kopia/tests/tools/fswalker/protofile"
+	"github.com/blinkdisk/core/tests/tools/fswalker/protofile"
 )
 
 const (

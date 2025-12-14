@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestProfileFlags(t *testing.T) {

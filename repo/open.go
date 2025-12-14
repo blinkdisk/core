@@ -13,35 +13,35 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/cacheprot"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/crypto"
-	"github.com/kopia/kopia/internal/feature"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/internal/repodiag"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/beforeop"
-	loggingwrapper "github.com/kopia/kopia/repo/blob/logging"
-	"github.com/kopia/kopia/repo/blob/readonly"
-	"github.com/kopia/kopia/repo/blob/storagemetrics"
-	"github.com/kopia/kopia/repo/blob/throttling"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/cacheprot"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/crypto"
+	"github.com/blinkdisk/core/internal/feature"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/internal/repodiag"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/beforeop"
+	loggingwrapper "github.com/blinkdisk/core/repo/blob/logging"
+	"github.com/blinkdisk/core/repo/blob/readonly"
+	"github.com/blinkdisk/core/repo/blob/storagemetrics"
+	"github.com/blinkdisk/core/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
 )
 
-// The list below keeps track of features this version of Kopia supports for forwards compatibility.
+// The list below keeps track of features this version of BlinkDisk supports for forwards compatibility.
 //
 // Repository can specify which features are required to open it and clients will refuse to open the
 // repository if they don't have all required features.
 //
 // In the future we'll be removing features from the list to deprecate them and this will ensure newer
-// versions of kopia won't be able to work with old, unmigrated repositories.
+// versions of blinkdisk won't be able to work with old, unmigrated repositories.
 //
 // The strings are arbitrary, but should be short, human-readable and immutable once a version
 // that starts requiring them is released.
@@ -65,7 +65,7 @@ const localCacheIntegrityHMACSecretLength = 16
 //nolint:gochecknoglobals
 const localCacheIntegrityPurpose = "local-cache-integrity"
 
-var log = logging.Module("kopia/repo")
+var log = logging.Module("blinkdisk/repo")
 
 // Options provides configuration parameters for connection to a repository.
 type Options struct {
@@ -177,7 +177,7 @@ func getContentCacheOrNil(ctx context.Context, si *APIServerInfo, opt *content.C
 	return pc, nil
 }
 
-// openAPIServer connects remote repository over Kopia API.
+// openAPIServer connects remote repository over BlinkDisk API.
 func openAPIServer(ctx context.Context, si *APIServerInfo, cliOpts ClientOptions, cachingOptions *content.CachingOptions, password string, options *Options) (Repository, error) {
 	cachingOptions = cachingOptions.CloneOrDefault()
 
@@ -404,7 +404,7 @@ func handleMissingRequiredFeatures(ctx context.Context, fmgr *format.Manager, ig
 		return errors.Wrap(err, "required features")
 	}
 
-	// See if the current version of Kopia supports all features required by the repository format.
+	// See if the current version of BlinkDisk supports all features required by the repository format.
 	// so we can safely fail to start in case repository has been upgraded to a new, incompatible version.
 	if missingFeatures := feature.GetUnsupportedFeatures(required, supportedFeatures); len(missingFeatures) > 0 {
 		for _, mf := range missingFeatures {

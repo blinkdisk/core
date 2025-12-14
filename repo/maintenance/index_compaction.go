@@ -3,9 +3,9 @@ package maintenance
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 // runTaskIndexCompactionQuick rewrites index blobs to reduce their count but does not drop any contents.

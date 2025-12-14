@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 func TestSetErrorHandlingPolicyFromFlags(t *testing.T) {

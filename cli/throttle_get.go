@@ -5,8 +5,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 type commonThrottleGet struct {

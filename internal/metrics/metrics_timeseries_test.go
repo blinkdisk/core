@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestCounterTimeSeries(t *testing.T) {

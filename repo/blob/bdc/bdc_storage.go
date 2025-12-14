@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
 )
 
 func (s *bdcStorage) ConnectionInfo() blob.ConnectionInfo {

@@ -1,6 +1,6 @@
 package notifydata
 
-import "github.com/kopia/kopia/internal/grpcapi"
+import "github.com/blinkdisk/core/internal/grpcapi"
 
 // EmptyEventData is a placeholder for events that do not carry any additional data.
 type EmptyEventData struct{}

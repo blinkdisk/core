@@ -5,9 +5,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 type commandCachePrefetch struct {

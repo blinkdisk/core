@@ -12,18 +12,18 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/windows"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestShadowCopy(t *testing.T) {
-	kopiaExe := os.Getenv("KOPIA_EXE")
-	if kopiaExe == "" {
+	blinkdiskExe := os.Getenv("BLINKDISK_EXE")
+	if blinkdiskExe == "" {
 		t.Skip()
 	}
 
-	runner := testenv.NewExeRunnerWithBinary(t, kopiaExe)
+	runner := testenv.NewExeRunnerWithBinary(t, blinkdiskExe)
 	e := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner)
 
 	e.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", e.RepoDir)

@@ -10,11 +10,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/logging"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/logging"
 )
 
 func TestLoggingStorage(t *testing.T) {

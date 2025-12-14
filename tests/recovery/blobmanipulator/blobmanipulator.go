@@ -12,24 +12,24 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
-	"github.com/kopia/kopia/tests/tools/fio"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/tests/tools/fio"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 var (
-	errKopiaRepoNotFound  = errors.New("kopia repository does not exist")
+	errBlinkDiskRepoNotFound  = errors.New("blinkdisk repository does not exist")
 	errCreatingFileWriter = errors.New("could not create file writer")
 )
 
-// BlobManipulator provides a way to run a kopia command.
+// BlobManipulator provides a way to run a blinkdisk command.
 type BlobManipulator struct {
-	KopiaCommandRunner *kopiarunner.KopiaSnapshotter
-	DirCreator         *snapmeta.KopiaSnapshotter
+	BlinkDiskCommandRunner *blinkdiskrunner.BlinkDiskSnapshotter
+	DirCreator         *snapmeta.BlinkDiskSnapshotter
 	fileWriter         *fiofilewriter.FileWriter
 
 	DataRepoPath       string
@@ -44,33 +44,33 @@ func NewBlobManipulator(baseDirPath, dataRepoPath string) (*BlobManipulator, err
 		return nil, nil
 	}
 
-	runner, err := kopiarunner.NewKopiaSnapshotter(baseDirPath)
+	runner, err := blinkdiskrunner.NewBlinkDiskSnapshotter(baseDirPath)
 	if err != nil {
 		return nil, err
 	}
 
 	return &BlobManipulator{
-		KopiaCommandRunner: runner,
+		BlinkDiskCommandRunner: runner,
 		DirCreator:         ks,
 	}, nil
 }
 
-func getSnapshotter(baseDirPath, dataRepoPath string) *snapmeta.KopiaSnapshotter {
+func getSnapshotter(baseDirPath, dataRepoPath string) *snapmeta.BlinkDiskSnapshotter {
 	ks, err := snapmeta.NewSnapshotter(baseDirPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			log.Println("Skipping recovery tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			log.Println("Skipping recovery tests because BLINKDISK_EXE is not set")
 		} else {
-			log.Println("Error creating kopia Snapshotter:", err)
+			log.Println("Error creating blinkdisk Snapshotter:", err)
 		}
 
 		return nil
 	}
 
-	log.Println("Created snapmeta.KopiaSnapshotter")
+	log.Println("Created snapmeta.BlinkDiskSnapshotter")
 
 	if err = ks.ConnectOrCreateRepo(dataRepoPath); err != nil {
-		log.Println("Error initializing kopia Snapshotter:", err)
+		log.Println("Error initializing blinkdisk Snapshotter:", err)
 		return nil
 	}
 
@@ -79,14 +79,14 @@ func getSnapshotter(baseDirPath, dataRepoPath string) *snapmeta.KopiaSnapshotter
 
 // ConnectOrCreateRepo connects to an existing repository if possible or creates a new one.
 func (bm *BlobManipulator) ConnectOrCreateRepo(dataRepoPath string) error {
-	if bm.KopiaCommandRunner == nil {
-		return errKopiaRepoNotFound
+	if bm.BlinkDiskCommandRunner == nil {
+		return errBlinkDiskRepoNotFound
 	}
 
 	return bm.DirCreator.ConnectOrCreateRepo(bm.DataRepoPath)
 }
 
-// DeleteBlob deletes the provided blob or a random blob, in kopia repo.
+// DeleteBlob deletes the provided blob or a random blob, in blinkdisk repo.
 func (bm *BlobManipulator) DeleteBlob(blobID string) error {
 	if blobID == "" {
 		randomBlobID, err := bm.getBlobIDRand()
@@ -99,7 +99,7 @@ func (bm *BlobManipulator) DeleteBlob(blobID string) error {
 
 	log.Printf("Deleting BLOB %s", blobID)
 
-	_, _, err := bm.KopiaCommandRunner.Run("blob", "delete", blobID, "--dangerous-commands=enabled")
+	_, _, err := bm.BlinkDiskCommandRunner.Run("blob", "delete", blobID, "--dangerous-commands=enabled")
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func (bm *BlobManipulator) getBlobIDRand() (string, error) {
 		return "", err
 	}
 
-	blobIDList, _, err := bm.KopiaCommandRunner.Run("blob", "list", "--json")
+	blobIDList, _, err := bm.BlinkDiskCommandRunner.Run("blob", "list", "--json")
 	if blobIDList == "" {
 		return "", robustness.ErrNoOp
 	}
@@ -183,7 +183,7 @@ func (bm *BlobManipulator) writeRandomFiles(ctx context.Context, fileSize, numFi
 	return nil
 }
 
-// RestoreGivenOrRandomSnapshot restores a given or a random snapshot from kopia repository into the provided target directory.
+// RestoreGivenOrRandomSnapshot restores a given or a random snapshot from blinkdisk repository into the provided target directory.
 func (bm *BlobManipulator) RestoreGivenOrRandomSnapshot(snapID, restoreDir string) (string, error) {
 	err := bm.ConnectOrCreateRepo(bm.DataRepoPath)
 	if err != nil {
@@ -192,7 +192,7 @@ func (bm *BlobManipulator) RestoreGivenOrRandomSnapshot(snapID, restoreDir strin
 
 	if snapID == "" {
 		// list available snapshots
-		stdout, _, snapshotListErr := bm.KopiaCommandRunner.Run("snapshot", "list", "--json")
+		stdout, _, snapshotListErr := bm.BlinkDiskCommandRunner.Run("snapshot", "list", "--json")
 		if snapshotListErr != nil {
 			return stdout, snapshotListErr
 		}
@@ -208,7 +208,7 @@ func (bm *BlobManipulator) RestoreGivenOrRandomSnapshot(snapID, restoreDir strin
 		snapID = string(s[rand.Intn(len(s))].ID)
 	}
 
-	_, msg, err := bm.KopiaCommandRunner.Run("snapshot", "restore", snapID, restoreDir)
+	_, msg, err := bm.BlinkDiskCommandRunner.Run("snapshot", "restore", snapID, restoreDir)
 	if err != nil {
 		// return the error message to parse the object ID to be used in snapshot fix command
 		return msg, err
@@ -217,7 +217,7 @@ func (bm *BlobManipulator) RestoreGivenOrRandomSnapshot(snapID, restoreDir strin
 	return "", nil
 }
 
-// SetUpSystemUnderTest connects or creates a kopia repo, writes random data in source directory,
+// SetUpSystemUnderTest connects or creates a blinkdisk repo, writes random data in source directory,
 // creates snapshots of the source directory.
 func (bm *BlobManipulator) SetUpSystemUnderTest() error {
 	fileSize := 100
@@ -273,7 +273,7 @@ func (bm *BlobManipulator) SetUpSystemUnderTest() error {
 	return nil
 }
 
-// SetUpSystemWithOneSnapshot connects or creates a kopia repo, writes random data in source directory,
+// SetUpSystemWithOneSnapshot connects or creates a blinkdisk repo, writes random data in source directory,
 // creates snapshots of the source directory.
 func (bm *BlobManipulator) SetUpSystemWithOneSnapshot() (string, error) {
 	fileSize := 1 * 1024 * 1024
@@ -301,7 +301,7 @@ func (bm *BlobManipulator) SetUpSystemWithOneSnapshot() (string, error) {
 	return snapshotID, nil
 }
 
-// GenerateRandomFiles connects or creates a Kopia repository that writes random data in source directory.
+// GenerateRandomFiles connects or creates a BlinkDisk repository that writes random data in source directory.
 // Tests can later create snapshots from the source directory.
 func (bm *BlobManipulator) GenerateRandomFiles(fileSize, numFiles int) error {
 	ctx := context.Background()
@@ -316,19 +316,19 @@ func (bm *BlobManipulator) GenerateRandomFiles(fileSize, numFiles int) error {
 	return nil
 }
 
-// VerifySnapshot implements the Snapshotter interface to verify a kopia snapshot corruption.
+// VerifySnapshot implements the Snapshotter interface to verify a blinkdisk snapshot corruption.
 func (bm *BlobManipulator) VerifySnapshot() error {
-	return bm.KopiaCommandRunner.VerifySnapshot("--verify-files-percent=100")
+	return bm.BlinkDiskCommandRunner.VerifySnapshot("--verify-files-percent=100")
 }
 
 // TakeSnapshot creates snapshot of the provided directory.
 func (bm *BlobManipulator) TakeSnapshot(dir string) (snapID, stdout string, err error) {
-	err = bm.KopiaCommandRunner.ConnectRepo("filesystem", "--path="+bm.DataRepoPath)
+	err = bm.BlinkDiskCommandRunner.ConnectRepo("filesystem", "--path="+bm.DataRepoPath)
 	if err != nil {
 		return "", "", err
 	}
 
-	msg, stdout, err := bm.KopiaCommandRunner.Run("snapshot", "create", dir, "--json")
+	msg, stdout, err := bm.BlinkDiskCommandRunner.Run("snapshot", "create", dir, "--json")
 	if err != nil {
 		return msg, stdout, err
 	}
@@ -352,7 +352,7 @@ func (bm *BlobManipulator) DeleteSnapshot(snapshotID string) (string, error) {
 		return "", err
 	}
 
-	stdout, _, err := bm.KopiaCommandRunner.Run("snapshot", "delete", snapshotID, "--delete")
+	stdout, _, err := bm.BlinkDiskCommandRunner.Run("snapshot", "delete", snapshotID, "--delete")
 	if err != nil {
 		return stdout, err
 	}
@@ -363,7 +363,7 @@ func (bm *BlobManipulator) DeleteSnapshot(snapshotID string) (string, error) {
 // SnapshotFixRemoveFilesByBlobID runs snapshot fix remove-files command with a provided blob id.
 func (bm *BlobManipulator) SnapshotFixRemoveFilesByBlobID(blobID string) (string, error) {
 	// Get hold of object ID that can be used in the snapshot fix command
-	output, msg, err := bm.KopiaCommandRunner.Run("snapshot", "fix", "remove-files", "--object-id="+blobID, "--commit")
+	output, msg, err := bm.BlinkDiskCommandRunner.Run("snapshot", "fix", "remove-files", "--object-id="+blobID, "--commit")
 	if err != nil {
 		log.Println(output, msg)
 		return output, err
@@ -375,7 +375,7 @@ func (bm *BlobManipulator) SnapshotFixRemoveFilesByBlobID(blobID string) (string
 // SnapshotFixRemoveFilesByFilename runs snapshot fix remove-files command with a provided file name.
 func (bm *BlobManipulator) SnapshotFixRemoveFilesByFilename(filename string) (string, error) {
 	// Get hold of the filename that can be used to in the snapshot fix command
-	stdout, msg, err := bm.KopiaCommandRunner.Run("snapshot", "fix", "remove-files", "--filename="+filename, "--commit")
+	stdout, msg, err := bm.BlinkDiskCommandRunner.Run("snapshot", "fix", "remove-files", "--filename="+filename, "--commit")
 	if err != nil {
 		log.Println(stdout, msg)
 		return stdout, err
@@ -386,7 +386,7 @@ func (bm *BlobManipulator) SnapshotFixRemoveFilesByFilename(filename string) (st
 
 // SnapshotFixInvalidFiles runs snapshot fix invalid-files command with the provided flags.
 func (bm *BlobManipulator) SnapshotFixInvalidFiles(flags string) (string, error) {
-	stdout, msg, err := bm.KopiaCommandRunner.Run("snapshot", "fix", "invalid-files", flags, "--commit")
+	stdout, msg, err := bm.BlinkDiskCommandRunner.Run("snapshot", "fix", "invalid-files", flags, "--commit")
 	if err != nil {
 		log.Println(stdout, msg)
 		return stdout, err
@@ -397,13 +397,13 @@ func (bm *BlobManipulator) SnapshotFixInvalidFiles(flags string) (string, error)
 
 // RunMaintenance runs repository maintenance.
 func (bm *BlobManipulator) RunMaintenance() (string, error) {
-	stdout, _, err := bm.KopiaCommandRunner.Run("maintenance", "set", "--full-interval", "2s")
+	stdout, _, err := bm.BlinkDiskCommandRunner.Run("maintenance", "set", "--full-interval", "2s")
 	if err != nil {
 		return stdout, err
 	}
 
 	// Run full maintenance, most likely calls blob gc
-	stdout, _, err = bm.KopiaCommandRunner.Run("maintenance", "run", "--full", "--force", "--safety", "none")
+	stdout, _, err = bm.BlinkDiskCommandRunner.Run("maintenance", "run", "--full", "--force", "--safety", "none")
 	if err != nil {
 		return stdout, err
 	}

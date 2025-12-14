@@ -3,8 +3,8 @@ package cache
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // passthroughContentCache is a contentCache which does no caching.

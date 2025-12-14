@@ -9,7 +9,7 @@ import (
 // APIServerInfo is remote repository configuration stored in local configuration.
 //
 // NOTE: this structure is persistent on disk may be read/written using
-// different versions of Kopia, so it must be backwards-compatible.
+// different versions of BlinkDisk, so it must be backwards-compatible.
 //
 // Apply appropriate defaults when reading.
 type APIServerInfo struct {

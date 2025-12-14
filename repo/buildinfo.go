@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Kopia's build information.
+// BlinkDisk's build information.
 //
 //nolint:gochecknoglobals
 var (

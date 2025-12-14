@@ -11,14 +11,14 @@ import (
 	"github.com/fatih/color"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 type commandSnapshotList struct {

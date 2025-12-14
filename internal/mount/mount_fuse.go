@@ -11,8 +11,8 @@ import (
 	"github.com/hanwen/go-fuse/v2/fuse"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/fusemount"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/fusemount"
 )
 
 // we're serving read-only filesystem, cache some attributes for 30 seconds.
@@ -24,9 +24,9 @@ func (mo *Options) toFuseMountOptions() *gofusefs.Options {
 	o := &gofusefs.Options{
 		MountOptions: fuse.MountOptions{
 			AllowOther: mo.FuseAllowOther,
-			Name:       "kopia",
-			FsName:     "kopia",
-			Debug:      os.Getenv("KOPIA_DEBUG_FUSE") != "",
+			Name:       "blinkdisk",
+			FsName:     "blinkdisk",
+			Debug:      os.Getenv("BLINKDISK_DEBUG_FUSE") != "",
 		},
 		EntryTimeout:    &cacheTimeout,
 		AttrTimeout:     &cacheTimeout,
@@ -48,7 +48,7 @@ func Directory(ctx context.Context, entry fs.Directory, mountPoint string, mount
 	if mountPoint == "*" {
 		var err error
 
-		mountPoint, err = os.MkdirTemp("", "kopia-mount")
+		mountPoint, err = os.MkdirTemp("", "blinkdisk-mount")
 		if err != nil {
 			return nil, errors.Wrap(err, "error creating temp directory")
 		}

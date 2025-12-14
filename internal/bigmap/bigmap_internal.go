@@ -19,8 +19,8 @@ import (
 	"github.com/edsrzf/mmap-go"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/tempfile"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/tempfile"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (

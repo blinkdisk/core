@@ -14,22 +14,22 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/crypto"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/metricid"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/beforeop"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/crypto"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/metricid"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/beforeop"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 func (s *formatSpecificTestSuite) TestWriters(t *testing.T) {
@@ -410,11 +410,11 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 	defer d.Close()
 
 	// verify that the blobcfg retention blob is created
-	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.KopiaBlobCfgBlobID, 0, -1, &d))
+	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.BlinkDiskBlobCfgBlobID, 0, -1, &d))
 	require.NoError(t, env.RepositoryWriter.FormatManager().ChangePassword(ctx, "new-password"))
 	// verify that the blobcfg retention blob is created and is different after
 	// password-change
-	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.KopiaBlobCfgBlobID, 0, -1, &d))
+	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.BlinkDiskBlobCfgBlobID, 0, -1, &d))
 
 	// verify that we cannot re-initialize the repo even after password change
 	require.EqualError(t, repo.Initialize(testlogging.Context(t), env.RootStorage(), nil, env.Password),
@@ -424,17 +424,17 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 	{
 		// backup & corrupt the blobcfg blob
 		d.Reset()
-		require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.KopiaBlobCfgBlobID, 0, -1, &d))
+		require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.BlinkDiskBlobCfgBlobID, 0, -1, &d))
 		corruptedData := d.Dup()
 		corruptedData.Append([]byte("bad bits"))
-		require.NoError(t, env.RepositoryWriter.BlobStorage().PutBlob(ctx, format.KopiaBlobCfgBlobID, corruptedData.Bytes(), blob.PutOptions{}))
+		require.NoError(t, env.RepositoryWriter.BlobStorage().PutBlob(ctx, format.BlinkDiskBlobCfgBlobID, corruptedData.Bytes(), blob.PutOptions{}))
 
 		// verify that we error out on corrupted blobcfg blob
 		_, err := repo.Open(ctx, env.ConfigFile(), env.Password, &repo.Options{})
 		require.ErrorContains(t, err, "invalid repository password")
 
 		// restore the original blob
-		require.NoError(t, env.RepositoryWriter.BlobStorage().PutBlob(ctx, format.KopiaBlobCfgBlobID, d.Bytes(), blob.PutOptions{}))
+		require.NoError(t, env.RepositoryWriter.BlobStorage().PutBlob(ctx, format.BlinkDiskBlobCfgBlobID, d.Bytes(), blob.PutOptions{}))
 	}
 
 	// verify that we'd hard-fail on unexpected errors on blobcfg blob-puts
@@ -445,11 +445,11 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 				env.RootStorage(),
 				// GetBlob callback
 				func(ctx context.Context, id blob.ID) error {
-					if id == format.KopiaBlobCfgBlobID {
+					if id == format.BlinkDiskBlobCfgBlobID {
 						return errors.New("unexpected error")
 					}
 					// simulate not-found for format-blob
-					if id == format.KopiaRepositoryBlobID {
+					if id == format.BlinkDiskRepositoryBlobID {
 						return blob.ErrBlobNotFound
 					}
 
@@ -471,11 +471,11 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 				func(ctx context.Context, id blob.ID) error {
 					// simulate not-found for format-blob but let blobcfg
 					// blob appear as pre-existing
-					if id == format.KopiaBlobCfgBlobID {
+					if id == format.BlinkDiskBlobCfgBlobID {
 						return nil
 					}
 
-					if id == format.KopiaRepositoryBlobID {
+					if id == format.BlinkDiskRepositoryBlobID {
 						return blob.ErrBlobNotFound
 					}
 
@@ -496,7 +496,7 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 				// GetBlob callback
 				func(ctx context.Context, id blob.ID) error {
 					// simulate not-found for format-blob and blobcfg blob
-					if id == format.KopiaBlobCfgBlobID || id == format.KopiaRepositoryBlobID {
+					if id == format.BlinkDiskBlobCfgBlobID || id == format.BlinkDiskRepositoryBlobID {
 						return blob.ErrBlobNotFound
 					}
 
@@ -505,7 +505,7 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 				nil, nil,
 				// PutBlob callback
 				func(ctx context.Context, id blob.ID, _ *blob.PutOptions) error {
-					if id == format.KopiaBlobCfgBlobID {
+					if id == format.BlinkDiskBlobCfgBlobID {
 						return errors.New("unexpected error")
 					}
 
@@ -518,7 +518,7 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 			},
 			env.Password,
 		),
-		"unable to write blobcfg blob: PutBlob() failed for \"kopia.blobcfg\": unexpected error")
+		"unable to write blobcfg blob: PutBlob() failed for \"blinkdisk.blobcfg\": unexpected error")
 
 	// verify that we always read/fail on the repository blob first before the
 	// blobcfg blob
@@ -529,7 +529,7 @@ func TestInitializeWithBlobCfgRetentionBlob(t *testing.T) {
 				// GetBlob callback
 				func(ctx context.Context, id blob.ID) error {
 					// simulate not-found for format-blob and blobcfg blob
-					if id == format.KopiaRepositoryBlobID {
+					if id == format.BlinkDiskRepositoryBlobID {
 						return errors.New("unexpected error")
 					}
 
@@ -551,7 +551,7 @@ func TestInitializeWithNoRetention(t *testing.T) {
 	var b gather.WriteBuffer
 	defer b.Close()
 
-	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.KopiaBlobCfgBlobID, 0, -1, &b))
+	require.NoError(t, env.RepositoryWriter.BlobStorage().GetBlob(ctx, format.BlinkDiskBlobCfgBlobID, 0, -1, &b))
 }
 
 func TestObjectWritesWithRetention(t *testing.T) {
@@ -580,9 +580,9 @@ func TestObjectWritesWithRetention(t *testing.T) {
 	}
 
 	prefixesWithRetention = append(prefixesWithRetention, indexblob.V0IndexBlobPrefix, epoch.EpochManagerIndexUberPrefix,
-		format.KopiaRepositoryBlobID, format.KopiaBlobCfgBlobID)
+		format.BlinkDiskRepositoryBlobID, format.BlinkDiskBlobCfgBlobID)
 
-	// make sure that we cannot set mtime on the kopia objects created due to the
+	// make sure that we cannot set mtime on the blinkdisk objects created due to the
 	// retention time constraint
 	require.NoError(t, versionedMap.ListBlobs(ctx, "", func(it blob.Metadata) error {
 		for _, prefix := range prefixesWithRetention {
@@ -863,7 +863,7 @@ func TestDeriveKey(t *testing.T) {
 	masterKey := []byte("01234567890123456789012345678901")
 	uniqueID := []byte("a5ba5d2da4b14b518b9501b64b5d87ca")
 
-	j := format.KopiaRepositoryJSON{
+	j := format.BlinkDiskRepositoryJSON{
 		UniqueID:               uniqueID,
 		KeyDerivationAlgorithm: format.DefaultKeyDerivationAlgorithm,
 	}

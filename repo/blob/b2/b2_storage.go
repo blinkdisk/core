@@ -12,16 +12,16 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/kothar/go-backblaze.v0"
 
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/timestampmeta"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/timestampmeta"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
 )
 
 const (
 	b2storageType = "b2"
 
-	timeMapKey = "kopia-mtime" // case is important, must be all-lowercase
+	timeMapKey = "blinkdisk-mtime" // case is important, must be all-lowercase
 )
 
 type b2Storage struct {

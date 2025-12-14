@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/kopia/kopia/fs/localfs"
+	"github.com/blinkdisk/core/fs/localfs"
 )
 
 // MaxFilenameLength is the maximum length of a filename.

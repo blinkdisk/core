@@ -7,9 +7,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/snapshot/restore"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/snapshot/restore"
 )
 
 type cliRestoreProgress struct {

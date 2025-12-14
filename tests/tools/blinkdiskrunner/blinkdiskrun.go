@@ -1,5 +1,5 @@
-// Package kopiarunner wraps the execution of the kopia binary.
-package kopiarunner
+// Package blinkdiskrunner wraps the execution of the blinkdisk binary.
+package blinkdiskrunner
 
 import (
 	"bytes"
@@ -17,7 +17,7 @@ const (
 	repoPassword = "qWQPJ2hiiLgWRRCr"
 )
 
-// Runner is a helper for running kopia commands.
+// Runner is a helper for running blinkdisk commands.
 type Runner struct {
 	Exe         string
 	ConfigDir   string
@@ -26,41 +26,41 @@ type Runner struct {
 }
 
 // ErrExeVariableNotSet is an exported error.
-var ErrExeVariableNotSet = errors.New("KOPIA_EXE variable has not been set")
+var ErrExeVariableNotSet = errors.New("BLINKDISK_EXE variable has not been set")
 
-// NewRunner initializes a new kopia runner and returns its pointer.
+// NewRunner initializes a new blinkdisk runner and returns its pointer.
 func NewRunner(baseDir string) (*Runner, error) {
-	exe := os.Getenv("KOPIA_EXE")
+	exe := os.Getenv("BLINKDISK_EXE")
 	if exe == "" {
 		return nil, ErrExeVariableNotSet
 	}
 
-	configDir, err := os.MkdirTemp(baseDir, "kopia-config")
+	configDir, err := os.MkdirTemp(baseDir, "blinkdisk-config")
 	if err != nil {
 		return nil, err
 	}
 
 	fixedArgs := []string{
 		// use per-test config file, to avoid clobbering current user's setup.
-		"--config-file", filepath.Join(configDir, ".kopia.config"),
+		"--config-file", filepath.Join(configDir, ".blinkdisk.config"),
 	}
 
 	return &Runner{
 		Exe:         exe,
 		ConfigDir:   configDir,
 		fixedArgs:   fixedArgs,
-		environment: []string{"KOPIA_PASSWORD=" + repoPassword},
+		environment: []string{"BLINKDISK_PASSWORD=" + repoPassword},
 	}, nil
 }
 
-// Cleanup cleans up the directories managed by the kopia Runner.
+// Cleanup cleans up the directories managed by the blinkdisk Runner.
 func (kr *Runner) Cleanup() {
 	if kr.ConfigDir != "" {
 		os.RemoveAll(kr.ConfigDir) //nolint:errcheck
 	}
 }
 
-// Run will execute the kopia command with the given args.
+// Run will execute the blinkdisk command with the given args.
 func (kr *Runner) Run(args ...string) (stdout, stderr string, err error) {
 	argsStr := strings.Join(args, " ")
 	log.Printf("running '%s %v'", kr.Exe, argsStr)
@@ -79,7 +79,7 @@ func (kr *Runner) Run(args ...string) (stdout, stderr string, err error) {
 	return string(o), errOut.String(), err
 }
 
-// RunAsync will execute the kopia command with the given args in background.
+// RunAsync will execute the blinkdisk command with the given args in background.
 func (kr *Runner) RunAsync(args ...string) (*exec.Cmd, error) {
 	log.Printf("running async '%s %v'", kr.Exe, strings.Join(args, " "))
 

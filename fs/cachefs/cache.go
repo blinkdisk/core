@@ -5,13 +5,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/object"
 )
 
-var log = logging.Module("kopia/cachefs")
+var log = logging.Module("blinkdisk/cachefs")
 
 const dirCacheExpiration = 24 * time.Hour
 

@@ -24,9 +24,9 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	oteltrace "go.opentelemetry.io/otel/trace"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo"
 )
 
 // DirMode is the directory mode for output directories.
@@ -68,20 +68,20 @@ type observabilityFlags struct {
 }
 
 func (c *observabilityFlags) setup(svc appServices, app *kingpin.Application) {
-	app.Flag("dump-allocator-stats", "Dump allocator stats at the end of execution.").Hidden().Envar(svc.EnvName("KOPIA_DUMP_ALLOCATOR_STATS")).BoolVar(&c.dumpAllocatorStats)
+	app.Flag("dump-allocator-stats", "Dump allocator stats at the end of execution.").Hidden().Envar(svc.EnvName("BLINKDISK_DUMP_ALLOCATOR_STATS")).BoolVar(&c.dumpAllocatorStats)
 	app.Flag("metrics-listen-addr", "Expose Prometheus metrics on a given host:port").Hidden().StringVar(&c.metricsListenAddr)
 	app.Flag("enable-pprof", "Expose pprof handlers").Hidden().BoolVar(&c.enablePProfEndpoint)
 
 	// push gateway parameters
-	app.Flag("metrics-push-addr", "Address of push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_ADDR")).Hidden().StringVar(&c.metricsPushAddr)
-	app.Flag("metrics-push-interval", "Frequency of metrics push").Envar(svc.EnvName("KOPIA_METRICS_PUSH_INTERVAL")).Hidden().Default("5s").DurationVar(&c.metricsPushInterval)
-	app.Flag("metrics-push-job", "Job ID for to push gateway").Envar(svc.EnvName("KOPIA_METRICS_JOB")).Hidden().Default("kopia").StringVar(&c.metricsJob)
-	app.Flag("metrics-push-grouping", "Grouping for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_GROUPING")).Hidden().StringsVar(&c.metricsGroupings)
-	app.Flag("metrics-push-username", "Username for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_USERNAME")).Hidden().StringVar(&c.metricsPushUsername)
-	app.Flag("metrics-push-password", "Password for push gateway").Envar(svc.EnvName("KOPIA_METRICS_PUSH_PASSWORD")).Hidden().StringVar(&c.metricsPushPassword)
+	app.Flag("metrics-push-addr", "Address of push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_ADDR")).Hidden().StringVar(&c.metricsPushAddr)
+	app.Flag("metrics-push-interval", "Frequency of metrics push").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_INTERVAL")).Hidden().Default("5s").DurationVar(&c.metricsPushInterval)
+	app.Flag("metrics-push-job", "Job ID for to push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_JOB")).Hidden().Default("blinkdisk").StringVar(&c.metricsJob)
+	app.Flag("metrics-push-grouping", "Grouping for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_GROUPING")).Hidden().StringsVar(&c.metricsGroupings)
+	app.Flag("metrics-push-username", "Username for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_USERNAME")).Hidden().StringVar(&c.metricsPushUsername)
+	app.Flag("metrics-push-password", "Password for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_PUSH_PASSWORD")).Hidden().StringVar(&c.metricsPushPassword)
 
 	// tracing (OTLP) parameters
-	app.Flag("otlp-trace", "Send OpenTelemetry traces to OTLP collector using gRPC").Hidden().Envar(svc.EnvName("KOPIA_ENABLE_OTLP_TRACE")).BoolVar(&c.otlpTrace)
+	app.Flag("otlp-trace", "Send OpenTelemetry traces to OTLP collector using gRPC").Hidden().Envar(svc.EnvName("BLINKDISK_ENABLE_OTLP_TRACE")).BoolVar(&c.otlpTrace)
 
 	var formats []string
 
@@ -91,10 +91,10 @@ func (c *observabilityFlags) setup(svc appServices, app *kingpin.Application) {
 
 	sort.Strings(formats)
 
-	app.Flag("metrics-push-format", "Format to use for push gateway").Envar(svc.EnvName("KOPIA_METRICS_FORMAT")).Hidden().EnumVar(&c.metricsPushFormat, formats...)
+	app.Flag("metrics-push-format", "Format to use for push gateway").Envar(svc.EnvName("BLINKDISK_METRICS_FORMAT")).Hidden().EnumVar(&c.metricsPushFormat, formats...)
 
 	//nolint:lll
-	app.Flag("diagnostics-output-directory", "Directory where the diagnostics output should be stored saved when kopia exits. Diagnostics data includes among others: metrics, traces, profiles. The output files are stored in a sub-directory for each kopia (process) execution").Hidden().Default(filepath.Join(os.TempDir(), "kopia-diagnostics")).StringVar(&c.outputDirectory)
+	app.Flag("diagnostics-output-directory", "Directory where the diagnostics output should be stored saved when blinkdisk exits. Diagnostics data includes among others: metrics, traces, profiles. The output files are stored in a sub-directory for each blinkdisk (process) execution").Hidden().Default(filepath.Join(os.TempDir(), "blinkdisk-diagnostics")).StringVar(&c.outputDirectory)
 
 	app.Flag("metrics-store-on-exit", "Writes metrics to a file in a sub-directory of the directory specified with the --diagnostics-output-directory").Hidden().BoolVar(&c.saveMetrics)
 
@@ -247,7 +247,7 @@ func (c *observabilityFlags) maybeStartTraceExporter(ctx context.Context) error 
 
 	r := resource.NewWithAttributes(
 		semconv.SchemaURL,
-		semconv.ServiceNameKey.String("kopia"),
+		semconv.ServiceNameKey.String("blinkdisk"),
 		semconv.ServiceVersionKey.String(repo.BuildVersion),
 	)
 
@@ -288,7 +288,7 @@ func (c *observabilityFlags) stop(ctx context.Context) {
 		if metricsDir, err := mkSubdirectories(c.outputDirectory, c.outputSubdirectoryName); err != nil {
 			log(ctx).Warnf("unable to create metrics output directory '%s': %v", metricsDir, err)
 		} else {
-			if err := prometheus.WriteToTextfile(filepath.Join(metricsDir, "kopia-metrics.prom"), prometheus.DefaultGatherer); err != nil {
+			if err := prometheus.WriteToTextfile(filepath.Join(metricsDir, "blinkdisk-metrics.prom"), prometheus.DefaultGatherer); err != nil {
 				log(ctx).Warnf("unable to write metrics to file: %v", err)
 			}
 		}

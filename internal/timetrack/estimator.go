@@ -3,7 +3,7 @@ package timetrack
 import (
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 // Estimator estimates the completion of a task.

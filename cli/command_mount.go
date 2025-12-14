@@ -6,12 +6,12 @@ import (
 	"github.com/pkg/errors"
 	"github.com/skratchdot/open-golang/open"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/cachefs"
-	"github.com/kopia/kopia/fs/loggingfs"
-	"github.com/kopia/kopia/internal/mount"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/cachefs"
+	"github.com/blinkdisk/core/fs/loggingfs"
+	"github.com/blinkdisk/core/internal/mount"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 type commandMount struct {
@@ -111,7 +111,7 @@ func (c *commandMount) run(ctx context.Context, rep repo.Repository) error {
 	case <-ctrlCPressed:
 		log(ctx).Info("Unmounting...")
 		// TODO: Consider lazy unmounting (-z) and polling till the filesystem is unmounted instead of failing with:
-		// "unmount error: exit status 1: fusermount: failed to unmount /tmp/kopia-mount719819963: Device or resource busy, try --help"
+		// "unmount error: exit status 1: fusermount: failed to unmount /tmp/blinkdisk-mount719819963: Device or resource busy, try --help"
 		err := ctrl.Unmount(ctx)
 		if err != nil {
 			return errors.Wrap(err, "unmount error")

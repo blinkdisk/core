@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 func osSnapshotMode(*policy.OSSnapshotPolicy) policy.OSSnapshotMode {
