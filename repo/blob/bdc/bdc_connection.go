@@ -158,8 +158,13 @@ func (s *bdcStorage) responseReader() {
 			}
 		}
 
+		// TODO: Remove this once the Vault v2 migration is complete
 		if resp.Error == "STORAGE_DELETED" {
 			fmt.Fprintln(os.Stderr, "BDC STORAGE DELETED: ")
+		}
+
+		if resp.Error == "VAULT_DELETED" {
+			fmt.Fprintln(os.Stderr, "BDC VAULT DELETED: ")
 		}
 
 		s.responseMu.Lock()
