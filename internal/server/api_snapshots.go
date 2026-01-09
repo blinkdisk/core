@@ -169,6 +169,143 @@ func handleEditSnapshots(ctx context.Context, rc requestContext) (any, *apiError
 	return snaps, nil
 }
 
+func handleMoveSnapshots(ctx context.Context, rc requestContext) (any, *apiError) {
+	var req serverapi.MoveSnapshotsRequest
+
+	if err := json.Unmarshal(rc.body, &req); err != nil {
+		return nil, requestError(serverapi.ErrorMalformedRequest, "malformed request")
+	}
+
+	rw, ok := rc.rep.(repo.RepositoryWriter)
+	if !ok {
+		return nil, repositoryNotWritableError()
+	}
+
+	if req.Source == "" {
+		return nil, requestError(serverapi.ErrorMalformedRequest, "source is required")
+	}
+
+	if req.Destination == "" {
+		return nil, requestError(serverapi.ErrorMalformedRequest, "destination is required")
+	}
+
+	si, err := snapshot.ParseSourceInfo(req.Source, rc.rep.ClientOptions().Hostname, rc.rep.ClientOptions().Username)
+	if err != nil {
+		return nil, requestError(serverapi.ErrorMalformedRequest, errors.Wrap(err, "invalid source").Error())
+	}
+
+	di, err := snapshot.ParseSourceInfo(req.Destination, rc.rep.ClientOptions().Hostname, rc.rep.ClientOptions().Username)
+	if err != nil {
+		return nil, requestError(serverapi.ErrorMalformedRequest, errors.Wrap(err, "invalid destination").Error())
+	}
+
+	if di.Path != "" && si.Path == "" {
+		return nil, requestError(serverapi.ErrorMalformedRequest, "path specified on destination but not source")
+	}
+
+	if di.UserName != "" && si.UserName == "" {
+		return nil, requestError(serverapi.ErrorMalformedRequest, "username specified on destination but not source")
+	}
+
+	if err := repo.WriteSession(ctx, rw, repo.WriteSessionOptions{
+		Purpose: "MoveSnapshots",
+	}, func(ctx context.Context, w repo.RepositoryWriter) error {
+		srcSnapshots, err := snapshot.ListSnapshots(ctx, w, si)
+		if err != nil {
+			return errors.Wrap(err, "error listing source snapshots")
+		}
+
+		dstSnapshots, err := snapshot.ListSnapshots(ctx, w, di)
+		if err != nil {
+			return errors.Wrap(err, "error listing destination snapshots")
+		}
+
+		for _, manifest := range srcSnapshots {
+			dstSource := getMoveDestination(manifest.Source, di)
+
+			if dstSource == manifest.Source {
+				userLog(ctx).Debugf("%v is the same as destination, ignoring", dstSource)
+				continue
+			}
+
+			if snapshotExists(dstSnapshots, dstSource, manifest) {
+				userLog(ctx).Infof("%v (%v) already exists - deleting source", dstSource, manifest.StartTime.ToTime())
+
+				if err := w.DeleteManifest(ctx, manifest.ID); err != nil {
+					return errors.Wrap(err, "unable to delete source manifest")
+				}
+
+				continue
+			}
+
+			srcID := manifest.ID
+
+			userLog(ctx).Infof("moving %v (%v) => %v", manifest.Source, manifest.StartTime.ToTime(), dstSource)
+
+			manifest.ID = ""
+			manifest.Source = dstSource
+
+			if _, err := snapshot.SaveSnapshot(ctx, w, manifest); err != nil {
+				return errors.Wrap(err, "unable to save snapshot")
+			}
+
+			if err := w.DeleteManifest(ctx, srcID); err != nil {
+				return errors.Wrap(err, "unable to delete source manifest")
+			}
+		}
+
+		return nil
+	}); err != nil {
+		return nil, internalServerError(err)
+	}
+
+	return &serverapi.Empty{}, nil
+}
+
+func getMoveDestination(source, overrides snapshot.SourceInfo) snapshot.SourceInfo {
+	dst := source
+
+	if overrides.Host != "" {
+		dst.Host = overrides.Host
+	}
+
+	if overrides.UserName != "" {
+		dst.UserName = overrides.UserName
+	}
+
+	if overrides.Path != "" {
+		dst.Path = overrides.Path
+	}
+
+	return dst
+}
+
+func snapshotExists(snaps []*snapshot.Manifest, src snapshot.SourceInfo, srcManifest *snapshot.Manifest) bool {
+	for _, s := range snaps {
+		if src != s.Source {
+			continue
+		}
+
+		if sameSnapshot(srcManifest, s) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func sameSnapshot(a, b *snapshot.Manifest) bool {
+	if !a.StartTime.Equal(b.StartTime) {
+		return false
+	}
+
+	if a.RootObjectID() != b.RootObjectID() {
+		return false
+	}
+
+	return true
+}
+
 func forAllSourceManagersMatchingURLFilter(ctx context.Context, managers map[snapshot.SourceInfo]*sourceManager, c func(s *sourceManager, ctx context.Context) serverapi.SourceActionResponse, values url.Values) (any, *apiError) {
 	resp := &serverapi.MultipleSourceActionResponse{
 		Sources: map[string]serverapi.SourceActionResponse{},

@@ -210,6 +210,12 @@ type EditSnapshotsRequest struct {
 	RemovePins     []string      `json:"removePins"`
 }
 
+// MoveSnapshotsRequest contains request to move snapshots from one source to another.
+type MoveSnapshotsRequest struct {
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
+}
+
 // MountSnapshotRequest contains request to mount a snapshot.
 type MountSnapshotRequest struct {
 	Root string `json:"root"`
