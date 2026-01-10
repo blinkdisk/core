@@ -124,7 +124,8 @@ type CreateRepositoryRequest struct {
 
 // CheckRepositoryExistsRequest returns success if a repository exists in a given storage, ErrorNotInitialized if not.
 type CheckRepositoryExistsRequest struct {
-	Storage blob.ConnectionInfo `json:"storage"`
+	Storage  blob.ConnectionInfo `json:"storage"`
+	Password string              `json:"password,omitempty"` // optional password to validate
 }
 
 // CheckRepositoryExistsResponse contains the repository blob data when a repository exists.

@@ -196,6 +196,15 @@ func handleRepoExists(ctx context.Context, rc requestContext) (any, *apiError) {
 		return nil, internalServerError(errors.Wrap(err, "failed to decode repository JSON"))
 	}
 
+	if req.Password != "" {
+		if err := repoJSON.ValidatePassword(req.Password); err != nil {
+			if errors.Is(err, format.ErrInvalidPassword) {
+				return nil, requestError(serverapi.ErrorInvalidPassword, "invalid password")
+			}
+			return nil, internalServerError(errors.Wrap(err, "unable to validate password"))
+		}
+	}
+
 	return &serverapi.CheckRepositoryExistsResponse{
 		UniqueID: base64.StdEncoding.EncodeToString(repoJSON.UniqueID),
 	}, nil

@@ -78,6 +78,22 @@ func (f *KopiaRepositoryJSON) DeriveFormatEncryptionKeyFromPassword(password str
 	return res, nil
 }
 
+// ValidatePassword attempts to decrypt the repository config with the given password.
+// Returns ErrInvalidPassword if the password is incorrect, or an error if decryption fails for other reasons.
+func (f *KopiaRepositoryJSON) ValidatePassword(password string) error {
+	formatEncryptionKey, err := f.DeriveFormatEncryptionKeyFromPassword(password)
+	if err != nil {
+		return errors.Wrap(err, "unable to derive format encryption key")
+	}
+
+	_, err = f.decryptRepositoryConfig(formatEncryptionKey)
+	if err != nil {
+		return ErrInvalidPassword
+	}
+
+	return nil
+}
+
 // RecoverFormatBlob attempts to recover format blob replica from the specified file.
 // The format blob can be either the prefix or a suffix of the given file.
 // optionally the length can be provided (if known) to speed up recovery.
