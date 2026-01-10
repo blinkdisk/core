@@ -13,12 +13,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/cachedir"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/logfile"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/cachedir"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/logfile"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 var (

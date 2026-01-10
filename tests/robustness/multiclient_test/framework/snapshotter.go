@@ -12,8 +12,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
 )
 
 const (
@@ -193,7 +193,7 @@ func (mcs *MultiClientSnapshotter) createOrGetSnapshotter(ctx context.Context) (
 		return nil, robustness.ErrKeyNotFound
 	}
 
-	log.Printf("Issuing Kopia command for client: %s\n", c.ID)
+	log.Printf("Issuing BlinkDisk command for client: %s\n", c.ID)
 
 	// Get existing ClientSnapshotter if available
 	mcs.mu.RLock()

@@ -4,7 +4,7 @@ package cachefs
 import (
 	"context"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 // DirectoryCacher reads and potentially caches directory entries for a given directory.

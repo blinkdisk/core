@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("blob")
@@ -47,7 +47,7 @@ var ErrUnsupportedObjectLock = errors.New("object locking unsupported")
 
 // ApplicationID is sent to storage providers as metadata in the User-Agent of requests.
 // It is used to identify the application making the request.
-var ApplicationID = "kopia"
+var ApplicationID = "blinkdisk"
 
 // Bytes encapsulates a sequence of bytes, possibly stored in a non-contiguous buffers,
 // which can be written sequentially or treated as a io.Reader.

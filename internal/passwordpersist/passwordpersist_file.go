@@ -55,5 +55,5 @@ func (filePasswordStorage) DeletePassword(_ context.Context, configFile string) 
 }
 
 func passwordFileName(configFile string) string {
-	return configFile + ".kopia-password"
+	return configFile + ".blinkdisk-password"
 }

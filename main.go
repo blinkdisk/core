@@ -3,9 +3,9 @@ Command-line tool for creating and accessing backups.
 
 Usage:
 
-	$ kopia [<flags>] <subcommand> [<args> ...]
+	$ blinkdisk [<flags>] <subcommand> [<args> ...]
 
-Use 'kopia help' to see more details.
+Use 'blinkdisk help' to see more details.
 */
 package main
 
@@ -14,9 +14,9 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/logfile"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/logfile"
+	"github.com/blinkdisk/core/repo"
 )
 
 const usageTemplate = `{{define "FormatCommand" -}}
@@ -65,7 +65,7 @@ Commands (use --help-full to list all commands):
 
 func main() {
 	app := cli.NewApp()
-	kp := kingpin.New("kopia", "Kopia - Fast And Secure Open-Source Backup").Author("http://kopia.github.io/")
+	kp := kingpin.New("blinkdisk", "BlinkDisk - Fast And Secure Open-Source Backup").Author("https://blinkdisk.com/")
 
 	kp.Version(repo.BuildVersion + " build: " + repo.BuildInfo + " from: " + repo.BuildGitHubRepo)
 	logfile.Attach(app, kp)

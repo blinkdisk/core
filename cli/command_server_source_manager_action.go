@@ -8,8 +8,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 // commandServerSourceManagerAction encapsulates common logic for all commands
@@ -32,7 +32,7 @@ func (c *commandServerSourceManagerAction) setup(svc appServices, cmd *kingpin.C
 	c.out.setup(svc)
 }
 
-func (c *commandServerSourceManagerAction) triggerActionOnMatchingSources(ctx context.Context, cli *apiclient.KopiaAPIClient, path string) error {
+func (c *commandServerSourceManagerAction) triggerActionOnMatchingSources(ctx context.Context, cli *apiclient.BlinkDiskAPIClient, path string) error {
 	var resp serverapi.MultipleSourceActionResponse
 
 	uv := url.Values{}

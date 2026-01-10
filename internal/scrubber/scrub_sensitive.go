@@ -7,7 +7,7 @@ import (
 )
 
 // ScrubSensitiveData returns a copy of a given value with sensitive fields scrubbed.
-// Fields are marked as sensitive with struct field tag `kopia:"sensitive"`.
+// Fields are marked as sensitive with struct field tag `blinkdisk:"sensitive"`.
 func ScrubSensitiveData(v reflect.Value) reflect.Value {
 	switch v.Kind() {
 	case reflect.Ptr:
@@ -21,7 +21,7 @@ func ScrubSensitiveData(v reflect.Value) reflect.Value {
 
 			sf := v.Type().Field(i)
 
-			if sf.Tag.Get("kopia") == "sensitive" {
+			if sf.Tag.Get("blinkdisk") == "sensitive" {
 				if sf.Type.Kind() == reflect.String {
 					res.Field(i).SetString(strings.Repeat("*", fv.Len()))
 				}

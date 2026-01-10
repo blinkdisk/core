@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"sync/atomic"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/ignorefs"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/ignorefs"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 var estimateLog = logging.Module("estimate")

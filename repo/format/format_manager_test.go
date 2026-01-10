@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/feature"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/feature"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 var (
@@ -58,9 +58,9 @@ func TestFormatManager(t *testing.T) {
 
 	st := blobtesting.NewMapStorage(blobtesting.DataMap{}, nil, nil)
 	fst := blobtesting.NewFaultyStorage(st)
-	require.NoError(t, format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+	require.NoError(t, format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
-	rawBytes := mustGetBytes(t, st, "kopia.repository")
+	rawBytes := mustGetBytes(t, st, "blinkdisk.repository")
 
 	mgr, err := format.NewManagerWithCache(ctx, fst, cacheDuration, "some-password", nowFunc, blobCache)
 	require.NoError(t, err)
@@ -148,25 +148,25 @@ func TestInitialize(t *testing.T) {
 	st := blobtesting.NewMapStorage(blobtesting.DataMap{}, nil, nil)
 	fst := blobtesting.NewFaultyStorage(st)
 
-	// error fetching first blob - kopia.repository
+	// error fetching first blob - blinkdisk.repository
 	fst.AddFault(blobtesting.MethodGetBlob).ErrorInstead(errSomeError)
 	require.ErrorIs(t,
-		format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
+		format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
 		errSomeError)
 
-	// error fetching second blob - kopia.blobcfg
+	// error fetching second blob - blinkdisk.blobcfg
 	fst.AddFault(blobtesting.MethodGetBlob)
 	fst.AddFault(blobtesting.MethodGetBlob).ErrorInstead(errSomeError)
 	require.ErrorIs(t,
-		format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
+		format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
 		errSomeError)
 
 	// success
-	require.NoError(t, format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+	require.NoError(t, format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
 	// already initialized
 	require.ErrorIs(t,
-		format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
+		format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"),
 		format.ErrAlreadyInitialized)
 }
 
@@ -187,7 +187,7 @@ func TestInitializeWithRetention(t *testing.T) {
 	require.NoError(t, format.Initialize(
 		ctx,
 		st,
-		&format.KopiaRepositoryJSON{},
+		&format.BlinkDiskRepositoryJSON{},
 		rc,
 		format.BlobStorageConfiguration{
 			RetentionMode:   mode,
@@ -207,13 +207,13 @@ func TestInitializeWithRetention(t *testing.T) {
 	// Get the retention configuration that was added to the blob. Allow up to a
 	// minute difference between the expected and returned values since that
 	// should be large enough to avoid test flakes.
-	gotMode, expiry, err := st.GetRetention(ctx, format.KopiaRepositoryBlobID)
+	gotMode, expiry, err := st.GetRetention(ctx, format.BlinkDiskRepositoryBlobID)
 	require.NoError(t, err, "getting repo blob retention info")
 
 	assert.Equal(t, mode, gotMode)
 	assert.WithinDuration(t, earliestExpiry, expiry, time.Minute)
 
-	gotMode, expiry, err = st.GetRetention(ctx, format.KopiaBlobCfgBlobID)
+	gotMode, expiry, err = st.GetRetention(ctx, format.BlinkDiskBlobCfgBlobID)
 	require.NoError(t, err, "getting storage blob config retention info")
 
 	assert.Equal(t, mode, gotMode)
@@ -234,7 +234,7 @@ func TestUpdateRetention(t *testing.T) {
 	blobCache := format.NewMemoryBlobCache(nowFunc)
 
 	// success
-	require.NoError(t, format.Initialize(ctx, st, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+	require.NoError(t, format.Initialize(ctx, st, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
 	mgr, err := format.NewManagerWithCache(ctx, st, cacheDuration, "some-password", nowFunc, blobCache)
 	require.NoError(t, err, "getting format manager")
@@ -261,13 +261,13 @@ func TestUpdateRetention(t *testing.T) {
 	// Get the retention configuration that was added to the blob. Allow up to a
 	// minute difference between the expected and returned values since that
 	// should be large enough to avoid test flakes.
-	gotMode, expiry, err := st.GetRetention(ctx, format.KopiaRepositoryBlobID)
+	gotMode, expiry, err := st.GetRetention(ctx, format.BlinkDiskRepositoryBlobID)
 	require.NoError(t, err, "getting repo blob retention info")
 
 	assert.Equal(t, mode, gotMode)
 	assert.WithinDuration(t, earliestExpiry, expiry, time.Minute)
 
-	gotMode, expiry, err = st.GetRetention(ctx, format.KopiaBlobCfgBlobID)
+	gotMode, expiry, err = st.GetRetention(ctx, format.BlinkDiskBlobCfgBlobID)
 	require.NoError(t, err, "getting storage blob config retention info")
 
 	assert.Equal(t, mode, gotMode)
@@ -287,7 +287,7 @@ func TestUpdateRetentionNegativeValue(t *testing.T) {
 	period := -time.Hour * 48
 
 	// success
-	require.NoError(t, format.Initialize(ctx, st, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+	require.NoError(t, format.Initialize(ctx, st, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
 	mgr, err := format.NewManagerWithCache(ctx, st, cacheDuration, "some-password", nowFunc, blobCache)
 	require.NoError(t, err, "getting format manager")
@@ -312,13 +312,13 @@ func TestUpdateRetentionNegativeValue(t *testing.T) {
 	assert.Zero(t, blobCfg.RetentionPeriod)
 
 	// Retention wasn't set so everything should be zero/empty.
-	gotMode, expiry, err := st.GetRetention(ctx, format.KopiaRepositoryBlobID)
+	gotMode, expiry, err := st.GetRetention(ctx, format.BlinkDiskRepositoryBlobID)
 	require.NoError(t, err, "getting repo blob retention info")
 
 	assert.Empty(t, gotMode)
 	assert.Zero(t, expiry)
 
-	gotMode, expiry, err = st.GetRetention(ctx, format.KopiaBlobCfgBlobID)
+	gotMode, expiry, err = st.GetRetention(ctx, format.BlinkDiskBlobCfgBlobID)
 	require.NoError(t, err, "getting storage blob config retention info")
 
 	assert.Empty(t, gotMode)
@@ -344,7 +344,7 @@ func TestChangePassword(t *testing.T) {
 
 	st := blobtesting.NewMapStorage(blobtesting.DataMap{}, nil, nil)
 	fst := blobtesting.NewFaultyStorage(st)
-	require.NoError(t, format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+	require.NoError(t, format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
 	mgr, err := format.NewManagerWithCache(ctx, fst, cacheDuration, "some-password", nowFunc, blobCache)
 	require.NoError(t, err)
@@ -385,11 +385,11 @@ func TestFormatManagerValidDuration(t *testing.T) {
 
 		st := blobtesting.NewMapStorage(blobtesting.DataMap{}, nil, nil)
 		fst := blobtesting.NewFaultyStorage(st)
-		require.NoError(t, format.Initialize(ctx, fst, &format.KopiaRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
+		require.NoError(t, format.Initialize(ctx, fst, &format.BlinkDiskRepositoryJSON{}, rc, format.BlobStorageConfiguration{}, "some-password"))
 
 		if requestedCacheDuration < 0 {
 			// plant a malformed cache entry to ensure it's not being used
-			blobCache.Put(ctx, "kopia.repository", []byte("malformed"))
+			blobCache.Put(ctx, "blinkdisk.repository", []byte("malformed"))
 		}
 
 		mgr, err := format.NewManagerWithCache(ctx, fst, requestedCacheDuration, "some-password", nowFunc, blobCache)

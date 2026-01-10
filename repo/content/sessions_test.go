@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 func TestGenerateSessionID(t *testing.T) {
@@ -87,11 +87,11 @@ func TestMaybeCheckClockSkewBounds_Disabled(t *testing.T) {
 		now.Add(maxClockSkew + 10*time.Hour),
 	} {
 		t.Run(tc.String(), func(t *testing.T) {
-			// KOPIA_ENABLE_CLOCK_SKEW_CHECK is not set
+			// BLINKDISK_ENABLE_CLOCK_SKEW_CHECK is not set
 			err := maybeCheckClockSkewBounds(now, tc)
 			require.NoError(t, err)
 
-			t.Setenv("KOPIA_ENABLE_CLOCK_SKEW_CHECK", "false")
+			t.Setenv("BLINKDISK_ENABLE_CLOCK_SKEW_CHECK", "false")
 
 			err = maybeCheckClockSkewBounds(now, tc)
 			require.NoError(t, err)
@@ -100,7 +100,7 @@ func TestMaybeCheckClockSkewBounds_Disabled(t *testing.T) {
 }
 
 func TestMaybeCheckClockSkewBounds_Enabled(t *testing.T) {
-	t.Setenv("KOPIA_ENABLE_CLOCK_SKEW_CHECK", "true")
+	t.Setenv("BLINKDISK_ENABLE_CLOCK_SKEW_CHECK", "true")
 
 	now := clock.Now()
 
@@ -116,7 +116,7 @@ func TestMaybeCheckClockSkewBounds_Enabled(t *testing.T) {
 }
 
 func TestWriteSessionMarkerLockedWithoutClockSkew(t *testing.T) {
-	t.Setenv("KOPIA_ENABLE_CLOCK_SKEW_CHECK", "1")
+	t.Setenv("BLINKDISK_ENABLE_CLOCK_SKEW_CHECK", "1")
 
 	ctx := testlogging.Context(t)
 	data := blobtesting.DataMap{}
@@ -147,7 +147,7 @@ func TestWriteSessionMarkerLockedWithoutClockSkew(t *testing.T) {
 }
 
 func TestWriteSessionMarkerLockedWithClockSkew(t *testing.T) {
-	t.Setenv("KOPIA_ENABLE_CLOCK_SKEW_CHECK", "1")
+	t.Setenv("BLINKDISK_ENABLE_CLOCK_SKEW_CHECK", "1")
 
 	ctx := testlogging.Context(t)
 	data := blobtesting.DataMap{}

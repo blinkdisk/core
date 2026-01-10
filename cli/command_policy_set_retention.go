@@ -5,7 +5,7 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type policyRetentionFlags struct {

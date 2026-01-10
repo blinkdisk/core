@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
+	"github.com/blinkdisk/core/internal/apiclient"
 )
 
 func TestGenerateCSRFToken(t *testing.T) {
@@ -84,7 +84,7 @@ func TestValidateCSRFToken(t *testing.T) {
 
 			if tc.session != "" {
 				req.AddCookie(&http.Cookie{
-					Name:  "Kopia-Session-Cookie",
+					Name:  "BlinkDisk-Session-Cookie",
 					Value: tc.session,
 				})
 			}

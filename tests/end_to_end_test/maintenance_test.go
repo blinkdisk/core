@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestFullMaintenance(t *testing.T) {

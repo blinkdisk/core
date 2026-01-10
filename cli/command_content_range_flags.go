@@ -3,8 +3,8 @@ package cli
 import (
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 type contentRangeFlags struct {

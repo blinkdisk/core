@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kopia/kopia/internal/auth"
+	"github.com/blinkdisk/core/internal/auth"
 )
 
 func TestAuthentication(t *testing.T) {

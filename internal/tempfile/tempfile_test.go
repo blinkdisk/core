@@ -3,7 +3,7 @@ package tempfile_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/internal/tempfile"
+	"github.com/blinkdisk/core/internal/tempfile"
 )
 
 func TestTempFile(t *testing.T) {

@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func TestOverallStatus(t *testing.T) {

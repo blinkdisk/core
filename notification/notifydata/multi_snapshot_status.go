@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kopia/kopia/internal/grpcapi"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/grpcapi"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const durationPrecision = 100 * time.Millisecond

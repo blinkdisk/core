@@ -11,9 +11,9 @@ import (
 	atunits "github.com/alecthomas/units"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 type commandBenchmarkSplitters struct {

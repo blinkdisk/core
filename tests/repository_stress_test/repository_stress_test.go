@@ -15,16 +15,16 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/tests/repository_stress_test/repomodel"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/tests/repository_stress_test/repomodel"
 )
 
 const (
@@ -188,7 +188,7 @@ func runStress(t *testing.T, opt *StressOptions) {
 		return
 	}
 
-	if os.Getenv("KOPIA_STRESS_TEST") == "" {
+	if os.Getenv("BLINKDISK_STRESS_TEST") == "" {
 		t.Skip("skipping stress test")
 	}
 
@@ -196,7 +196,7 @@ func runStress(t *testing.T, opt *StressOptions) {
 
 	ctx := testlogging.Context(t)
 
-	tmpPath, err := os.MkdirTemp("", "kopia")
+	tmpPath, err := os.MkdirTemp("", "blinkdisk")
 	if err != nil {
 		t.Fatalf("unable to create temp directory")
 	}
@@ -225,9 +225,9 @@ func runStress(t *testing.T, opt *StressOptions) {
 
 	var configFiles []string
 
-	// set up two parallel kopia connections, each with its own config file and cache.
+	// set up two parallel blinkdisk connections, each with its own config file and cache.
 	for i := range opt.ConfigsPerRepository {
-		configFile := filepath.Join(tmpPath, fmt.Sprintf("kopia-%v.config", i))
+		configFile := filepath.Join(tmpPath, fmt.Sprintf("blinkdisk-%v.config", i))
 		configFiles = append(configFiles, configFile)
 
 		if err = repo.Connect(ctx, configFile, st, masterPassword, &repo.ConnectOptions{

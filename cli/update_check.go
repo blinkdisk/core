@@ -14,13 +14,13 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/mod/semver"
 
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo"
 )
 
 const (
-	checkForUpdatesEnvar = "KOPIA_CHECK_FOR_UPDATES"
+	checkForUpdatesEnvar = "BLINKDISK_CHECK_FOR_UPDATES"
 	githubTimeout        = 10 * time.Second
 )
 
@@ -28,12 +28,12 @@ const (
 	latestReleaseGitHubURLFormat = "https://api.github.com/repos/%v/releases/latest"
 	checksumsURLFormat           = "https://github.com/%v/releases/download/%v/checksums.txt.sig"
 	autoUpdateNotice             = `
-NOTICE: Kopia will check for updates on GitHub every 7 days, starting 24 hours after first use.
+NOTICE: BlinkDisk will check for updates on GitHub every 7 days, starting 24 hours after first use.
 To disable this behavior, set environment variable ` + checkForUpdatesEnvar + `=false
 Alternatively you can remove the file "%v".
 `
 	updateAvailableNoticeFormat = `
-Upgrade of Kopia from %v to %v is available.
+Upgrade of BlinkDisk from %v to %v is available.
 Visit https://github.com/%v/releases/latest to download it.
 
 `

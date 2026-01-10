@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/parallelwork"
+	"github.com/blinkdisk/core/internal/parallelwork"
 )
 
 func TestEnqueueFrontAndProcess(t *testing.T) {

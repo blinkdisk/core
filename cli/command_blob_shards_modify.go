@@ -11,8 +11,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/sharded"
 )
 
 type commandBlobShardsModify struct {
@@ -30,7 +30,7 @@ func (c *commandBlobShardsModify) setup(svc appServices, parent commandParent) {
 	c.unshardedLength = -1
 
 	cmd := parent.Command("modify", "Perform low-level resharding of blob storage").Hidden().Alias("reshard")
-	cmd.Flag("i-am-sure-kopia-is-not-running", "Confirm that no other instance of kopia is running").Required().Bool()
+	cmd.Flag("i-am-sure-blinkdisk-is-not-running", "Confirm that no other instance of blinkdisk is running").Required().Bool()
 	cmd.Flag("path", "Sharded directory path").Required().ExistingDirVar(&c.rootPath)
 	cmd.Flag("default-shards", "Default specification 'n1,..nN' or 'flat')").StringVar(&c.defaultShardSpec)
 	cmd.Flag("override", "Override specification 'prefix=n1,..nN')").StringsVar(&c.overrideSpecs)

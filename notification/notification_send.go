@@ -11,14 +11,14 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/grpcapi"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/grpcapi"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // AdditionalSenders is a list of additional senders that will be used in addition to the senders configured in the repository.
@@ -34,9 +34,9 @@ type TemplateArgs struct {
 	EventTime         time.Time
 	EventArgs         any
 	EventArgsType     grpcapi.NotificationEventArgType
-	KopiaRepo         string
-	KopiaBuildInfo    string
-	KopiaBuildVersion string
+	BlinkDiskRepo         string
+	BlinkDiskBuildInfo    string
+	BlinkDiskBuildVersion string
 }
 
 // Severity represents the severity of a notification message.
@@ -169,9 +169,9 @@ func MakeTemplateArgs(eventArgs notifydata.TypedEventArgs) TemplateArgs {
 		Hostname:          h,
 		EventArgs:         eventArgs,
 		EventTime:         now,
-		KopiaRepo:         repo.BuildGitHubRepo,
-		KopiaBuildInfo:    repo.BuildInfo,
-		KopiaBuildVersion: repo.BuildVersion,
+		BlinkDiskRepo:         repo.BuildGitHubRepo,
+		BlinkDiskBuildInfo:    repo.BuildInfo,
+		BlinkDiskBuildVersion: repo.BuildVersion,
 	}
 }
 

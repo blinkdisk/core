@@ -1,4 +1,4 @@
-package kopiarunner
+package blinkdiskrunner
 
 import (
 	"errors"
@@ -11,9 +11,9 @@ func TestParseSnapListAllExeTest(t *testing.T) {
 	repoDir := t.TempDir()
 	sourceDir := t.TempDir()
 
-	ks, err := NewKopiaSnapshotter(repoDir)
+	ks, err := NewBlinkDiskSnapshotter(repoDir)
 	if errors.Is(err, ErrExeVariableNotSet) {
-		t.Skip("KOPIA_EXE not set, skipping test")
+		t.Skip("BLINKDISK_EXE not set, skipping test")
 	}
 
 	require.NoError(t, err)
@@ -31,14 +31,14 @@ func TestParseSnapListAllExeTest(t *testing.T) {
 		snapID, err := ks.CreateSnapshot(sourceDir)
 		require.NoError(t, err)
 
-		// Validate the list against kopia snapshot list --all
+		// Validate the list against blinkdisk snapshot list --all
 		snapIDListSnap, err := ks.snapIDsFromSnapListAll()
 
 		require.NoError(t, err)
 		require.Len(t, snapIDListSnap, snapCount+1, "snapshot list length does not match expected number of snapshots")
 		require.Truef(t, snapIDIsLastInList(snapID, snapIDListSnap), "snapshot ID that was just created was not in the snapshot list %s", snapID)
 
-		// Validate the list against kopia snapshot list --all
+		// Validate the list against blinkdisk snapshot list --all
 		snapIDListMan, err := ks.snapIDsFromManifestList()
 
 		require.NoError(t, err)

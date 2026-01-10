@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestReporterWithFiles(t *testing.T) {

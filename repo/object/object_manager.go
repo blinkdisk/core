@@ -8,12 +8,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 // ErrObjectNotFound is returned when an object cannot be found.

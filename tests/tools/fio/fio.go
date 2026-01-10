@@ -18,7 +18,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/tests/robustness/pathlock"
+	"github.com/blinkdisk/core/tests/robustness/pathlock"
 )
 
 // List of fio flags.

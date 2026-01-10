@@ -11,8 +11,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // Status describes the status of UI Task.

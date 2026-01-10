@@ -7,7 +7,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 // MultiClientFileWriter manages a set of client FileWriter instances and

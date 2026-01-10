@@ -11,12 +11,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/scrubber"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/scrubber"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 type commandRepositoryStatus struct {
@@ -242,7 +242,7 @@ func (c *commandRepositoryStatus) run(ctx context.Context, rep repo.Repository) 
 		return errors.Wrap(err, "error computing repository token")
 	}
 
-	c.out.printStdout("\nTo reconnect to the repository use:\n\n$ kopia repository connect from-config --token %v\n\n", tok)
+	c.out.printStdout("\nTo reconnect to the repository use:\n\n$ blinkdisk repository connect from-config --token %v\n\n", tok)
 
 	if pass != "" {
 		c.out.printStdout("NOTICE: The token printed above can be trivially decoded to reveal the repository password. Do not store it in an unsecured place.\n")

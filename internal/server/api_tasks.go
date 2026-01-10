@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/uitask"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/uitask"
 )
 
 func handleTaskList(_ context.Context, rc requestContext) (any, *apiError) {

@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// CacheDirMarkerFile is the name of the marker file indicating a directory contains Kopia caches.
+// CacheDirMarkerFile is the name of the marker file indicating a directory contains BlinkDisk caches.
 // See https://bford.info/cachedir/
 const CacheDirMarkerFile = "CACHEDIR.TAG"
 
@@ -17,10 +17,10 @@ const CacheDirMarkerHeader = "Signature: 8a477f597d28d172789f06886806bc55"
 
 const cacheDirMarkerContents = CacheDirMarkerHeader + `
 #
-# This file is a cache directory tag created by Kopia - Fast And Secure Open-Source Backup.
+# This file is a cache directory tag created by BlinkDisk - Fast And Secure Open-Source Backup.
 #
-# For information about Kopia, see:
-#   https://kopia.io
+# For information about BlinkDisk, see:
+#   https://blinkdisk.com
 #
 # For information about cache directory tags, see:
 #   http://www.brynosaurus.com/cachedir/

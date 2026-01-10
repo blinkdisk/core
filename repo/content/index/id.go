@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 // IDPrefix represents a content ID prefix (empty string or single character between 'g' and 'z').

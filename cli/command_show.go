@@ -5,9 +5,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 type commandShow struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/grpcapi"
+	"github.com/blinkdisk/core/internal/grpcapi"
 )
 
 // TypedEventArgs is an interface that represents the event arguments for notifications.

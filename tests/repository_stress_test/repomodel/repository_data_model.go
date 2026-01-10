@@ -4,8 +4,8 @@ package repomodel
 import (
 	"sync/atomic"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 // RepositoryData models the data stored in the repository.

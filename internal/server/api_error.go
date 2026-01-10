@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 type apiError struct {

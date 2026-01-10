@@ -3,7 +3,7 @@ package cli
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/apiclient"
+	"github.com/blinkdisk/core/internal/apiclient"
 )
 
 type commandServerCancel struct {
@@ -16,6 +16,6 @@ func (c *commandServerCancel) setup(svc appServices, parent commandParent) {
 	cmd.Action(svc.serverAction(&c.sf, c.runServerCancelUpload))
 }
 
-func (c *commandServerCancel) runServerCancelUpload(ctx context.Context, cli *apiclient.KopiaAPIClient) error {
+func (c *commandServerCancel) runServerCancelUpload(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error {
 	return c.triggerActionOnMatchingSources(ctx, cli, "control/cancel-snapshot")
 }

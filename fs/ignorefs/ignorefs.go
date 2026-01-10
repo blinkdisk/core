@@ -1,4 +1,4 @@
-// Package ignorefs implements a wrapper that hides ignored files listed in '.kopiaignore' and in policies attached to directories.
+// Package ignorefs implements a wrapper that hides ignored files listed in '.blinkdiskignore' and in policies attached to directories.
 package ignorefs
 
 import (
@@ -9,12 +9,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/cachedir"
-	"github.com/kopia/kopia/internal/wcmatch"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/cachedir"
+	"github.com/blinkdisk/core/internal/wcmatch"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 var (
@@ -132,7 +132,7 @@ func (d *ignoreDirectory) skipCacheDirectory(ctx context.Context, relativePath s
 		return false
 	}
 
-	// if the given directory contains a marker file used for kopia cache, pretend the directory was empty.
+	// if the given directory contains a marker file used for blinkdisk cache, pretend the directory was empty.
 	for _, oi := range d.parentContext.onIgnore {
 		oi(ctx, strings.TrimPrefix(relativePath, "./"), d, policyTree)
 	}

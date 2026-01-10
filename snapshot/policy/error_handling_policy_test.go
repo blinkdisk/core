@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func TestErrorHandlingPolicyMerge(t *testing.T) {

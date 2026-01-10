@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func (fs *fsStorage) GetCapacity(ctx context.Context) (blob.Capacity, error) {

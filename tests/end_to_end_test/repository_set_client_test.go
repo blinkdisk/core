@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestRepositorySetClient(t *testing.T) {

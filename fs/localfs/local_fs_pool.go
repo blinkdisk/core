@@ -1,6 +1,6 @@
 package localfs
 
-import "github.com/kopia/kopia/internal/freepool"
+import "github.com/blinkdisk/core/internal/freepool"
 
 //nolint:gochecknoglobals
 var (

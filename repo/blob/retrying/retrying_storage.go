@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // retryingStorage adds retry loop around all operations of the underlying storage.

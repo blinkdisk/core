@@ -12,7 +12,7 @@ import (
 
 const (
 	dataSubPath = "recovery-data"
-	dirPath     = "kopia_dummy_repo"
+	dirPath     = "blinkdisk_dummy_repo"
 	dataPath    = "crash-consistency-data"
 )
 
@@ -21,7 +21,7 @@ var repoPathPrefix = flag.String("repo-path-prefix", "", "Point the robustness t
 func TestMain(m *testing.M) {
 	dataRepoPath := path.Join(*repoPathPrefix, dataSubPath)
 
-	th := &kopiaRecoveryTestHarness{}
+	th := &blinkdiskRecoveryTestHarness{}
 	th.init(dataRepoPath)
 
 	// run the tests
@@ -30,16 +30,16 @@ func TestMain(m *testing.M) {
 	os.Exit(result)
 }
 
-type kopiaRecoveryTestHarness struct {
+type blinkdiskRecoveryTestHarness struct {
 	dataRepoPath string
 }
 
-func (th *kopiaRecoveryTestHarness) init(dataRepoPath string) {
+func (th *blinkdiskRecoveryTestHarness) init(dataRepoPath string) {
 	th.dataRepoPath = dataRepoPath
 
-	kopiaExe := os.Getenv("KOPIA_EXE")
-	if kopiaExe == "" {
-		log.Println("Skipping recovery tests because KOPIA_EXE is not set")
+	blinkdiskExe := os.Getenv("BLINKDISK_EXE")
+	if blinkdiskExe == "" {
+		log.Println("Skipping recovery tests because BLINKDISK_EXE is not set")
 		os.Exit(0)
 	}
 }

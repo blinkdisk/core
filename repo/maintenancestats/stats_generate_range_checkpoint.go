@@ -3,7 +3,7 @@ package maintenancestats
 import (
 	"fmt"
 
-	"github.com/kopia/kopia/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog"
 )
 
 const generateRangeCheckpointStatsKind = "generateRangeCheckpointStats"

@@ -8,8 +8,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/sftp"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/sftp"
 )
 
 type storageSFTPFlags struct {
@@ -33,7 +33,7 @@ func (c *storageSFTPFlags) Setup(_ StorageProviderServices, cmd *kingpin.CmdClau
 	cmd.Flag("known-hosts", "path to known_hosts file").StringVar(&c.options.KnownHostsFile)
 	cmd.Flag("known-hosts-data", "known_hosts file entries").StringVar(&c.options.KnownHostsData)
 
-	cmd.Flag("embed-credentials", "Embed key and known_hosts in Kopia configuration").BoolVar(&c.embedCredentials)
+	cmd.Flag("embed-credentials", "Embed key and known_hosts in BlinkDisk configuration").BoolVar(&c.embedCredentials)
 
 	cmd.Flag("external", "Launch external passwordless SSH command").BoolVar(&c.options.ExternalSSH)
 	cmd.Flag("ssh-command", "SSH command").Default("ssh").StringVar(&c.options.SSHCommand)

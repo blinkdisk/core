@@ -307,7 +307,7 @@ func (x *ManifestEntryMetadata) GetLabels() map[string]string {
 // ErrorResponse can be sent in response to any request.
 type ErrorResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          ErrorResponse_Code     `protobuf:"varint,1,opt,name=code,proto3,enum=kopia_repository.ErrorResponse_Code" json:"code,omitempty"`
+	Code          ErrorResponse_Code     `protobuf:"varint,1,opt,name=code,proto3,enum=blinkdisk_repository.ErrorResponse_Code" json:"code,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1442,7 +1442,7 @@ type SendNotificationRequest struct {
 	TemplateName  string                   `protobuf:"bytes,1,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
 	EventArgs     []byte                   `protobuf:"bytes,2,opt,name=event_args,json=eventArgs,proto3" json:"event_args,omitempty"` // JSON-encoded
 	Severity      int32                    `protobuf:"varint,3,opt,name=severity,proto3" json:"severity,omitempty"`
-	EventArgsType NotificationEventArgType `protobuf:"varint,4,opt,name=event_args_type,json=eventArgsType,proto3,enum=kopia_repository.NotificationEventArgType" json:"event_args_type,omitempty"`
+	EventArgsType NotificationEventArgType `protobuf:"varint,4,opt,name=event_args_type,json=eventArgsType,proto3,enum=blinkdisk_repository.NotificationEventArgType" json:"event_args_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2081,7 +2081,7 @@ var File_repository_server_proto protoreflect.FileDescriptor
 
 const file_repository_server_proto_rawDesc = "" +
 	"\n" +
-	"\x17repository_server.proto\x12\x10kopia_repository\"\x9c\x02\n" +
+	"\x17repository_server.proto\x12\x14blinkdisk_repository\"\x9c\x02\n" +
 	"\vContentInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rpacked_length\x18\x02 \x01(\rR\fpackedLength\x12+\n" +
@@ -2092,17 +2092,17 @@ const file_repository_server_proto_rawDesc = "" +
 	"packOffset\x12\x18\n" +
 	"\adeleted\x18\x06 \x01(\bR\adeleted\x12%\n" +
 	"\x0eformat_version\x18\a \x01(\rR\rformatVersion\x12'\n" +
-	"\x0foriginal_length\x18\b \x01(\rR\x0eoriginalLength\"\xed\x01\n" +
+	"\x0foriginal_length\x18\b \x01(\rR\x0eoriginalLength\"\xf1\x01\n" +
 	"\x15ManifestEntryMetadata\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12$\n" +
 	"\x0emod_time_nanos\x18\x02 \x01(\x03R\fmodTimeNanos\x12\x16\n" +
-	"\x06length\x18\x03 \x01(\x05R\x06length\x12K\n" +
-	"\x06labels\x18\x04 \x03(\v23.kopia_repository.ManifestEntryMetadata.LabelsEntryR\x06labels\x1a9\n" +
+	"\x06length\x18\x03 \x01(\x05R\x06length\x12O\n" +
+	"\x06labels\x18\x04 \x03(\v27.blinkdisk_repository.ManifestEntryMetadata.LabelsEntryR\x06labels\x1a9\n" +
 	"\vLabelsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xfc\x01\n" +
-	"\rErrorResponse\x128\n" +
-	"\x04code\x18\x01 \x01(\x0e2$.kopia_repository.ErrorResponse.CodeR\x04code\x12\x18\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x80\x02\n" +
+	"\rErrorResponse\x12<\n" +
+	"\x04code\x18\x01 \x01(\x0e2(.blinkdisk_repository.ErrorResponse.CodeR\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"\x96\x01\n" +
 	"\x04Code\x12\x11\n" +
 	"\rUNKNOWN_ERROR\x10\x00\x12\x10\n" +
@@ -2120,16 +2120,16 @@ const file_repository_server_proto_rawDesc = "" +
 	"\x1csupports_content_compression\x18\x04 \x01(\bR\x1asupportsContentCompression\"Q\n" +
 	"\x18InitializeSessionRequest\x12\x18\n" +
 	"\apurpose\x18\x01 \x01(\tR\apurpose\x12\x1b\n" +
-	"\tread_only\x18\x02 \x01(\bR\breadOnly\"c\n" +
-	"\x19InitializeSessionResponse\x12F\n" +
+	"\tread_only\x18\x02 \x01(\bR\breadOnly\"g\n" +
+	"\x19InitializeSessionResponse\x12J\n" +
 	"\n" +
-	"parameters\x18\x01 \x01(\v2&.kopia_repository.RepositoryParametersR\n" +
+	"parameters\x18\x01 \x01(\v2*.blinkdisk_repository.RepositoryParametersR\n" +
 	"parameters\"6\n" +
 	"\x15GetContentInfoRequest\x12\x1d\n" +
 	"\n" +
-	"content_id\x18\x01 \x01(\tR\tcontentId\"K\n" +
-	"\x16GetContentInfoResponse\x121\n" +
-	"\x04info\x18\x01 \x01(\v2\x1d.kopia_repository.ContentInfoR\x04info\"2\n" +
+	"content_id\x18\x01 \x01(\tR\tcontentId\"O\n" +
+	"\x16GetContentInfoResponse\x125\n" +
+	"\x04info\x18\x01 \x01(\v2!.blinkdisk_repository.ContentInfoR\x04info\"2\n" +
 	"\x11GetContentRequest\x12\x1d\n" +
 	"\n" +
 	"content_id\x18\x01 \x01(\tR\tcontentId\"(\n" +
@@ -2146,13 +2146,13 @@ const file_repository_server_proto_rawDesc = "" +
 	"content_id\x18\x01 \x01(\tR\tcontentId\"5\n" +
 	"\x12GetManifestRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
-	"manifestId\"w\n" +
+	"manifestId\"{\n" +
 	"\x13GetManifestResponse\x12\x1b\n" +
-	"\tjson_data\x18\x01 \x01(\fR\bjsonData\x12C\n" +
-	"\bmetadata\x18\x02 \x01(\v2'.kopia_repository.ManifestEntryMetadataR\bmetadata\"\xb6\x01\n" +
+	"\tjson_data\x18\x01 \x01(\fR\bjsonData\x12G\n" +
+	"\bmetadata\x18\x02 \x01(\v2+.blinkdisk_repository.ManifestEntryMetadataR\bmetadata\"\xba\x01\n" +
 	"\x12PutManifestRequest\x12\x1b\n" +
-	"\tjson_data\x18\x01 \x01(\fR\bjsonData\x12H\n" +
-	"\x06labels\x18\x02 \x03(\v20.kopia_repository.PutManifestRequest.LabelsEntryR\x06labels\x1a9\n" +
+	"\tjson_data\x18\x01 \x01(\fR\bjsonData\x12L\n" +
+	"\x06labels\x18\x02 \x03(\v24.blinkdisk_repository.PutManifestRequest.LabelsEntryR\x06labels\x1a9\n" +
 	"\vLabelsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"6\n" +
@@ -2162,15 +2162,15 @@ const file_repository_server_proto_rawDesc = "" +
 	"\x15DeleteManifestRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
 	"manifestId\"\x18\n" +
-	"\x16DeleteManifestResponse\"\xba\x01\n" +
-	"\x14FindManifestsRequest\x12J\n" +
-	"\x06labels\x18\x01 \x03(\v22.kopia_repository.FindManifestsRequest.LabelsEntryR\x06labels\x12\x1b\n" +
+	"\x16DeleteManifestResponse\"\xbe\x01\n" +
+	"\x14FindManifestsRequest\x12N\n" +
+	"\x06labels\x18\x01 \x03(\v26.blinkdisk_repository.FindManifestsRequest.LabelsEntryR\x06labels\x12\x1b\n" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x1a9\n" +
 	"\vLabelsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\\\n" +
-	"\x15FindManifestsResponse\x12C\n" +
-	"\bmetadata\x18\x01 \x03(\v2'.kopia_repository.ManifestEntryMetadataR\bmetadata\"N\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"`\n" +
+	"\x15FindManifestsResponse\x12G\n" +
+	"\bmetadata\x18\x01 \x03(\v2+.blinkdisk_repository.ManifestEntryMetadataR\bmetadata\"N\n" +
 	"\x17PrefetchContentsRequest\x12\x1f\n" +
 	"\vcontent_ids\x18\x01 \x03(\tR\n" +
 	"contentIds\x12\x12\n" +
@@ -2183,64 +2183,64 @@ const file_repository_server_proto_rawDesc = "" +
 	"sourcePath\x12#\n" +
 	"\rreally_delete\x18\x02 \x01(\bR\freallyDelete\"A\n" +
 	"\x1cApplyRetentionPolicyResponse\x12!\n" +
-	"\fmanifest_ids\x18\x01 \x03(\tR\vmanifestIds\"\xcd\x01\n" +
+	"\fmanifest_ids\x18\x01 \x03(\tR\vmanifestIds\"\xd1\x01\n" +
 	"\x17SendNotificationRequest\x12#\n" +
 	"\rtemplate_name\x18\x01 \x01(\tR\ftemplateName\x12\x1d\n" +
 	"\n" +
 	"event_args\x18\x02 \x01(\fR\teventArgs\x12\x1a\n" +
-	"\bseverity\x18\x03 \x01(\x05R\bseverity\x12R\n" +
-	"\x0fevent_args_type\x18\x04 \x01(\x0e2*.kopia_repository.NotificationEventArgTypeR\reventArgsType\"\x1a\n" +
-	"\x18SendNotificationResponse\"\xaa\t\n" +
+	"\bseverity\x18\x03 \x01(\x05R\bseverity\x12V\n" +
+	"\x0fevent_args_type\x18\x04 \x01(\x0e2..blinkdisk_repository.NotificationEventArgTypeR\reventArgsType\"\x1a\n" +
+	"\x18SendNotificationResponse\"\xde\t\n" +
 	"\x0eSessionRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\x03R\trequestId\x12W\n" +
-	"\rtrace_context\x18\x02 \x03(\v22.kopia_repository.SessionRequest.TraceContextEntryR\ftraceContext\x12[\n" +
+	"request_id\x18\x01 \x01(\x03R\trequestId\x12[\n" +
+	"\rtrace_context\x18\x02 \x03(\v26.blinkdisk_repository.SessionRequest.TraceContextEntryR\ftraceContext\x12_\n" +
 	"\x12initialize_session\x18\n" +
-	" \x01(\v2*.kopia_repository.InitializeSessionRequestH\x00R\x11initializeSession\x12S\n" +
-	"\x10get_content_info\x18\v \x01(\v2'.kopia_repository.GetContentInfoRequestH\x00R\x0egetContentInfo\x126\n" +
-	"\x05flush\x18\f \x01(\v2\x1e.kopia_repository.FlushRequestH\x00R\x05flush\x12L\n" +
-	"\rwrite_content\x18\r \x01(\v2%.kopia_repository.WriteContentRequestH\x00R\fwriteContent\x12F\n" +
-	"\vget_content\x18\x0e \x01(\v2#.kopia_repository.GetContentRequestH\x00R\n" +
-	"getContent\x12I\n" +
-	"\fget_manifest\x18\x0f \x01(\v2$.kopia_repository.GetManifestRequestH\x00R\vgetManifest\x12I\n" +
-	"\fput_manifest\x18\x10 \x01(\v2$.kopia_repository.PutManifestRequestH\x00R\vputManifest\x12O\n" +
-	"\x0efind_manifests\x18\x11 \x01(\v2&.kopia_repository.FindManifestsRequestH\x00R\rfindManifests\x12R\n" +
-	"\x0fdelete_manifest\x18\x12 \x01(\v2'.kopia_repository.DeleteManifestRequestH\x00R\x0edeleteManifest\x12X\n" +
-	"\x11prefetch_contents\x18\x13 \x01(\v2).kopia_repository.PrefetchContentsRequestH\x00R\x10prefetchContents\x12e\n" +
-	"\x16apply_retention_policy\x18\x14 \x01(\v2-.kopia_repository.ApplyRetentionPolicyRequestH\x00R\x14applyRetentionPolicy\x12X\n" +
-	"\x11send_notification\x18\x15 \x01(\v2).kopia_repository.SendNotificationRequestH\x00R\x10sendNotification\x1a?\n" +
+	" \x01(\v2..blinkdisk_repository.InitializeSessionRequestH\x00R\x11initializeSession\x12W\n" +
+	"\x10get_content_info\x18\v \x01(\v2+.blinkdisk_repository.GetContentInfoRequestH\x00R\x0egetContentInfo\x12:\n" +
+	"\x05flush\x18\f \x01(\v2\".blinkdisk_repository.FlushRequestH\x00R\x05flush\x12P\n" +
+	"\rwrite_content\x18\r \x01(\v2).blinkdisk_repository.WriteContentRequestH\x00R\fwriteContent\x12J\n" +
+	"\vget_content\x18\x0e \x01(\v2'.blinkdisk_repository.GetContentRequestH\x00R\n" +
+	"getContent\x12M\n" +
+	"\fget_manifest\x18\x0f \x01(\v2(.blinkdisk_repository.GetManifestRequestH\x00R\vgetManifest\x12M\n" +
+	"\fput_manifest\x18\x10 \x01(\v2(.blinkdisk_repository.PutManifestRequestH\x00R\vputManifest\x12S\n" +
+	"\x0efind_manifests\x18\x11 \x01(\v2*.blinkdisk_repository.FindManifestsRequestH\x00R\rfindManifests\x12V\n" +
+	"\x0fdelete_manifest\x18\x12 \x01(\v2+.blinkdisk_repository.DeleteManifestRequestH\x00R\x0edeleteManifest\x12\\\n" +
+	"\x11prefetch_contents\x18\x13 \x01(\v2-.blinkdisk_repository.PrefetchContentsRequestH\x00R\x10prefetchContents\x12i\n" +
+	"\x16apply_retention_policy\x18\x14 \x01(\v21.blinkdisk_repository.ApplyRetentionPolicyRequestH\x00R\x14applyRetentionPolicy\x12\\\n" +
+	"\x11send_notification\x18\x15 \x01(\v2-.blinkdisk_repository.SendNotificationRequestH\x00R\x10sendNotification\x1a?\n" +
 	"\x11TraceContextEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\t\n" +
-	"\arequest\"\xf2\b\n" +
+	"\arequest\"\xa6\t\n" +
 	"\x0fSessionResponse\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x03R\trequestId\x12\x19\n" +
-	"\bhas_more\x18\x03 \x01(\bR\ahasMore\x127\n" +
-	"\x05error\x18\x02 \x01(\v2\x1f.kopia_repository.ErrorResponseH\x00R\x05error\x12\\\n" +
+	"\bhas_more\x18\x03 \x01(\bR\ahasMore\x12;\n" +
+	"\x05error\x18\x02 \x01(\v2#.blinkdisk_repository.ErrorResponseH\x00R\x05error\x12`\n" +
 	"\x12initialize_session\x18\n" +
-	" \x01(\v2+.kopia_repository.InitializeSessionResponseH\x00R\x11initializeSession\x12T\n" +
-	"\x10get_content_info\x18\v \x01(\v2(.kopia_repository.GetContentInfoResponseH\x00R\x0egetContentInfo\x127\n" +
-	"\x05flush\x18\f \x01(\v2\x1f.kopia_repository.FlushResponseH\x00R\x05flush\x12M\n" +
-	"\rwrite_content\x18\r \x01(\v2&.kopia_repository.WriteContentResponseH\x00R\fwriteContent\x12G\n" +
-	"\vget_content\x18\x0e \x01(\v2$.kopia_repository.GetContentResponseH\x00R\n" +
-	"getContent\x12J\n" +
-	"\fget_manifest\x18\x0f \x01(\v2%.kopia_repository.GetManifestResponseH\x00R\vgetManifest\x12J\n" +
-	"\fput_manifest\x18\x10 \x01(\v2%.kopia_repository.PutManifestResponseH\x00R\vputManifest\x12P\n" +
-	"\x0efind_manifests\x18\x11 \x01(\v2'.kopia_repository.FindManifestsResponseH\x00R\rfindManifests\x12S\n" +
-	"\x0fdelete_manifest\x18\x12 \x01(\v2(.kopia_repository.DeleteManifestResponseH\x00R\x0edeleteManifest\x12Y\n" +
-	"\x11prefetch_contents\x18\x13 \x01(\v2*.kopia_repository.PrefetchContentsResponseH\x00R\x10prefetchContents\x12f\n" +
-	"\x16apply_retention_policy\x18\x14 \x01(\v2..kopia_repository.ApplyRetentionPolicyResponseH\x00R\x14applyRetentionPolicy\x12Y\n" +
-	"\x11send_notification\x18\x15 \x01(\v2*.kopia_repository.SendNotificationResponseH\x00R\x10sendNotificationB\n" +
+	" \x01(\v2/.blinkdisk_repository.InitializeSessionResponseH\x00R\x11initializeSession\x12X\n" +
+	"\x10get_content_info\x18\v \x01(\v2,.blinkdisk_repository.GetContentInfoResponseH\x00R\x0egetContentInfo\x12;\n" +
+	"\x05flush\x18\f \x01(\v2#.blinkdisk_repository.FlushResponseH\x00R\x05flush\x12Q\n" +
+	"\rwrite_content\x18\r \x01(\v2*.blinkdisk_repository.WriteContentResponseH\x00R\fwriteContent\x12K\n" +
+	"\vget_content\x18\x0e \x01(\v2(.blinkdisk_repository.GetContentResponseH\x00R\n" +
+	"getContent\x12N\n" +
+	"\fget_manifest\x18\x0f \x01(\v2).blinkdisk_repository.GetManifestResponseH\x00R\vgetManifest\x12N\n" +
+	"\fput_manifest\x18\x10 \x01(\v2).blinkdisk_repository.PutManifestResponseH\x00R\vputManifest\x12T\n" +
+	"\x0efind_manifests\x18\x11 \x01(\v2+.blinkdisk_repository.FindManifestsResponseH\x00R\rfindManifests\x12W\n" +
+	"\x0fdelete_manifest\x18\x12 \x01(\v2,.blinkdisk_repository.DeleteManifestResponseH\x00R\x0edeleteManifest\x12]\n" +
+	"\x11prefetch_contents\x18\x13 \x01(\v2..blinkdisk_repository.PrefetchContentsResponseH\x00R\x10prefetchContents\x12j\n" +
+	"\x16apply_retention_policy\x18\x14 \x01(\v22.blinkdisk_repository.ApplyRetentionPolicyResponseH\x00R\x14applyRetentionPolicy\x12]\n" +
+	"\x11send_notification\x18\x15 \x01(\v2..blinkdisk_repository.SendNotificationResponseH\x00R\x10sendNotificationB\n" +
 	"\n" +
 	"\bresponse*\x81\x01\n" +
 	"\x18NotificationEventArgType\x12\x14\n" +
 	"\x10ARG_TYPE_UNKNOWN\x10\x00\x12\x12\n" +
 	"\x0eARG_TYPE_EMPTY\x10\x01\x12\x17\n" +
 	"\x13ARG_TYPE_ERROR_INFO\x10\x02\x12\"\n" +
-	"\x1eARG_TYPE_MULTI_SNAPSHOT_STATUS\x10\x032e\n" +
-	"\x0fKopiaRepository\x12R\n" +
-	"\aSession\x12 .kopia_repository.SessionRequest\x1a!.kopia_repository.SessionResponse(\x010\x01B)Z'github.com/kopia/kopia/internal/grpcapib\x06proto3"
+	"\x1eARG_TYPE_MULTI_SNAPSHOT_STATUS\x10\x032q\n" +
+	"\x13BlinkDiskRepository\x12Z\n" +
+	"\aSession\x12$.blinkdisk_repository.SessionRequest\x1a%.blinkdisk_repository.SessionResponse(\x010\x01B,Z*github.com/blinkdisk/core/internal/grpcapib\x06proto3"
 
 var (
 	file_repository_server_proto_rawDescOnce sync.Once
@@ -2257,81 +2257,81 @@ func file_repository_server_proto_rawDescGZIP() []byte {
 var file_repository_server_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_repository_server_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_repository_server_proto_goTypes = []any{
-	(NotificationEventArgType)(0),        // 0: kopia_repository.NotificationEventArgType
-	(ErrorResponse_Code)(0),              // 1: kopia_repository.ErrorResponse.Code
-	(*ContentInfo)(nil),                  // 2: kopia_repository.ContentInfo
-	(*ManifestEntryMetadata)(nil),        // 3: kopia_repository.ManifestEntryMetadata
-	(*ErrorResponse)(nil),                // 4: kopia_repository.ErrorResponse
-	(*RepositoryParameters)(nil),         // 5: kopia_repository.RepositoryParameters
-	(*InitializeSessionRequest)(nil),     // 6: kopia_repository.InitializeSessionRequest
-	(*InitializeSessionResponse)(nil),    // 7: kopia_repository.InitializeSessionResponse
-	(*GetContentInfoRequest)(nil),        // 8: kopia_repository.GetContentInfoRequest
-	(*GetContentInfoResponse)(nil),       // 9: kopia_repository.GetContentInfoResponse
-	(*GetContentRequest)(nil),            // 10: kopia_repository.GetContentRequest
-	(*GetContentResponse)(nil),           // 11: kopia_repository.GetContentResponse
-	(*FlushRequest)(nil),                 // 12: kopia_repository.FlushRequest
-	(*FlushResponse)(nil),                // 13: kopia_repository.FlushResponse
-	(*WriteContentRequest)(nil),          // 14: kopia_repository.WriteContentRequest
-	(*WriteContentResponse)(nil),         // 15: kopia_repository.WriteContentResponse
-	(*GetManifestRequest)(nil),           // 16: kopia_repository.GetManifestRequest
-	(*GetManifestResponse)(nil),          // 17: kopia_repository.GetManifestResponse
-	(*PutManifestRequest)(nil),           // 18: kopia_repository.PutManifestRequest
-	(*PutManifestResponse)(nil),          // 19: kopia_repository.PutManifestResponse
-	(*DeleteManifestRequest)(nil),        // 20: kopia_repository.DeleteManifestRequest
-	(*DeleteManifestResponse)(nil),       // 21: kopia_repository.DeleteManifestResponse
-	(*FindManifestsRequest)(nil),         // 22: kopia_repository.FindManifestsRequest
-	(*FindManifestsResponse)(nil),        // 23: kopia_repository.FindManifestsResponse
-	(*PrefetchContentsRequest)(nil),      // 24: kopia_repository.PrefetchContentsRequest
-	(*PrefetchContentsResponse)(nil),     // 25: kopia_repository.PrefetchContentsResponse
-	(*ApplyRetentionPolicyRequest)(nil),  // 26: kopia_repository.ApplyRetentionPolicyRequest
-	(*ApplyRetentionPolicyResponse)(nil), // 27: kopia_repository.ApplyRetentionPolicyResponse
-	(*SendNotificationRequest)(nil),      // 28: kopia_repository.SendNotificationRequest
-	(*SendNotificationResponse)(nil),     // 29: kopia_repository.SendNotificationResponse
-	(*SessionRequest)(nil),               // 30: kopia_repository.SessionRequest
-	(*SessionResponse)(nil),              // 31: kopia_repository.SessionResponse
-	nil,                                  // 32: kopia_repository.ManifestEntryMetadata.LabelsEntry
-	nil,                                  // 33: kopia_repository.PutManifestRequest.LabelsEntry
-	nil,                                  // 34: kopia_repository.FindManifestsRequest.LabelsEntry
-	nil,                                  // 35: kopia_repository.SessionRequest.TraceContextEntry
+	(NotificationEventArgType)(0),        // 0: blinkdisk_repository.NotificationEventArgType
+	(ErrorResponse_Code)(0),              // 1: blinkdisk_repository.ErrorResponse.Code
+	(*ContentInfo)(nil),                  // 2: blinkdisk_repository.ContentInfo
+	(*ManifestEntryMetadata)(nil),        // 3: blinkdisk_repository.ManifestEntryMetadata
+	(*ErrorResponse)(nil),                // 4: blinkdisk_repository.ErrorResponse
+	(*RepositoryParameters)(nil),         // 5: blinkdisk_repository.RepositoryParameters
+	(*InitializeSessionRequest)(nil),     // 6: blinkdisk_repository.InitializeSessionRequest
+	(*InitializeSessionResponse)(nil),    // 7: blinkdisk_repository.InitializeSessionResponse
+	(*GetContentInfoRequest)(nil),        // 8: blinkdisk_repository.GetContentInfoRequest
+	(*GetContentInfoResponse)(nil),       // 9: blinkdisk_repository.GetContentInfoResponse
+	(*GetContentRequest)(nil),            // 10: blinkdisk_repository.GetContentRequest
+	(*GetContentResponse)(nil),           // 11: blinkdisk_repository.GetContentResponse
+	(*FlushRequest)(nil),                 // 12: blinkdisk_repository.FlushRequest
+	(*FlushResponse)(nil),                // 13: blinkdisk_repository.FlushResponse
+	(*WriteContentRequest)(nil),          // 14: blinkdisk_repository.WriteContentRequest
+	(*WriteContentResponse)(nil),         // 15: blinkdisk_repository.WriteContentResponse
+	(*GetManifestRequest)(nil),           // 16: blinkdisk_repository.GetManifestRequest
+	(*GetManifestResponse)(nil),          // 17: blinkdisk_repository.GetManifestResponse
+	(*PutManifestRequest)(nil),           // 18: blinkdisk_repository.PutManifestRequest
+	(*PutManifestResponse)(nil),          // 19: blinkdisk_repository.PutManifestResponse
+	(*DeleteManifestRequest)(nil),        // 20: blinkdisk_repository.DeleteManifestRequest
+	(*DeleteManifestResponse)(nil),       // 21: blinkdisk_repository.DeleteManifestResponse
+	(*FindManifestsRequest)(nil),         // 22: blinkdisk_repository.FindManifestsRequest
+	(*FindManifestsResponse)(nil),        // 23: blinkdisk_repository.FindManifestsResponse
+	(*PrefetchContentsRequest)(nil),      // 24: blinkdisk_repository.PrefetchContentsRequest
+	(*PrefetchContentsResponse)(nil),     // 25: blinkdisk_repository.PrefetchContentsResponse
+	(*ApplyRetentionPolicyRequest)(nil),  // 26: blinkdisk_repository.ApplyRetentionPolicyRequest
+	(*ApplyRetentionPolicyResponse)(nil), // 27: blinkdisk_repository.ApplyRetentionPolicyResponse
+	(*SendNotificationRequest)(nil),      // 28: blinkdisk_repository.SendNotificationRequest
+	(*SendNotificationResponse)(nil),     // 29: blinkdisk_repository.SendNotificationResponse
+	(*SessionRequest)(nil),               // 30: blinkdisk_repository.SessionRequest
+	(*SessionResponse)(nil),              // 31: blinkdisk_repository.SessionResponse
+	nil,                                  // 32: blinkdisk_repository.ManifestEntryMetadata.LabelsEntry
+	nil,                                  // 33: blinkdisk_repository.PutManifestRequest.LabelsEntry
+	nil,                                  // 34: blinkdisk_repository.FindManifestsRequest.LabelsEntry
+	nil,                                  // 35: blinkdisk_repository.SessionRequest.TraceContextEntry
 }
 var file_repository_server_proto_depIdxs = []int32{
-	32, // 0: kopia_repository.ManifestEntryMetadata.labels:type_name -> kopia_repository.ManifestEntryMetadata.LabelsEntry
-	1,  // 1: kopia_repository.ErrorResponse.code:type_name -> kopia_repository.ErrorResponse.Code
-	5,  // 2: kopia_repository.InitializeSessionResponse.parameters:type_name -> kopia_repository.RepositoryParameters
-	2,  // 3: kopia_repository.GetContentInfoResponse.info:type_name -> kopia_repository.ContentInfo
-	3,  // 4: kopia_repository.GetManifestResponse.metadata:type_name -> kopia_repository.ManifestEntryMetadata
-	33, // 5: kopia_repository.PutManifestRequest.labels:type_name -> kopia_repository.PutManifestRequest.LabelsEntry
-	34, // 6: kopia_repository.FindManifestsRequest.labels:type_name -> kopia_repository.FindManifestsRequest.LabelsEntry
-	3,  // 7: kopia_repository.FindManifestsResponse.metadata:type_name -> kopia_repository.ManifestEntryMetadata
-	0,  // 8: kopia_repository.SendNotificationRequest.event_args_type:type_name -> kopia_repository.NotificationEventArgType
-	35, // 9: kopia_repository.SessionRequest.trace_context:type_name -> kopia_repository.SessionRequest.TraceContextEntry
-	6,  // 10: kopia_repository.SessionRequest.initialize_session:type_name -> kopia_repository.InitializeSessionRequest
-	8,  // 11: kopia_repository.SessionRequest.get_content_info:type_name -> kopia_repository.GetContentInfoRequest
-	12, // 12: kopia_repository.SessionRequest.flush:type_name -> kopia_repository.FlushRequest
-	14, // 13: kopia_repository.SessionRequest.write_content:type_name -> kopia_repository.WriteContentRequest
-	10, // 14: kopia_repository.SessionRequest.get_content:type_name -> kopia_repository.GetContentRequest
-	16, // 15: kopia_repository.SessionRequest.get_manifest:type_name -> kopia_repository.GetManifestRequest
-	18, // 16: kopia_repository.SessionRequest.put_manifest:type_name -> kopia_repository.PutManifestRequest
-	22, // 17: kopia_repository.SessionRequest.find_manifests:type_name -> kopia_repository.FindManifestsRequest
-	20, // 18: kopia_repository.SessionRequest.delete_manifest:type_name -> kopia_repository.DeleteManifestRequest
-	24, // 19: kopia_repository.SessionRequest.prefetch_contents:type_name -> kopia_repository.PrefetchContentsRequest
-	26, // 20: kopia_repository.SessionRequest.apply_retention_policy:type_name -> kopia_repository.ApplyRetentionPolicyRequest
-	28, // 21: kopia_repository.SessionRequest.send_notification:type_name -> kopia_repository.SendNotificationRequest
-	4,  // 22: kopia_repository.SessionResponse.error:type_name -> kopia_repository.ErrorResponse
-	7,  // 23: kopia_repository.SessionResponse.initialize_session:type_name -> kopia_repository.InitializeSessionResponse
-	9,  // 24: kopia_repository.SessionResponse.get_content_info:type_name -> kopia_repository.GetContentInfoResponse
-	13, // 25: kopia_repository.SessionResponse.flush:type_name -> kopia_repository.FlushResponse
-	15, // 26: kopia_repository.SessionResponse.write_content:type_name -> kopia_repository.WriteContentResponse
-	11, // 27: kopia_repository.SessionResponse.get_content:type_name -> kopia_repository.GetContentResponse
-	17, // 28: kopia_repository.SessionResponse.get_manifest:type_name -> kopia_repository.GetManifestResponse
-	19, // 29: kopia_repository.SessionResponse.put_manifest:type_name -> kopia_repository.PutManifestResponse
-	23, // 30: kopia_repository.SessionResponse.find_manifests:type_name -> kopia_repository.FindManifestsResponse
-	21, // 31: kopia_repository.SessionResponse.delete_manifest:type_name -> kopia_repository.DeleteManifestResponse
-	25, // 32: kopia_repository.SessionResponse.prefetch_contents:type_name -> kopia_repository.PrefetchContentsResponse
-	27, // 33: kopia_repository.SessionResponse.apply_retention_policy:type_name -> kopia_repository.ApplyRetentionPolicyResponse
-	29, // 34: kopia_repository.SessionResponse.send_notification:type_name -> kopia_repository.SendNotificationResponse
-	30, // 35: kopia_repository.KopiaRepository.Session:input_type -> kopia_repository.SessionRequest
-	31, // 36: kopia_repository.KopiaRepository.Session:output_type -> kopia_repository.SessionResponse
+	32, // 0: blinkdisk_repository.ManifestEntryMetadata.labels:type_name -> blinkdisk_repository.ManifestEntryMetadata.LabelsEntry
+	1,  // 1: blinkdisk_repository.ErrorResponse.code:type_name -> blinkdisk_repository.ErrorResponse.Code
+	5,  // 2: blinkdisk_repository.InitializeSessionResponse.parameters:type_name -> blinkdisk_repository.RepositoryParameters
+	2,  // 3: blinkdisk_repository.GetContentInfoResponse.info:type_name -> blinkdisk_repository.ContentInfo
+	3,  // 4: blinkdisk_repository.GetManifestResponse.metadata:type_name -> blinkdisk_repository.ManifestEntryMetadata
+	33, // 5: blinkdisk_repository.PutManifestRequest.labels:type_name -> blinkdisk_repository.PutManifestRequest.LabelsEntry
+	34, // 6: blinkdisk_repository.FindManifestsRequest.labels:type_name -> blinkdisk_repository.FindManifestsRequest.LabelsEntry
+	3,  // 7: blinkdisk_repository.FindManifestsResponse.metadata:type_name -> blinkdisk_repository.ManifestEntryMetadata
+	0,  // 8: blinkdisk_repository.SendNotificationRequest.event_args_type:type_name -> blinkdisk_repository.NotificationEventArgType
+	35, // 9: blinkdisk_repository.SessionRequest.trace_context:type_name -> blinkdisk_repository.SessionRequest.TraceContextEntry
+	6,  // 10: blinkdisk_repository.SessionRequest.initialize_session:type_name -> blinkdisk_repository.InitializeSessionRequest
+	8,  // 11: blinkdisk_repository.SessionRequest.get_content_info:type_name -> blinkdisk_repository.GetContentInfoRequest
+	12, // 12: blinkdisk_repository.SessionRequest.flush:type_name -> blinkdisk_repository.FlushRequest
+	14, // 13: blinkdisk_repository.SessionRequest.write_content:type_name -> blinkdisk_repository.WriteContentRequest
+	10, // 14: blinkdisk_repository.SessionRequest.get_content:type_name -> blinkdisk_repository.GetContentRequest
+	16, // 15: blinkdisk_repository.SessionRequest.get_manifest:type_name -> blinkdisk_repository.GetManifestRequest
+	18, // 16: blinkdisk_repository.SessionRequest.put_manifest:type_name -> blinkdisk_repository.PutManifestRequest
+	22, // 17: blinkdisk_repository.SessionRequest.find_manifests:type_name -> blinkdisk_repository.FindManifestsRequest
+	20, // 18: blinkdisk_repository.SessionRequest.delete_manifest:type_name -> blinkdisk_repository.DeleteManifestRequest
+	24, // 19: blinkdisk_repository.SessionRequest.prefetch_contents:type_name -> blinkdisk_repository.PrefetchContentsRequest
+	26, // 20: blinkdisk_repository.SessionRequest.apply_retention_policy:type_name -> blinkdisk_repository.ApplyRetentionPolicyRequest
+	28, // 21: blinkdisk_repository.SessionRequest.send_notification:type_name -> blinkdisk_repository.SendNotificationRequest
+	4,  // 22: blinkdisk_repository.SessionResponse.error:type_name -> blinkdisk_repository.ErrorResponse
+	7,  // 23: blinkdisk_repository.SessionResponse.initialize_session:type_name -> blinkdisk_repository.InitializeSessionResponse
+	9,  // 24: blinkdisk_repository.SessionResponse.get_content_info:type_name -> blinkdisk_repository.GetContentInfoResponse
+	13, // 25: blinkdisk_repository.SessionResponse.flush:type_name -> blinkdisk_repository.FlushResponse
+	15, // 26: blinkdisk_repository.SessionResponse.write_content:type_name -> blinkdisk_repository.WriteContentResponse
+	11, // 27: blinkdisk_repository.SessionResponse.get_content:type_name -> blinkdisk_repository.GetContentResponse
+	17, // 28: blinkdisk_repository.SessionResponse.get_manifest:type_name -> blinkdisk_repository.GetManifestResponse
+	19, // 29: blinkdisk_repository.SessionResponse.put_manifest:type_name -> blinkdisk_repository.PutManifestResponse
+	23, // 30: blinkdisk_repository.SessionResponse.find_manifests:type_name -> blinkdisk_repository.FindManifestsResponse
+	21, // 31: blinkdisk_repository.SessionResponse.delete_manifest:type_name -> blinkdisk_repository.DeleteManifestResponse
+	25, // 32: blinkdisk_repository.SessionResponse.prefetch_contents:type_name -> blinkdisk_repository.PrefetchContentsResponse
+	27, // 33: blinkdisk_repository.SessionResponse.apply_retention_policy:type_name -> blinkdisk_repository.ApplyRetentionPolicyResponse
+	29, // 34: blinkdisk_repository.SessionResponse.send_notification:type_name -> blinkdisk_repository.SendNotificationResponse
+	30, // 35: blinkdisk_repository.BlinkDiskRepository.Session:input_type -> blinkdisk_repository.SessionRequest
+	31, // 36: blinkdisk_repository.BlinkDiskRepository.Session:output_type -> blinkdisk_repository.SessionResponse
 	36, // [36:37] is the sub-list for method output_type
 	35, // [35:36] is the sub-list for method input_type
 	35, // [35:35] is the sub-list for extension type_name
