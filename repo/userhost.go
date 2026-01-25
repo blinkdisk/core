@@ -37,7 +37,7 @@ func GetDefaultHostName(ctx context.Context) string {
 	}
 
 	// Normalize hostname.
-	hostname = strings.ToLower(strings.Split(hostname, ".")[0])
+	hostname = strings.Split(hostname, ".")[0]
 
 	return hostname
 }
