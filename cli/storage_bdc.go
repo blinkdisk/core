@@ -14,8 +14,8 @@ type storageBdcFlags struct {
 }
 
 func (c *storageBdcFlags) Setup(svc StorageProviderServices, cmd *kingpin.CmdClause) {
-	cmd.Flag("url", "URL of the BlinkDisk Cloud API server").Required().StringVar(&c.bdcOptions.URL)
-	cmd.Flag("token", "BlinkDisk Cloud access token").Required().Envar(svc.EnvName("BLINKDISK_CLOUD_TOKEN")).StringVar(&c.bdcOptions.Token)
+	cmd.Flag("url", "URL of the BlinkCloud API server").Required().StringVar(&c.bdcOptions.URL)
+	cmd.Flag("token", "BlinkCloud access token").Required().Envar(svc.EnvName("BLINKCLOUD_TOKEN")).StringVar(&c.bdcOptions.Token)
 
 	commonThrottlingFlags(cmd, &c.bdcOptions.Limits)
 }

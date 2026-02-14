@@ -109,7 +109,7 @@ func (s *bdcStorage) connect(ctx context.Context) error {
 
 	conn, _, err := websocket.DefaultDialer.DialContext(ctx, u.String(), headers)
 	if err != nil {
-		return errors.Wrap(err, "failed to connect to BlinkDisk Cloud")
+		return errors.Wrap(err, "failed to connect to BlinkCloud")
 	}
 
 	s.conn = conn
