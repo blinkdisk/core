@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/crypto"
+	"github.com/blinkdisk/core/internal/crypto"
 )
 
 // The password hashing constants defined in this package are used as "lookup

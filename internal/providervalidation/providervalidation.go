@@ -1,4 +1,4 @@
-// Package providervalidation implements validation to ensure the blob storage is compatible with Kopia requirements.
+// Package providervalidation implements validation to ensure the blob storage is compatible with BlinkDisk requirements.
 package providervalidation
 
 import (
@@ -16,11 +16,11 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	loggingwrapper "github.com/kopia/kopia/repo/blob/logging"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	loggingwrapper "github.com/blinkdisk/core/repo/blob/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // Options provides options for provider validation.
@@ -99,11 +99,11 @@ func openEquivalentStorageConnections(ctx context.Context, st blob.Storage, n in
 }
 
 // ValidateProvider runs a series of tests against provided storage to validate that
-// it can be used with Kopia.
+// it can be used with BlinkDisk.
 //
 //nolint:mnd,funlen,gocyclo,cyclop
 func ValidateProvider(ctx context.Context, st0 blob.Storage, opt Options) error {
-	if os.Getenv("KOPIA_SKIP_PROVIDER_VALIDATION") != "" {
+	if os.Getenv("BLINKDISK_SKIP_PROVIDER_VALIDATION") != "" {
 		return nil
 	}
 

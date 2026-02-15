@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func (s *bdcStorage) GetBlob(ctx context.Context, id blob.ID, offset, length int64, output blob.OutputBuffer) error {

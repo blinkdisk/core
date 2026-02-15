@@ -11,9 +11,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/pushover"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/pushover"
 )
 
 func TestPushover(t *testing.T) {

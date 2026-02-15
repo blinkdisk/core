@@ -13,7 +13,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("editor")
@@ -22,7 +22,7 @@ var log = logging.Module("editor")
 // It creates a temporary file with 'initial' contents and repeatedly invokes the editor until the provided 'parse' function
 // returns nil result indicating success. The 'parse' function is passed the contents of edited files without # line comments.
 func EditLoop(ctx context.Context, fname, initial string, withComments bool, parse func(updated string) error) error {
-	tmpDir, err := os.MkdirTemp("", "kopia")
+	tmpDir, err := os.MkdirTemp("", "blinkdisk")
 	if err != nil {
 		return errors.Wrap(err, "unable to create temp directory")
 	}

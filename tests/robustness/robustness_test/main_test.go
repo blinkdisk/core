@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/engine"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
-	"github.com/kopia/kopia/tests/tools/fio"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/engine"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/tests/tools/fio"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 var eng *engine.Engine // for use in the test functions
@@ -42,7 +42,7 @@ func TestMain(m *testing.M) {
 
 	ctx := context.Background()
 
-	th := &kopiaRobustnessTestHarness{}
+	th := &blinkdiskRobustnessTestHarness{}
 	th.init(ctx, dataRepoPath, metadataRepoPath)
 	eng = th.engine
 
@@ -71,7 +71,7 @@ func TestMain(m *testing.M) {
 		log.Println("Upgraded repository format:", curr)
 
 		// Reset the env variable.
-		os.Setenv("KOPIA_UPGRADE_LOCK_ENABLED", "")
+		os.Setenv("BLINKDISK_UPGRADE_LOCK_ENABLED", "")
 	}
 
 	// run the tests
@@ -83,21 +83,21 @@ func TestMain(m *testing.M) {
 	os.Exit(result)
 }
 
-type kopiaRobustnessTestHarness struct {
+type blinkdiskRobustnessTestHarness struct {
 	dataRepoPath string
 	metaRepoPath string
 	baseDirPath  string
 
 	fileWriter  *fiofilewriter.FileWriter
-	snapshotter *snapmeta.KopiaSnapshotter
-	persister   *snapmeta.KopiaPersisterLight
-	upgrader    *kopiarunner.KopiaSnapshotter
+	snapshotter *snapmeta.BlinkDiskSnapshotter
+	persister   *snapmeta.BlinkDiskPersisterLight
+	upgrader    *blinkdiskrunner.BlinkDiskSnapshotter
 	engine      *engine.Engine
 
 	skipTest bool
 }
 
-func (th *kopiaRobustnessTestHarness) init(ctx context.Context, dataRepoPath, metaRepoPath string) {
+func (th *blinkdiskRobustnessTestHarness) init(ctx context.Context, dataRepoPath, metaRepoPath string) {
 	th.dataRepoPath = dataRepoPath
 	th.metaRepoPath = metaRepoPath
 
@@ -116,7 +116,7 @@ func (th *kopiaRobustnessTestHarness) init(ctx context.Context, dataRepoPath, me
 	os.Exit(1)
 }
 
-func (th *kopiaRobustnessTestHarness) makeBaseDir() bool {
+func (th *blinkdiskRobustnessTestHarness) makeBaseDir() bool {
 	baseDir, err := os.MkdirTemp("", "engine-data-")
 	if err != nil {
 		log.Println("Error creating temp dir:", err)
@@ -128,7 +128,7 @@ func (th *kopiaRobustnessTestHarness) makeBaseDir() bool {
 	return true
 }
 
-func (th *kopiaRobustnessTestHarness) getFileWriter() bool {
+func (th *blinkdiskRobustnessTestHarness) getFileWriter() bool {
 	fw, err := fiofilewriter.New()
 	if err != nil {
 		if errors.Is(err, fio.ErrEnvNotSet) {
@@ -147,15 +147,15 @@ func (th *kopiaRobustnessTestHarness) getFileWriter() bool {
 	return true
 }
 
-func (th *kopiaRobustnessTestHarness) getSnapshotter() bool {
+func (th *blinkdiskRobustnessTestHarness) getSnapshotter() bool {
 	ks, err := snapmeta.NewSnapshotter(th.baseDirPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			log.Println("Skipping robustness tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			log.Println("Skipping robustness tests because BLINKDISK_EXE is not set")
 
 			th.skipTest = true
 		} else {
-			log.Println("Error creating kopia Snapshotter:", err)
+			log.Println("Error creating blinkdisk Snapshotter:", err)
 		}
 
 		return false
@@ -164,31 +164,31 @@ func (th *kopiaRobustnessTestHarness) getSnapshotter() bool {
 	th.snapshotter = ks
 
 	if err = ks.ConnectOrCreateRepo(th.dataRepoPath); err != nil {
-		log.Println("Error initializing kopia Snapshotter:", err)
+		log.Println("Error initializing blinkdisk Snapshotter:", err)
 		return false
 	}
 
 	return true
 }
 
-func (th *kopiaRobustnessTestHarness) getPersister() bool {
+func (th *blinkdiskRobustnessTestHarness) getPersister() bool {
 	kp, err := snapmeta.NewPersisterLight(th.baseDirPath)
 	if err != nil {
-		log.Println("Error creating kopia Persister:", err)
+		log.Println("Error creating blinkdisk Persister:", err)
 		return false
 	}
 
 	th.persister = kp
 
 	if err = kp.ConnectOrCreateRepo(th.metaRepoPath); err != nil {
-		log.Println("Error initializing kopia Persister:", err)
+		log.Println("Error initializing blinkdisk Persister:", err)
 		return false
 	}
 
 	return true
 }
 
-func (th *kopiaRobustnessTestHarness) getEngine() bool {
+func (th *blinkdiskRobustnessTestHarness) getEngine() bool {
 	args := &engine.Args{
 		MetaStore:        th.persister,
 		TestRepo:         th.snapshotter,
@@ -217,8 +217,8 @@ func (th *kopiaRobustnessTestHarness) getEngine() bool {
 	return true
 }
 
-func (th *kopiaRobustnessTestHarness) cleanup(ctx context.Context) (retErr error) {
-	os.Setenv("KOPIA_UPGRADE_LOCK_ENABLED", "")
+func (th *blinkdiskRobustnessTestHarness) cleanup(ctx context.Context) (retErr error) {
+	os.Setenv("BLINKDISK_UPGRADE_LOCK_ENABLED", "")
 
 	if th.engine != nil {
 		retErr = th.engine.Shutdown(ctx)
@@ -231,7 +231,7 @@ func (th *kopiaRobustnessTestHarness) cleanup(ctx context.Context) (retErr error
 	if th.snapshotter != nil {
 		if sc := th.snapshotter.ServerCmd(); sc != nil {
 			if err := sc.Process.Signal(syscall.SIGTERM); err != nil {
-				log.Println("Warning: Failed to send termination signal to kopia server process:", err)
+				log.Println("Warning: Failed to send termination signal to blinkdisk server process:", err)
 			}
 		}
 
@@ -249,15 +249,15 @@ func (th *kopiaRobustnessTestHarness) cleanup(ctx context.Context) (retErr error
 	return retErr
 }
 
-func (th *kopiaRobustnessTestHarness) getUpgrader() bool {
-	ks, err := kopiarunner.NewKopiaSnapshotter(th.baseDirPath)
+func (th *blinkdiskRobustnessTestHarness) getUpgrader() bool {
+	ks, err := blinkdiskrunner.NewBlinkDiskSnapshotter(th.baseDirPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			log.Println("Skipping robustness tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			log.Println("Skipping robustness tests because BLINKDISK_EXE is not set")
 
 			th.skipTest = true
 		} else {
-			log.Println("Error creating kopia Upgrader:", err)
+			log.Println("Error creating blinkdisk Upgrader:", err)
 		}
 
 		return false

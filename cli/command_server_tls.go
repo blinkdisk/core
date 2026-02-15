@@ -20,7 +20,7 @@ import (
 	"github.com/coreos/go-systemd/v22/activation"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/tlsutil"
+	"github.com/blinkdisk/core/internal/tlsutil"
 )
 
 const oneDay = 24 * time.Hour
@@ -144,7 +144,7 @@ func (c *commandServerStart) startServerWithOptionalTLSAndListener(ctx context.C
 		fmt.Fprintf(c.out.stderr(), "SERVER CERT SHA256: %v\n", hex.EncodeToString(fingerprint[:])) //nolint:errcheck
 
 		if c.serverStartTLSPrintFullServerCert {
-			// dump PEM-encoded server cert, only used by KopiaUI to securely connect.
+			// dump PEM-encoded server cert, only used by BlinkDiskUI to securely connect.
 			var b bytes.Buffer
 
 			if err := pem.Encode(&b, &pem.Block{Type: "CERTIFICATE", Bytes: cert.Raw}); err != nil {

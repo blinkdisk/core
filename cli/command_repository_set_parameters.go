@@ -6,13 +6,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/feature"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/maintenance"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/feature"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/maintenance"
 )
 
 type commandRepositorySetParameters struct {
@@ -236,7 +236,7 @@ func (c *commandRepositorySetParameters) run(ctx context.Context, rep repo.Direc
 		return errors.Wrap(err, "error updating repository parameters")
 	}
 
-	log(ctx).Info("NOTE: Repository parameters updated, you must disconnect and re-connect all other Kopia clients.")
+	log(ctx).Info("NOTE: Repository parameters updated, you must disconnect and re-connect all other BlinkDisk clients.")
 
 	return nil
 }

@@ -8,25 +8,25 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 var (
-	kopiaCurrentExe = os.Getenv("KOPIA_CURRENT_EXE")
-	kopia08exe      = os.Getenv("KOPIA_08_EXE")
-	kopia017exe     = os.Getenv("KOPIA_017_EXE")
+	blinkdiskCurrentExe = os.Getenv("BLINKDISK_CURRENT_EXE")
+	blinkdisk08exe      = os.Getenv("BLINKDISK_08_EXE")
+	blinkdisk017exe     = os.Getenv("BLINKDISK_017_EXE")
 )
 
 func TestRepoCreatedWith08CanBeOpenedWithCurrent(t *testing.T) {
 	t.Parallel()
 
-	if kopiaCurrentExe == "" {
+	if blinkdiskCurrentExe == "" {
 		t.Skip()
 	}
 
-	runnerCurrent := testenv.NewExeRunnerWithBinary(t, kopiaCurrentExe)
-	runner08 := testenv.NewExeRunnerWithBinary(t, kopia08exe)
+	runnerCurrent := testenv.NewExeRunnerWithBinary(t, blinkdiskCurrentExe)
+	runner08 := testenv.NewExeRunnerWithBinary(t, blinkdisk08exe)
 
 	// create repository using v0.8
 	e1 := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner08)
@@ -38,7 +38,7 @@ func TestRepoCreatedWith08CanBeOpenedWithCurrent(t *testing.T) {
 	e2.RunAndExpectSuccess(t, "repo", "connect", "filesystem", "--path", e1.RepoDir)
 	e2.RunAndExpectSuccess(t, "snap", "ls")
 
-	e2.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	e2.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	// upgrade
 	e2.RunAndExpectSuccess(t, "repository", "upgrade", "begin",
@@ -59,11 +59,11 @@ func TestRepoCreatedWith08CanBeOpenedWithCurrent(t *testing.T) {
 func TestRepoCreatedWith08ProperlyRefreshes(t *testing.T) {
 	t.Parallel()
 
-	if kopiaCurrentExe == "" {
+	if blinkdiskCurrentExe == "" {
 		t.Skip()
 	}
 
-	runner08 := testenv.NewExeRunnerWithBinary(t, kopia08exe)
+	runner08 := testenv.NewExeRunnerWithBinary(t, blinkdisk08exe)
 
 	// create repository using v0.8
 	e1 := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner08)
@@ -71,14 +71,14 @@ func TestRepoCreatedWith08ProperlyRefreshes(t *testing.T) {
 	e1.RunAndExpectSuccess(t, "snap", "create", ".")
 
 	// switch to using latest runner
-	e1.Runner = testenv.NewExeRunnerWithBinary(t, kopiaCurrentExe)
+	e1.Runner = testenv.NewExeRunnerWithBinary(t, blinkdiskCurrentExe)
 
 	// measure time of the cache file and ensure it stays the same
 	cachePath := e1.RunAndExpectSuccess(t, "cache", "info", "--path")[0]
-	cachedBlob := filepath.Join(cachePath, "kopia.repository")
+	cachedBlob := filepath.Join(cachePath, "blinkdisk.repository")
 
 	time.Sleep(1 * time.Second)
-	// 0.12.0 had a bug where we would constantly refresh kopia.repository
+	// 0.12.0 had a bug where we would constantly refresh blinkdisk.repository
 	// this was done all the time instead of every 15 minutes,
 	st1, err := os.Stat(cachedBlob)
 	require.NoError(t, err)
@@ -96,12 +96,12 @@ func TestRepoCreatedWith08ProperlyRefreshes(t *testing.T) {
 func TestRepoCreatedWithCurrentWithFormatVersion1CanBeOpenedWith08(t *testing.T) {
 	t.Parallel()
 
-	if kopiaCurrentExe == "" {
+	if blinkdiskCurrentExe == "" {
 		t.Skip()
 	}
 
-	runnerCurrent := testenv.NewExeRunnerWithBinary(t, kopiaCurrentExe)
-	runner08 := testenv.NewExeRunnerWithBinary(t, kopia08exe)
+	runnerCurrent := testenv.NewExeRunnerWithBinary(t, blinkdiskCurrentExe)
+	runner08 := testenv.NewExeRunnerWithBinary(t, blinkdisk08exe)
 
 	// create repository using current, setting format version to v1
 	e1 := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runnerCurrent)
@@ -117,12 +117,12 @@ func TestRepoCreatedWithCurrentWithFormatVersion1CanBeOpenedWith08(t *testing.T)
 func TestRepoCreatedWithCurrentCannotBeOpenedWith08(t *testing.T) {
 	t.Parallel()
 
-	if kopiaCurrentExe == "" {
+	if blinkdiskCurrentExe == "" {
 		t.Skip()
 	}
 
-	runnerCurrent := testenv.NewExeRunnerWithBinary(t, kopiaCurrentExe)
-	runner08 := testenv.NewExeRunnerWithBinary(t, kopia08exe)
+	runnerCurrent := testenv.NewExeRunnerWithBinary(t, blinkdiskCurrentExe)
+	runner08 := testenv.NewExeRunnerWithBinary(t, blinkdisk08exe)
 
 	// create repository using current, using default format version (v2)
 	e1 := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runnerCurrent)
@@ -137,16 +137,16 @@ func TestRepoCreatedWithCurrentCannotBeOpenedWith08(t *testing.T) {
 func TestClientConnectedUsingV017CanConnectUsingCurrent(t *testing.T) {
 	t.Parallel()
 
-	if kopiaCurrentExe == "" {
+	if blinkdiskCurrentExe == "" {
 		t.Skip()
 	}
 
-	if kopia017exe == "" {
+	if blinkdisk017exe == "" {
 		t.Skip()
 	}
 
-	runnerCurrent := testenv.NewExeRunnerWithBinary(t, kopiaCurrentExe)
-	runner017 := testenv.NewExeRunnerWithBinary(t, kopia017exe)
+	runnerCurrent := testenv.NewExeRunnerWithBinary(t, blinkdiskCurrentExe)
+	runner017 := testenv.NewExeRunnerWithBinary(t, blinkdisk017exe)
 
 	// create repository using v0.17 and start a server
 	e1 := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner017)
@@ -192,7 +192,7 @@ func TestClientConnectedUsingV017CanConnectUsingCurrent(t *testing.T) {
 	// we are providing custom password to connect, make sure we won't be providing
 	// (different) default password via environment variable, as command-line password
 	// takes precedence over persisted password.
-	delete(e2.Environment, "KOPIA_PASSWORD")
+	delete(e2.Environment, "BLINKDISK_PASSWORD")
 
 	e2.RunAndExpectSuccess(t, "snapshot", "ls")
 

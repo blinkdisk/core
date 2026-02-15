@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/user"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/user"
 )
 
 func TestUserManager(t *testing.T) {

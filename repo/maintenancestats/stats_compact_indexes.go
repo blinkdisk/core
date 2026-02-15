@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kopia/kopia/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog"
 )
 
 const compactIndexesStatsKind = "compactIndexesStats"

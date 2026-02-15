@@ -13,20 +13,20 @@ import (
 	"github.com/pkg/errors"
 	"go.opentelemetry.io/otel"
 
-	"github.com/kopia/kopia/internal/blobparam"
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/contentparam"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/blobparam"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/contentparam"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 // Prefixes for pack blobs.
@@ -36,14 +36,14 @@ const (
 
 	NoCompression compression.HeaderID = 0
 
-	FormatLogModule = "kopia/format"
+	FormatLogModule = "blinkdisk/format"
 
 	packBlobIDLength = 16
 
 	DefaultIndexVersion = 2
 )
 
-var tracer = otel.Tracer("kopia/content")
+var tracer = otel.Tracer("blinkdisk/content")
 
 // PackBlobIDPrefixes contains all possible prefixes for pack blobs.
 //

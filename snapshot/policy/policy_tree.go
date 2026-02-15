@@ -27,7 +27,7 @@ var (
 
 	// defaultFilesPolicy is the default file ignore policy.
 	defaultFilesPolicy = FilesPolicy{
-		DotIgnoreFiles: []string{".kopiaignore"},
+		DotIgnoreFiles: []string{".blinkdiskignore"},
 	}
 
 	// defaultLoggingPolicy is the default logs policy.

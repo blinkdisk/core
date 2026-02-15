@@ -3,8 +3,8 @@ package cli
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 type commandServerShutdown struct {
@@ -20,7 +20,7 @@ func (c *commandServerShutdown) setup(svc appServices, parent commandParent) {
 	cmd.Action(svc.serverAction(&c.sf, c.run))
 }
 
-func (c *commandServerShutdown) run(ctx context.Context, cli *apiclient.KopiaAPIClient) error {
+func (c *commandServerShutdown) run(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error {
 	//nolint:wrapcheck
 	return cli.Post(ctx, "control/shutdown", &serverapi.Empty{}, &serverapi.Empty{})
 }

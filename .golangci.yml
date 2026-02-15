@@ -37,7 +37,7 @@ linters:
               reason: "github.com/aws/aws-sdk-go is not actively developed any longer"
           - github.com/rs/zerolog/log:
               recommendations:
-                - "use kopia's logging packages"
+                - "use blinkdisk's logging packages"
               reason: "zerolog not currently use"
           - go.uber.org/multierr:
               recommendations:
@@ -152,16 +152,16 @@ linters:
       - text: "Line contains TODO"
         linters:
           - godox
-      - text: "error returned from external package is unwrapped: sig: func github.com/kopia/kopia/internal/retry"
+      - text: "error returned from external package is unwrapped: sig: func github.com/blinkdisk/core/internal/retry"
         linters:
           - wrapcheck
-      - text: "error returned from external package is unwrapped: sig: func github.com/kopia/kopia/internal/connection.UsingConnection"
+      - text: "error returned from external package is unwrapped: sig: func github.com/blinkdisk/core/internal/connection.UsingConnection"
         linters:
           - wrapcheck
       - text: "Errors unhandled"
         linters:
           - gosec
-      - text: "unwrapped: sig: func github.com/kopia/kopia/fs.GetAllEntries"
+      - text: "unwrapped: sig: func github.com/blinkdisk/core/fs.GetAllEntries"
         linters:
           - wrapcheck
       - text: "float-compare: use require.InEpsilon"

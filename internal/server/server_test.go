@@ -13,22 +13,22 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/webhook"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/webhook"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 const (
@@ -80,7 +80,7 @@ func TestServerUIAccessDeniedToRemoteUser(t *testing.T) {
 	ctx, env := repotesting.NewEnvironment(t, repotesting.FormatNotImportant)
 	si := servertesting.StartServer(t, env, true)
 
-	remoteUserClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	remoteUserClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             si.BaseURL,
 		TrustedServerCertificateFingerprint: si.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUsername + "@" + servertesting.TestHostname,
@@ -88,7 +88,7 @@ func TestServerUIAccessDeniedToRemoteUser(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	uiUserWithoutCSRFToken, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	uiUserWithoutCSRFToken, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             si.BaseURL,
 		TrustedServerCertificateFingerprint: si.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUIUsername,
@@ -97,7 +97,7 @@ func TestServerUIAccessDeniedToRemoteUser(t *testing.T) {
 
 	require.NoError(t, err)
 
-	uiUserClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	uiUserClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             si.BaseURL,
 		TrustedServerCertificateFingerprint: si.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUIUsername,

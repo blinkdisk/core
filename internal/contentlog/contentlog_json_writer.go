@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kopia/kopia/internal/freepool"
+	"github.com/blinkdisk/core/internal/freepool"
 )
 
 var commaSeparator = []byte(",")

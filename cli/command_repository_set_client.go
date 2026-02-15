@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandRepositorySetClient struct {
@@ -32,8 +32,8 @@ func (c *commandRepositorySetClient) setup(svc appServices, parent commandParent
 	cmd.Flag("description", "Change description").StringsVar(&c.repoClientOptionsDescription)
 	cmd.Flag("username", "Change username").StringsVar(&c.repoClientOptionsUsername)
 	cmd.Flag("hostname", "Change hostname").StringsVar(&c.repoClientOptionsHostname)
-	cmd.Flag("repository-format-cache-duration", "Duration of kopia.repository format blob cache").DurationVar(&c.formatBlobCacheDuration)
-	cmd.Flag("disable-repository-format-cache", "Disable caching of kopia.repository format blob").BoolVar(&c.disableFormatBlobCache)
+	cmd.Flag("repository-format-cache-duration", "Duration of blinkdisk.repository format blob cache").DurationVar(&c.formatBlobCacheDuration)
+	cmd.Flag("disable-repository-format-cache", "Disable caching of blinkdisk.repository format blob").BoolVar(&c.disableFormatBlobCache)
 	cmd.Action(svc.repositoryReaderAction(c.run))
 
 	c.svc = svc

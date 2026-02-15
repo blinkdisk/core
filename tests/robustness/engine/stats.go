@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 var (

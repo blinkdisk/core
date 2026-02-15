@@ -11,9 +11,9 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/fatih/color"
 
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 const (

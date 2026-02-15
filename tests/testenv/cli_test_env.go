@@ -18,12 +18,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/testsender"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/testsender"
 )
 
 const (
@@ -31,7 +31,7 @@ const (
 	TestRepoPassword = "qWQPJ2hiiLgWRRCr"
 )
 
-// CLIRunner encapsulates running kopia subcommands for testing purposes.
+// CLIRunner encapsulates running blinkdisk subcommands for testing purposes.
 // It supports implementations that use subprocesses or in-process invocations.
 type CLIRunner interface {
 	Start(tb testing.TB, ctx context.Context, args []string, env map[string]string) (stdout, stderr io.Reader, wait func() error, interrupt func(os.Signal))
@@ -71,11 +71,11 @@ func NewCLITest(tb testing.TB, repoCreateFlags []string, runner CLIRunner) *CLIT
 	configDir := testutil.TempDirectory(tb)
 
 	// unset global environment variable that may interfere with the test
-	os.Unsetenv("KOPIA_METRICS_PUSH_ADDR")
+	os.Unsetenv("BLINKDISK_METRICS_PUSH_ADDR")
 
 	fixedArgs := []string{
 		// use per-test config file, to avoid clobbering current user's setup.
-		"--config-file", filepath.Join(configDir, ".kopia.config"),
+		"--config-file", filepath.Join(configDir, ".blinkdisk.config"),
 	}
 
 	// disable the use of keyring
@@ -106,7 +106,7 @@ func NewCLITest(tb testing.TB, repoCreateFlags []string, runner CLIRunner) *CLIT
 		fixedArgs:                    fixedArgs,
 		DefaultRepositoryCreateFlags: formatFlags,
 		Environment: map[string]string{
-			"KOPIA_PASSWORD": TestRepoPassword,
+			"BLINKDISK_PASSWORD": TestRepoPassword,
 		},
 		Runner: runner,
 	}
@@ -117,7 +117,7 @@ func (e *CLITest) RunAndExpectSuccess(tb testing.TB, args ...string) []string {
 	tb.Helper()
 
 	stdout, _, err := e.Run(tb, false, args...)
-	require.NoError(tb, err, "'kopia %v' failed", strings.Join(args, " "))
+	require.NoError(tb, err, "'blinkdisk %v' failed", strings.Join(args, " "))
 
 	return stdout
 }
@@ -169,7 +169,7 @@ func (e *CLITest) getLogOutputPrefix() (string, bool) {
 	e.logMu.RLock()
 	defer e.logMu.RUnlock()
 
-	return e.logOutputPrefix, os.Getenv("KOPIA_TEST_LOG_OUTPUT") != "" || e.logOutputEnabled
+	return e.logOutputPrefix, os.Getenv("BLINKDISK_TEST_LOG_OUTPUT") != "" || e.logOutputEnabled
 }
 
 // RunAndProcessStderr runs the given command, and streams its stderr line-by-line to stderrCallback until it returns false.
@@ -252,7 +252,7 @@ func (e *CLITest) RunAndExpectSuccessWithErrOut(tb testing.TB, args ...string) (
 	tb.Helper()
 
 	stdout, stderr, err := e.Run(tb, false, args...)
-	require.NoError(tb, err, "'kopia %v' failed", strings.Join(args, " "))
+	require.NoError(tb, err, "'blinkdisk %v' failed", strings.Join(args, " "))
 
 	return stdout, stderr
 }
@@ -264,7 +264,7 @@ func (e *CLITest) RunAndExpectFailure(tb testing.TB, args ...string) (stdout, st
 	var err error
 
 	stdout, stderr, err = e.Run(tb, true, args...)
-	require.Error(tb, err, "'kopia %v' succeeded, but expected failure", strings.Join(args, " "))
+	require.Error(tb, err, "'blinkdisk %v' succeeded, but expected failure", strings.Join(args, " "))
 
 	return stdout, stderr
 }
@@ -274,7 +274,7 @@ func (e *CLITest) RunAndVerifyOutputLineCount(tb testing.TB, wantLines int, args
 	tb.Helper()
 
 	lines := e.RunAndExpectSuccess(tb, args...)
-	require.Len(tb, lines, wantLines, "unexpected output lines for 'kopia %v', lines:\n %s", strings.Join(args, " "), strings.Join(lines, "\n "))
+	require.Len(tb, lines, wantLines, "unexpected output lines for 'blinkdisk %v', lines:\n %s", strings.Join(args, " "), strings.Join(lines, "\n "))
 
 	return lines
 }
@@ -291,13 +291,13 @@ func (e *CLITest) cmdArgs(args []string) []string {
 	return append(append(append([]string(nil), e.fixedArgs...), args...), suffix...)
 }
 
-// Run executes kopia with given arguments and returns the output lines.
+// Run executes blinkdisk with given arguments and returns the output lines.
 func (e *CLITest) Run(tb testing.TB, expectedError bool, args ...string) (stdout, stderr []string, err error) {
 	tb.Helper()
 
 	args = e.cmdArgs(args)
 	outputPrefix, logOutput := e.getLogOutputPrefix()
-	tb.Logf("%vrunning 'kopia %v' with %v", outputPrefix, strings.Join(args, " "), e.Environment)
+	tb.Logf("%vrunning 'blinkdisk %v' with %v", outputPrefix, strings.Join(args, " "), e.Environment)
 
 	timer := timetrack.StartTimer()
 
@@ -332,13 +332,13 @@ func (e *CLITest) Run(tb testing.TB, expectedError bool, args ...string) (stdout
 	gotErr := wait()
 
 	if expectedError {
-		require.Error(tb, gotErr, "unexpected success when running 'kopia %v' (stdout:\n%v\nstderr:\n%v", strings.Join(args, " "), strings.Join(stdout, "\n"), strings.Join(stderr, "\n"))
+		require.Error(tb, gotErr, "unexpected success when running 'blinkdisk %v' (stdout:\n%v\nstderr:\n%v", strings.Join(args, " "), strings.Join(stdout, "\n"), strings.Join(stderr, "\n"))
 	} else {
-		require.NoError(tb, gotErr, "unexpected error when running 'kopia %v' (stdout:\n%v\nstderr:\n%v", strings.Join(args, " "), strings.Join(stdout, "\n"), strings.Join(stderr, "\n"))
+		require.NoError(tb, gotErr, "unexpected error when running 'blinkdisk %v' (stdout:\n%v\nstderr:\n%v", strings.Join(args, " "), strings.Join(stdout, "\n"), strings.Join(stderr, "\n"))
 	}
 
 	//nolint:forbidigo
-	tb.Logf("%vfinished in %v: 'kopia %v'", outputPrefix, timer.Elapsed().Milliseconds(), strings.Join(args, " "))
+	tb.Logf("%vfinished in %v: 'blinkdisk %v'", outputPrefix, timer.Elapsed().Milliseconds(), strings.Join(args, " "))
 
 	return stdout, stderr, gotErr
 }

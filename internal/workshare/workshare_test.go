@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/workshare"
+	"github.com/blinkdisk/core/internal/workshare"
 )
 
 type treeNode struct {

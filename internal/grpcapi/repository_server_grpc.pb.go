@@ -19,28 +19,28 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	KopiaRepository_Session_FullMethodName = "/kopia_repository.KopiaRepository/Session"
+	BlinkDiskRepository_Session_FullMethodName = "/blinkdisk_repository.BlinkDiskRepository/Session"
 )
 
-// KopiaRepositoryClient is the client API for KopiaRepository service.
+// BlinkDiskRepositoryClient is the client API for BlinkDiskRepository service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type KopiaRepositoryClient interface {
+type BlinkDiskRepositoryClient interface {
 	// Session starts a long-running repository session.
 	Session(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SessionRequest, SessionResponse], error)
 }
 
-type kopiaRepositoryClient struct {
+type blinkdiskRepositoryClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewKopiaRepositoryClient(cc grpc.ClientConnInterface) KopiaRepositoryClient {
-	return &kopiaRepositoryClient{cc}
+func NewBlinkDiskRepositoryClient(cc grpc.ClientConnInterface) BlinkDiskRepositoryClient {
+	return &blinkdiskRepositoryClient{cc}
 }
 
-func (c *kopiaRepositoryClient) Session(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SessionRequest, SessionResponse], error) {
+func (c *blinkdiskRepositoryClient) Session(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SessionRequest, SessionResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &KopiaRepository_ServiceDesc.Streams[0], KopiaRepository_Session_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &BlinkDiskRepository_ServiceDesc.Streams[0], BlinkDiskRepository_Session_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -49,66 +49,66 @@ func (c *kopiaRepositoryClient) Session(ctx context.Context, opts ...grpc.CallOp
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type KopiaRepository_SessionClient = grpc.BidiStreamingClient[SessionRequest, SessionResponse]
+type BlinkDiskRepository_SessionClient = grpc.BidiStreamingClient[SessionRequest, SessionResponse]
 
-// KopiaRepositoryServer is the server API for KopiaRepository service.
-// All implementations must embed UnimplementedKopiaRepositoryServer
+// BlinkDiskRepositoryServer is the server API for BlinkDiskRepository service.
+// All implementations must embed UnimplementedBlinkDiskRepositoryServer
 // for forward compatibility.
-type KopiaRepositoryServer interface {
+type BlinkDiskRepositoryServer interface {
 	// Session starts a long-running repository session.
 	Session(grpc.BidiStreamingServer[SessionRequest, SessionResponse]) error
-	mustEmbedUnimplementedKopiaRepositoryServer()
+	mustEmbedUnimplementedBlinkDiskRepositoryServer()
 }
 
-// UnimplementedKopiaRepositoryServer must be embedded to have
+// UnimplementedBlinkDiskRepositoryServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedKopiaRepositoryServer struct{}
+type UnimplementedBlinkDiskRepositoryServer struct{}
 
-func (UnimplementedKopiaRepositoryServer) Session(grpc.BidiStreamingServer[SessionRequest, SessionResponse]) error {
+func (UnimplementedBlinkDiskRepositoryServer) Session(grpc.BidiStreamingServer[SessionRequest, SessionResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Session not implemented")
 }
-func (UnimplementedKopiaRepositoryServer) mustEmbedUnimplementedKopiaRepositoryServer() {}
-func (UnimplementedKopiaRepositoryServer) testEmbeddedByValue()                         {}
+func (UnimplementedBlinkDiskRepositoryServer) mustEmbedUnimplementedBlinkDiskRepositoryServer() {}
+func (UnimplementedBlinkDiskRepositoryServer) testEmbeddedByValue()                         {}
 
-// UnsafeKopiaRepositoryServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to KopiaRepositoryServer will
+// UnsafeBlinkDiskRepositoryServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BlinkDiskRepositoryServer will
 // result in compilation errors.
-type UnsafeKopiaRepositoryServer interface {
-	mustEmbedUnimplementedKopiaRepositoryServer()
+type UnsafeBlinkDiskRepositoryServer interface {
+	mustEmbedUnimplementedBlinkDiskRepositoryServer()
 }
 
-func RegisterKopiaRepositoryServer(s grpc.ServiceRegistrar, srv KopiaRepositoryServer) {
-	// If the following call pancis, it indicates UnimplementedKopiaRepositoryServer was
+func RegisterBlinkDiskRepositoryServer(s grpc.ServiceRegistrar, srv BlinkDiskRepositoryServer) {
+	// If the following call pancis, it indicates UnimplementedBlinkDiskRepositoryServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&KopiaRepository_ServiceDesc, srv)
+	s.RegisterService(&BlinkDiskRepository_ServiceDesc, srv)
 }
 
-func _KopiaRepository_Session_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(KopiaRepositoryServer).Session(&grpc.GenericServerStream[SessionRequest, SessionResponse]{ServerStream: stream})
+func _BlinkDiskRepository_Session_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BlinkDiskRepositoryServer).Session(&grpc.GenericServerStream[SessionRequest, SessionResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type KopiaRepository_SessionServer = grpc.BidiStreamingServer[SessionRequest, SessionResponse]
+type BlinkDiskRepository_SessionServer = grpc.BidiStreamingServer[SessionRequest, SessionResponse]
 
-// KopiaRepository_ServiceDesc is the grpc.ServiceDesc for KopiaRepository service.
+// BlinkDiskRepository_ServiceDesc is the grpc.ServiceDesc for BlinkDiskRepository service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var KopiaRepository_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "kopia_repository.KopiaRepository",
-	HandlerType: (*KopiaRepositoryServer)(nil),
+var BlinkDiskRepository_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "blinkdisk_repository.BlinkDiskRepository",
+	HandlerType: (*BlinkDiskRepositoryServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Session",
-			Handler:       _KopiaRepository_Session_Handler,
+			Handler:       _BlinkDiskRepository_Session_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

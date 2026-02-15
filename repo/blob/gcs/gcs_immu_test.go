@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/api/option"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/gcs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/gcs"
 )
 
 // TestGoogleStorageImmutabilityProtection runs through the behavior of Google immutability protection.

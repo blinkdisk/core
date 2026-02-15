@@ -10,12 +10,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/throttling"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 const configDirMode = 0o700
@@ -88,7 +88,7 @@ func (o ClientOptions) UsernameAtHost() string {
 	return o.Username + "@" + o.Hostname
 }
 
-// LocalConfig is a configuration of Kopia stored in a configuration file.
+// LocalConfig is a configuration of BlinkDisk stored in a configuration file.
 type LocalConfig struct {
 	// APIServer is only provided for remote repository.
 	APIServer *APIServerInfo `json:"apiServer,omitempty"`
@@ -148,13 +148,13 @@ func LoadConfigFromFile(fileName string) (*LocalConfig, error) {
 		}
 
 		// override cache directory from the environment variable.
-		if cd := os.Getenv("KOPIA_CACHE_DIRECTORY"); cd != "" && ospath.IsAbs(cd) {
+		if cd := os.Getenv("BLINKDISK_CACHE_DIRECTORY"); cd != "" && ospath.IsAbs(cd) {
 			lc.Caching.CacheDirectory = cd
 		}
 	}
 
-	if lc.PermissiveCacheLoading && os.Getenv("KOPIA_UPGRADE_LOCK_ENABLED") == "" {
-		return nil, errors.New("must have set KOPIA_UPGRADE_LOCK_ENABLED when connecting to repository with permissive cache loading")
+	if lc.PermissiveCacheLoading && os.Getenv("BLINKDISK_UPGRADE_LOCK_ENABLED") == "" {
+		return nil, errors.New("must have set BLINKDISK_UPGRADE_LOCK_ENABLED when connecting to repository with permissive cache loading")
 	}
 
 	return &lc, nil

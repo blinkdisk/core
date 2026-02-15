@@ -3,7 +3,7 @@ package cli
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/apiclient"
+	"github.com/blinkdisk/core/internal/apiclient"
 )
 
 type commandServerResume struct {
@@ -16,6 +16,6 @@ func (c *commandServerResume) setup(svc appServices, parent commandParent) {
 	cmd.Action(svc.serverAction(&c.sf, c.run))
 }
 
-func (c *commandServerResume) run(ctx context.Context, cli *apiclient.KopiaAPIClient) error {
+func (c *commandServerResume) run(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error {
 	return c.triggerActionOnMatchingSources(ctx, cli, "control/resume-source")
 }

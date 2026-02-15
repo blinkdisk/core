@@ -5,7 +5,7 @@ package snapmeta
 import (
 	"context"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
 var _ robustness.Store = &Simple{}

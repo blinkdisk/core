@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 // Queue represents a work queue with multiple parallel workers.

@@ -8,12 +8,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/repo/maintenancestats"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/repo/maintenancestats"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 func (s *formatSpecificTestSuite) TestContentRewrite(t *testing.T) {

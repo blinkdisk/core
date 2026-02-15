@@ -18,26 +18,26 @@ import (
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/grpcapi"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/grpcapi"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type grpcServerState struct {
 	sendMutex sync.RWMutex
 
-	grpcapi.UnimplementedKopiaRepositoryServer
+	grpcapi.UnimplementedBlinkDiskRepositoryServer
 
 	sem *semaphore.Weighted
 
@@ -47,7 +47,7 @@ type grpcServerState struct {
 }
 
 // send sends the provided session response with the provided request ID.
-func (s *Server) send(srv grpcapi.KopiaRepository_SessionServer, requestID int64, resp *grpcapi.SessionResponse) error {
+func (s *Server) send(srv grpcapi.BlinkDiskRepository_SessionServer, requestID int64, resp *grpcapi.SessionResponse) error {
 	s.sendMutex.Lock()
 	defer s.sendMutex.Unlock()
 
@@ -66,7 +66,7 @@ func (s *Server) authenticateGRPCSession(ctx context.Context, rep repo.Repositor
 		return "", status.Errorf(codes.PermissionDenied, "metadata not found in context")
 	}
 
-	if u, h, p := md.Get("kopia-username"), md.Get("kopia-hostname"), md.Get("kopia-password"); len(u) == 1 && len(p) == 1 && len(h) == 1 {
+	if u, h, p := md.Get("blinkdisk-username"), md.Get("blinkdisk-hostname"), md.Get("blinkdisk-password"); len(u) == 1 && len(p) == 1 && len(h) == 1 {
 		username := u[0] + "@" + h[0]
 		password := p[0]
 
@@ -81,7 +81,7 @@ func (s *Server) authenticateGRPCSession(ctx context.Context, rep repo.Repositor
 }
 
 // Session handles GRPC session from a repository client.
-func (s *Server) Session(srv grpcapi.KopiaRepository_SessionServer) error {
+func (s *Server) Session(srv grpcapi.BlinkDiskRepository_SessionServer) error {
 	ctx := srv.Context()
 
 	s.serverMutex.RLock()
@@ -162,7 +162,7 @@ func (s *Server) Session(srv grpcapi.KopiaRepository_SessionServer) error {
 	})
 }
 
-var tracer = otel.Tracer("kopia/grpc")
+var tracer = otel.Tracer("blinkdisk/grpc")
 
 func (s *Server) handleSessionRequest(ctx context.Context, dw repo.DirectRepositoryWriter, authz auth.AuthorizationInfo, usernameAtHostname string, req *grpcapi.SessionRequest, respond func(*grpcapi.SessionResponse)) {
 	if req.GetTraceContext() != nil {
@@ -586,7 +586,7 @@ func makeEntryMetadata(em *manifest.EntryMetadata) *grpcapi.ManifestEntryMetadat
 	}
 }
 
-func (s *Server) handleInitialSessionHandshake(srv grpcapi.KopiaRepository_SessionServer, dr repo.DirectRepository) (repo.WriteSessionOptions, error) {
+func (s *Server) handleInitialSessionHandshake(srv grpcapi.BlinkDiskRepository_SessionServer, dr repo.DirectRepository) (repo.WriteSessionOptions, error) {
 	initializeReq, err := srv.Recv()
 	if err != nil {
 		return repo.WriteSessionOptions{}, errors.Wrap(err, "unable to read initialization request")
@@ -621,7 +621,7 @@ func (s *Server) handleInitialSessionHandshake(srv grpcapi.KopiaRepository_Sessi
 
 // RegisterGRPCHandlers registers server gRPC handler.
 func (s *Server) RegisterGRPCHandlers(r grpc.ServiceRegistrar) {
-	grpcapi.RegisterKopiaRepositoryServer(r, s)
+	grpcapi.RegisterBlinkDiskRepositoryServer(r, s)
 }
 
 func makeGRPCServerState(maxConcurrency int) grpcServerState {

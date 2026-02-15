@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"path/filepath"
 
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func handlePathResolve(_ context.Context, rc requestContext) (any, *apiError) {

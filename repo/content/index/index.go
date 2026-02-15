@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 const (

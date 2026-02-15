@@ -6,10 +6,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-// UpgradeLockIntent represents the intent to lock a kopia repository for upgrade
+// UpgradeLockIntent represents the intent to lock a blinkdisk repository for upgrade
 // related maintenance activity. This signals a request for exclusive access to
-// the repository. The lock object is set on the Kopia repository format blob
-// 'kopia.repository' and must be respected by all clients accessing the
+// the repository. The lock object is set on the BlinkDisk repository format blob
+// 'blinkdisk.repository' and must be respected by all clients accessing the
 // repository.
 type UpgradeLockIntent struct {
 	OwnerID                string        `json:"ownerID,omitempty"`
@@ -102,7 +102,7 @@ func (l *UpgradeLockIntent) Validate() error {
 }
 
 // UpgradeTime returns the absolute time in future by when the upgrade lock
-// will be fully established, i.e. all non-upgrading-owner kopia accessors
+// will be fully established, i.e. all non-upgrading-owner blinkdisk accessors
 // would be drained.
 func (l *UpgradeLockIntent) UpgradeTime() time.Time {
 	if l == nil {

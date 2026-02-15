@@ -11,7 +11,7 @@ import (
 	fspb "github.com/google/fswalker/proto/fswalker"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/tests/tools/fswalker/protofile"
+	"github.com/blinkdisk/core/tests/tools/fswalker/protofile"
 )
 
 // Report performs a report governed by the contents of the provided

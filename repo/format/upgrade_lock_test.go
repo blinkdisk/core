@@ -13,18 +13,18 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/beforeop"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/beforeop"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 func TestFormatUpgradeSetLock(t *testing.T) {
@@ -279,7 +279,7 @@ func TestFormatUpgradeFailureToBackupFormatBlobOnLock(t *testing.T) {
 	}
 	require.NoError(t, repo.Initialize(testlogging.Context(t), st, opt, "password"))
 
-	configFile := filepath.Join(testutil.TempDirectory(t), ".kopia.config")
+	configFile := filepath.Join(testutil.TempDirectory(t), ".blinkdisk.config")
 	defer os.Remove(configFile)
 
 	connectOpts := repo.ConnectOptions{CachingOptions: content.CachingOptions{CacheDirectory: testutil.TempDirectory(t)}}
@@ -293,26 +293,26 @@ func TestFormatUpgradeFailureToBackupFormatBlobOnLock(t *testing.T) {
 	drw := testutil.EnsureType[repo.DirectRepositoryWriter](t, r)
 
 	_, err = drw.FormatManager().SetUpgradeLockIntent(testlogging.Context(t), *faultyLock)
-	require.EqualError(t, err, "failed to backup the repo format blob: unable to write format blob \"kopia.repository.backup.faulty-upgrade-owner\": unexpected error")
+	require.EqualError(t, err, "failed to backup the repo format blob: unable to write format blob \"blinkdisk.repository.backup.faulty-upgrade-owner\": unexpected error")
 
 	_, err = drw.FormatManager().SetUpgradeLockIntent(testlogging.Context(t), allowedLock)
 	require.NoError(t, err)
 
 	require.EqualError(t, drw.FormatManager().RollbackUpgrade(testlogging.Context(t)),
-		"failed to delete the format blob backup \"kopia.repository.backup.allowed-upgrade-owner\": unexpected error")
+		"failed to delete the format blob backup \"blinkdisk.repository.backup.allowed-upgrade-owner\": unexpected error")
 
 	require.EqualError(t, drw.FormatManager().RollbackUpgrade(testlogging.Context(t)),
-		"failed to delete the format blob backup \"kopia.repository.backup.allowed-upgrade-owner\": unexpected error")
+		"failed to delete the format blob backup \"blinkdisk.repository.backup.allowed-upgrade-owner\": unexpected error")
 
 	allowPuts = false
 
 	require.EqualError(t, drw.FormatManager().RollbackUpgrade(testlogging.Context(t)),
-		"failed to restore format blob from backup \"kopia.repository.backup.allowed-upgrade-owner\": unexpected error")
+		"failed to restore format blob from backup \"blinkdisk.repository.backup.allowed-upgrade-owner\": unexpected error")
 
 	allowGets = false
 
 	require.EqualError(t, drw.FormatManager().RollbackUpgrade(testlogging.Context(t)),
-		"failed to read from backup \"kopia.repository.backup.allowed-upgrade-owner\": unexpected error on get")
+		"failed to read from backup \"blinkdisk.repository.backup.allowed-upgrade-owner\": unexpected error on get")
 
 	allowPuts, allowGets, allowDeletes = true, true, true
 

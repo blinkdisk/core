@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo/maintenance"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo/maintenance"
 )
 
 func (s *formatSpecificTestSuite) TestMaintenanceSchedule(t *testing.T) {

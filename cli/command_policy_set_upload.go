@@ -5,7 +5,7 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type policyUploadFlags struct {
@@ -16,7 +16,7 @@ type policyUploadFlags struct {
 
 func (c *policyUploadFlags) setup(cmd *kingpin.CmdClause) {
 	cmd.Flag("max-parallel-file-reads", "Maximum number of parallel file reads").StringVar(&c.maxParallelFileReads)
-	cmd.Flag("max-parallel-snapshots", "Maximum number of parallel snapshots (server, KopiaUI only)").StringVar(&c.maxParallelUploads)
+	cmd.Flag("max-parallel-snapshots", "Maximum number of parallel snapshots (server, BlinkDiskUI only)").StringVar(&c.maxParallelUploads)
 	cmd.Flag("parallel-upload-above-size-mib", "Use parallel uploads above size").StringVar(&c.parallelizeUploadAboveSizeMiB)
 }
 

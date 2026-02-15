@@ -1,4 +1,4 @@
-// Package cli implements command-line commands for the Kopia.
+// Package cli implements command-line commands for the BlinkDisk.
 package cli
 
 import (
@@ -15,21 +15,21 @@ import (
 	"github.com/pkg/errors"
 	"go.opentelemetry.io/otel"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/passwordpersist"
-	"github.com/kopia/kopia/internal/releasable"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/snapshot/snapshotmaintenance"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/passwordpersist"
+	"github.com/blinkdisk/core/internal/releasable"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/snapshot/snapshotmaintenance"
 )
 
-var log = logging.Module("kopia/cli")
+var log = logging.Module("blinkdisk/cli")
 
 var tracer = otel.Tracer("cli")
 
@@ -78,7 +78,7 @@ func (o *textOutput) printStderr(msg string, args ...any) {
 //nolint:interfacebloat
 type appServices interface {
 	noRepositoryAction(act func(ctx context.Context) error) func(ctx *kingpin.ParseContext) error
-	serverAction(sf *serverClientFlags, act func(ctx context.Context, cli *apiclient.KopiaAPIClient) error) func(ctx *kingpin.ParseContext) error
+	serverAction(sf *serverClientFlags, act func(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error) func(ctx *kingpin.ParseContext) error
 	directRepositoryWriteAction(act func(ctx context.Context, rep repo.DirectRepositoryWriter) error) func(ctx *kingpin.ParseContext) error
 	directRepositoryReadAction(act func(ctx context.Context, rep repo.DirectRepository) error) func(ctx *kingpin.ParseContext) error
 	repositoryReaderAction(act func(ctx context.Context, rep repo.Repository) error) func(ctx *kingpin.ParseContext) error
@@ -118,7 +118,7 @@ type advancedAppServices interface {
 	enableErrorNotifications() bool
 }
 
-// App contains per-invocation flags and state of Kopia CLI.
+// App contains per-invocation flags and state of BlinkDisk CLI.
 type App struct {
 	// global flags
 	enableAutomaticMaintenance    bool
@@ -184,7 +184,7 @@ type App struct {
 }
 
 func (c *App) enableTestOnlyFlags() bool {
-	return c.isInProcessTest || os.Getenv("KOPIA_TESTONLY_FLAGS") != ""
+	return c.isInProcessTest || os.Getenv("BLINKDISK_TESTONLY_FLAGS") != ""
 }
 
 func (c *App) getProgress() *cliProgress {
@@ -268,21 +268,21 @@ func (c *App) setup(app *kingpin.Application) {
 	app.Flag("auto-maintenance", "Automatic maintenance").Default("true").Hidden().BoolVar(&c.enableAutomaticMaintenance)
 
 	// hidden flags to control auto-update behavior.
-	app.Flag("initial-update-check-delay", "Initial delay before first time update check").Default("24h").Hidden().Envar(c.EnvName("KOPIA_INITIAL_UPDATE_CHECK_DELAY")).DurationVar(&c.initialUpdateCheckDelay)
-	app.Flag("update-check-interval", "Interval between update checks").Default("168h").Hidden().Envar(c.EnvName("KOPIA_UPDATE_CHECK_INTERVAL")).DurationVar(&c.updateCheckInterval)
-	app.Flag("update-available-notify-interval", "Interval between update notifications").Default("1h").Hidden().Envar(c.EnvName("KOPIA_UPDATE_NOTIFY_INTERVAL")).DurationVar(&c.updateAvailableNotifyInterval)
-	app.Flag("config-file", "Specify the config file to use").Default("repository.config").Envar(c.EnvName("KOPIA_CONFIG_PATH")).StringVar(&c.configPath)
+	app.Flag("initial-update-check-delay", "Initial delay before first time update check").Default("24h").Hidden().Envar(c.EnvName("BLINKDISK_INITIAL_UPDATE_CHECK_DELAY")).DurationVar(&c.initialUpdateCheckDelay)
+	app.Flag("update-check-interval", "Interval between update checks").Default("168h").Hidden().Envar(c.EnvName("BLINKDISK_UPDATE_CHECK_INTERVAL")).DurationVar(&c.updateCheckInterval)
+	app.Flag("update-available-notify-interval", "Interval between update notifications").Default("1h").Hidden().Envar(c.EnvName("BLINKDISK_UPDATE_NOTIFY_INTERVAL")).DurationVar(&c.updateAvailableNotifyInterval)
+	app.Flag("config-file", "Specify the config file to use").Default("repository.config").Envar(c.EnvName("BLINKDISK_CONFIG_PATH")).StringVar(&c.configPath)
 	app.Flag("trace-storage", "Enables tracing of storage operations.").Default("true").Hidden().BoolVar(&c.traceStorage)
 	app.Flag("timezone", "Format time according to specified time zone (local, utc, original or time zone name)").Hidden().StringVar(&timeZone)
-	app.Flag("password", "Repository password.").Envar(c.EnvName("KOPIA_PASSWORD")).Short('p').StringVar(&c.password)
-	app.Flag("persist-credentials", "Persist credentials").Default("true").Envar(c.EnvName("KOPIA_PERSIST_CREDENTIALS_ON_CONNECT")).BoolVar(&c.persistCredentials)
-	app.Flag("disable-repository-log", "Disable repository log").Hidden().Envar(c.EnvName("KOPIA_DISABLE_REPOSITORY_LOG")).BoolVar(&c.disableRepositoryLog)
-	app.Flag("dangerous-commands", "Enable dangerous commands that could result in data loss and repository corruption.").Hidden().Envar(c.EnvName("KOPIA_DANGEROUS_COMMANDS")).StringVar(&c.DangerousCommands)
-	app.Flag("track-releasable", "Enable tracking of releasable resources.").Hidden().Envar(c.EnvName("KOPIA_TRACK_RELEASABLE")).StringsVar(&c.trackReleasable)
-	app.Flag("upgrade-owner-id", "Repository format upgrade owner-id.").Hidden().Envar(c.EnvName("KOPIA_REPO_UPGRADE_OWNER_ID")).StringVar(&c.upgradeOwnerID)
-	app.Flag("upgrade-no-block", "Do not block when repository format upgrade is in progress, instead exit with a message.").Hidden().Default("false").Envar(c.EnvName("KOPIA_REPO_UPGRADE_NO_BLOCK")).BoolVar(&c.doNotWaitForUpgrade)
+	app.Flag("password", "Repository password.").Envar(c.EnvName("BLINKDISK_PASSWORD")).Short('p').StringVar(&c.password)
+	app.Flag("persist-credentials", "Persist credentials").Default("true").Envar(c.EnvName("BLINKDISK_PERSIST_CREDENTIALS_ON_CONNECT")).BoolVar(&c.persistCredentials)
+	app.Flag("disable-repository-log", "Disable repository log").Hidden().Envar(c.EnvName("BLINKDISK_DISABLE_REPOSITORY_LOG")).BoolVar(&c.disableRepositoryLog)
+	app.Flag("dangerous-commands", "Enable dangerous commands that could result in data loss and repository corruption.").Hidden().Envar(c.EnvName("BLINKDISK_DANGEROUS_COMMANDS")).StringVar(&c.DangerousCommands)
+	app.Flag("track-releasable", "Enable tracking of releasable resources.").Hidden().Envar(c.EnvName("BLINKDISK_TRACK_RELEASABLE")).StringsVar(&c.trackReleasable)
+	app.Flag("upgrade-owner-id", "Repository format upgrade owner-id.").Hidden().Envar(c.EnvName("BLINKDISK_REPO_UPGRADE_OWNER_ID")).StringVar(&c.upgradeOwnerID)
+	app.Flag("upgrade-no-block", "Do not block when repository format upgrade is in progress, instead exit with a message.").Hidden().Default("false").Envar(c.EnvName("BLINKDISK_REPO_UPGRADE_NO_BLOCK")).BoolVar(&c.doNotWaitForUpgrade)
 	app.Flag("error-notifications", "Send notification on errors").Hidden().
-		Envar(c.EnvName("KOPIA_SEND_ERROR_NOTIFICATIONS")).
+		Envar(c.EnvName("BLINKDISK_SEND_ERROR_NOTIFICATIONS")).
 		Default(errorNotificationsNonInteractive).
 		EnumVar(&c.errorNotifications, errorNotificationsAlways, errorNotificationsNever, errorNotificationsNonInteractive)
 
@@ -404,14 +404,14 @@ func (c *App) noRepositoryAction(act func(ctx context.Context) error) func(ctx *
 	}
 }
 
-func (c *App) serverAction(sf *serverClientFlags, act func(ctx context.Context, cli *apiclient.KopiaAPIClient) error) func(ctx *kingpin.ParseContext) error {
+func (c *App) serverAction(sf *serverClientFlags, act func(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error) func(ctx *kingpin.ParseContext) error {
 	return func(kpc *kingpin.ParseContext) error {
 		opts, err := sf.serverAPIClientOptions()
 		if err != nil {
 			return errors.Wrap(err, "unable to create API client options")
 		}
 
-		apiClient, err := apiclient.NewKopiaAPIClient(opts)
+		apiClient, err := apiclient.NewBlinkDiskAPIClient(opts)
 		if err != nil {
 			return errors.Wrap(err, "unable to create API client")
 		}
@@ -620,7 +620,7 @@ func (c *App) dangerousCommand() {
 		_, _ = errorColor.Fprintf(c.stderrWriter, `
 This command is dangerous, it can corrupt the repository and result in data loss.
 
-Running this command is not needed for using Kopia. Instead, rely on periodic repository maintenance. See https://kopia.io/docs/advanced/maintenance/ for more information.
+Running this command is not needed for using BlinkDisk. Instead, rely on periodic repository maintenance. See https://blinkdisk.com/docs/advanced/maintenance/ for more information.
 To run this command despite the warning, set --dangerous-commands=enabled
 
 `)

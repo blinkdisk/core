@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/iocopy"
+	"github.com/blinkdisk/core/internal/iocopy"
 )
 
 // Copy copies a file sparsely (omitting holes) from src to dst, while recycling

@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/contentparam"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/contentparam"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 func BenchmarkLogger(b *testing.B) {

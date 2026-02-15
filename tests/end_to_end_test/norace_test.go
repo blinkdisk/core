@@ -11,9 +11,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 // Exclude tests below from the -race detection test, because they are resource

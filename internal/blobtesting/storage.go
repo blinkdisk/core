@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // RetentionStorage allows for better testing of retention and object

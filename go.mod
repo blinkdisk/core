@@ -1,4 +1,4 @@
-module github.com/kopia/kopia
+module github.com/blinkdisk/core
 
 go 1.25
 

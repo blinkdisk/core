@@ -10,18 +10,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 func TestRestoreSnapshots(t *testing.T) {
@@ -49,7 +49,7 @@ func TestRestoreSnapshots(t *testing.T) {
 
 	srvInfo := servertesting.StartServer(t, env, false)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             srvInfo.BaseURL,
 		TrustedServerCertificateFingerprint: srvInfo.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUIUsername,
@@ -113,9 +113,9 @@ func TestRestoreSnapshots(t *testing.T) {
 
 		require.NoError(t, err)
 		require.Equal(t, uitask.StatusSuccess, waitForTask(t, cli, restoreTask1.TaskID, 30*time.Second).Status)
-		require.FileExists(t, filepath.Join(targetPath1, "file1.kopia-entry"))
-		require.DirExists(t, filepath.Join(targetPath1, "dir1.kopia-entry"))
-		require.FileExists(t, filepath.Join(targetPath1, "dir1.kopia-entry", ".kopia-entry"))
+		require.FileExists(t, filepath.Join(targetPath1, "file1.blinkdisk-entry"))
+		require.DirExists(t, filepath.Join(targetPath1, "dir1.blinkdisk-entry"))
+		require.FileExists(t, filepath.Join(targetPath1, "dir1.blinkdisk-entry", ".blinkdisk-entry"))
 	})
 
 	t.Run("FilesystemPartialShallowRestore", func(t *testing.T) {
@@ -136,7 +136,7 @@ func TestRestoreSnapshots(t *testing.T) {
 		require.Equal(t, uitask.StatusSuccess, waitForTask(t, cli, restoreTask1.TaskID, 30*time.Second).Status)
 		require.FileExists(t, filepath.Join(targetPath1, "file1"))
 		require.DirExists(t, filepath.Join(targetPath1, "dir1"))
-		require.FileExists(t, filepath.Join(targetPath1, "dir1", "file2.kopia-entry"))
+		require.FileExists(t, filepath.Join(targetPath1, "dir1", "file2.blinkdisk-entry"))
 	})
 
 	t.Run("ZipFile", func(t *testing.T) {

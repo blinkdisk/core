@@ -13,9 +13,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/checker"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/checker"
 )
 
 var (

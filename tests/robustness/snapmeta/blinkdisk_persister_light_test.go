@@ -58,7 +58,7 @@ func TestConcurrency(t *testing.T) {
 }
 
 // Store and test that subsequent Load succeeds.
-func (kpl *KopiaPersisterLight) testStoreLoad(ctx context.Context, t *testing.T, key string, val []byte) { //nolint:thelper
+func (kpl *BlinkDiskPersisterLight) testStoreLoad(ctx context.Context, t *testing.T, key string, val []byte) { //nolint:thelper
 	err := kpl.Store(ctx, key, val)
 	require.NoError(t, err)
 
@@ -69,7 +69,7 @@ func (kpl *KopiaPersisterLight) testStoreLoad(ctx context.Context, t *testing.T,
 }
 
 // Delete and test that subsequent Load fails.
-func (kpl *KopiaPersisterLight) testDelete(ctx context.Context, t *testing.T, key string) { //nolint:thelper
+func (kpl *BlinkDiskPersisterLight) testDelete(ctx context.Context, t *testing.T, key string) { //nolint:thelper
 	kpl.Delete(ctx, key)
 
 	_, err := kpl.Load(ctx, key)
@@ -124,7 +124,7 @@ func TestS3Connect(t *testing.T) {
 	kpl.Cleanup()
 }
 
-func initKPL(t *testing.T, repoPath string) *KopiaPersisterLight {
+func initKPL(t *testing.T, repoPath string) *BlinkDiskPersisterLight {
 	t.Helper()
 
 	os.Unsetenv(S3BucketNameEnvKey)

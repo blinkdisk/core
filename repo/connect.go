@@ -6,11 +6,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 // ConnectOptions specifies options when persisting configuration to connect to a repository.
@@ -33,7 +33,7 @@ func Connect(ctx context.Context, configFile string, st blob.Storage, password s
 	var formatBytes gather.WriteBuffer
 	defer formatBytes.Close()
 
-	if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &formatBytes); err != nil {
+	if err := st.GetBlob(ctx, format.BlinkDiskRepositoryBlobID, 0, -1, &formatBytes); err != nil {
 		if errors.Is(err, blob.ErrBlobNotFound) {
 			return ErrRepositoryNotInitialized
 		}
@@ -41,7 +41,7 @@ func Connect(ctx context.Context, configFile string, st blob.Storage, password s
 		return errors.Wrap(err, "unable to read format blob")
 	}
 
-	f, err := format.ParseKopiaRepositoryJSON(formatBytes.ToByteSlice())
+	f, err := format.ParseBlinkDiskRepositoryJSON(formatBytes.ToByteSlice())
 	if err != nil {
 		//nolint:wrapcheck
 		return err

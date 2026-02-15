@@ -1,6 +1,6 @@
 package cache
 
-import "github.com/kopia/kopia/internal/metrics"
+import "github.com/blinkdisk/core/internal/metrics"
 
 type metricsStruct struct {
 	metricHitCount                *metrics.Counter

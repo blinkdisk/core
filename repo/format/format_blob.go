@@ -1,4 +1,4 @@
-// Package format manages kopia.repository and other central format blobs.
+// Package format manages blinkdisk.repository and other central format blobs.
 package format
 
 import (
@@ -9,9 +9,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/crypto"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/crypto"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // DefaultFormatEncryption is the identifier of the default format blob encryption algorithm.
@@ -27,8 +27,8 @@ const (
 	formatBlobEncryptionKeySize     = 32
 )
 
-// KopiaRepositoryBlobID is the identifier of a BLOB that describes repository format.
-const KopiaRepositoryBlobID = "kopia.repository"
+// BlinkDiskRepositoryBlobID is the identifier of a BLOB that describes repository format.
+const BlinkDiskRepositoryBlobID = "blinkdisk.repository"
 
 // ErrInvalidPassword is returned when repository password is invalid.
 var ErrInvalidPassword = errors.New("invalid repository password") // +checklocksignore
@@ -38,13 +38,13 @@ var (
 	// formatBlobChecksumSecret is a HMAC secret used for checksumming the format content.
 	// It's not really a secret, but will provide positive identification of blocks that
 	// are repository format blocks.
-	formatBlobChecksumSecret = []byte("kopia-repository")
+	formatBlobChecksumSecret = []byte("blinkdisk-repository")
 
 	errFormatBlobNotFound = errors.New("format blob not found")
 )
 
-// KopiaRepositoryJSON represents JSON contents of 'kopia.repository' blob.
-type KopiaRepositoryJSON struct {
+// BlinkDiskRepositoryJSON represents JSON contents of 'blinkdisk.repository' blob.
+type BlinkDiskRepositoryJSON struct {
 	Tool         string `json:"tool"`
 	BuildVersion string `json:"buildVersion"`
 	BuildInfo    string `json:"buildInfo"`
@@ -57,9 +57,9 @@ type KopiaRepositoryJSON struct {
 	EncryptedFormatBytes []byte `json:"encryptedBlockFormat,omitempty"`
 }
 
-// ParseKopiaRepositoryJSON parses the provided byte slice into KopiaRepositoryJSON.
-func ParseKopiaRepositoryJSON(b []byte) (*KopiaRepositoryJSON, error) {
-	f := &KopiaRepositoryJSON{}
+// ParseBlinkDiskRepositoryJSON parses the provided byte slice into BlinkDiskRepositoryJSON.
+func ParseBlinkDiskRepositoryJSON(b []byte) (*BlinkDiskRepositoryJSON, error) {
+	f := &BlinkDiskRepositoryJSON{}
 
 	if err := json.Unmarshal(b, &f); err != nil {
 		return nil, errors.Wrap(err, "invalid format blob")
@@ -69,7 +69,7 @@ func ParseKopiaRepositoryJSON(b []byte) (*KopiaRepositoryJSON, error) {
 }
 
 // DeriveFormatEncryptionKeyFromPassword derives encryption key using the provided password and per-repository unique ID.
-func (f *KopiaRepositoryJSON) DeriveFormatEncryptionKeyFromPassword(password string) ([]byte, error) {
+func (f *BlinkDiskRepositoryJSON) DeriveFormatEncryptionKeyFromPassword(password string) ([]byte, error) {
 	res, err := crypto.DeriveKeyFromPassword(password, f.UniqueID, formatBlobEncryptionKeySize, f.KeyDerivationAlgorithm)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to derive format encryption key")
@@ -80,7 +80,7 @@ func (f *KopiaRepositoryJSON) DeriveFormatEncryptionKeyFromPassword(password str
 
 // ValidatePassword attempts to decrypt the repository config with the given password.
 // Returns ErrInvalidPassword if the password is incorrect, or an error if decryption fails for other reasons.
-func (f *KopiaRepositoryJSON) ValidatePassword(password string) error {
+func (f *BlinkDiskRepositoryJSON) ValidatePassword(password string) error {
 	formatEncryptionKey, err := f.DeriveFormatEncryptionKeyFromPassword(password)
 	if err != nil {
 		return errors.Wrap(err, "unable to derive format encryption key")
@@ -183,13 +183,13 @@ func verifyFormatBlobChecksum(b []byte) ([]byte, bool) {
 	return data, true
 }
 
-// WriteKopiaRepositoryBlob writes `kopia.repository` blob to a given storage.
-func (f *KopiaRepositoryJSON) WriteKopiaRepositoryBlob(ctx context.Context, st blob.Storage, blobCfg BlobStorageConfiguration) error {
-	return f.WriteKopiaRepositoryBlobWithID(ctx, st, blobCfg, KopiaRepositoryBlobID)
+// WriteBlinkDiskRepositoryBlob writes `blinkdisk.repository` blob to a given storage.
+func (f *BlinkDiskRepositoryJSON) WriteBlinkDiskRepositoryBlob(ctx context.Context, st blob.Storage, blobCfg BlobStorageConfiguration) error {
+	return f.WriteBlinkDiskRepositoryBlobWithID(ctx, st, blobCfg, BlinkDiskRepositoryBlobID)
 }
 
-// WriteKopiaRepositoryBlobWithID writes `kopia.repository` blob to a given storage under an alternate blobID.
-func (f *KopiaRepositoryJSON) WriteKopiaRepositoryBlobWithID(ctx context.Context, st blob.Storage, blobCfg BlobStorageConfiguration, id blob.ID) error {
+// WriteBlinkDiskRepositoryBlobWithID writes `blinkdisk.repository` blob to a given storage under an alternate blobID.
+func (f *BlinkDiskRepositoryJSON) WriteBlinkDiskRepositoryBlobWithID(ctx context.Context, st blob.Storage, blobCfg BlobStorageConfiguration, id blob.ID) error {
 	buf := gather.NewWriteBuffer()
 	e := json.NewEncoder(buf)
 	e.SetIndent("", "  ")

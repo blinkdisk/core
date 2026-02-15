@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/bigmap"
-	"github.com/kopia/kopia/internal/workshare"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/bigmap"
+	"github.com/blinkdisk/core/internal/workshare"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 const walkersPerCPU = 4

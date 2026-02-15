@@ -9,12 +9,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
-	bloblogging "github.com/kopia/kopia/repo/blob/logging"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
+	bloblogging "github.com/blinkdisk/core/repo/blob/logging"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 type mockThrottler struct {

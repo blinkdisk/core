@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 func TestPickLatestID(t *testing.T) {

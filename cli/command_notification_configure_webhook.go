@@ -7,8 +7,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/notification/sender/webhook"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/notification/sender/webhook"
 )
 
 type commandNotificationConfigureWebhook struct {

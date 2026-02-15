@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/iocopy"
+	"github.com/blinkdisk/core/internal/iocopy"
 )
 
 const (

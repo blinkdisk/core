@@ -11,11 +11,11 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/net/webdav"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
-var log = logging.Module("kopia/webdavmount")
+var log = logging.Module("blinkdisk/webdavmount")
 
 var (
 	_ os.FileInfo = webdavFileInfo{}

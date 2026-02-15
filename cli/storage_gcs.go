@@ -9,8 +9,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/gcs"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/gcs"
 )
 
 type storageGCSFlags struct {
@@ -24,7 +24,7 @@ func (c *storageGCSFlags) Setup(_ StorageProviderServices, cmd *kingpin.CmdClaus
 	cmd.Flag("prefix", "Prefix to use for objects in the bucket").StringVar(&c.options.Prefix)
 	cmd.Flag("read-only", "Use read-only GCS scope to prevent write access").BoolVar(&c.options.ReadOnly)
 	cmd.Flag("credentials-file", "Use the provided JSON file with credentials").ExistingFileVar(&c.options.ServiceAccountCredentialsFile)
-	cmd.Flag("embed-credentials", "Embed GCS credentials JSON in Kopia configuration").BoolVar(&c.embedCredentials)
+	cmd.Flag("embed-credentials", "Embed GCS credentials JSON in BlinkDisk configuration").BoolVar(&c.embedCredentials)
 
 	commonThrottlingFlags(cmd, &c.options.Limits)
 

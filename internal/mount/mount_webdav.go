@@ -10,8 +10,8 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/net/webdav"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/webdavmount"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/webdavmount"
 )
 
 func webdavServerLogger(r *http.Request, err error) {

@@ -15,14 +15,14 @@ import (
 	"github.com/sanity-io/litter"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestShallowrestore(t *testing.T) {
@@ -566,14 +566,14 @@ const (
 	// d1 + kDIRPH is the DirEntry placeholder for original directory d1.
 	dIRPH = localfs.ShallowEntrySuffix + string(filepath.Separator) + localfs.ShallowEntrySuffix
 
-	// d1 + kSUBFILE is the DirEntry placeholder for placeholder directory d1.kopia-entry.
+	// d1 + kSUBFILE is the DirEntry placeholder for placeholder directory d1.blinkdisk-entry.
 	sUBFILE = string(filepath.Separator) + localfs.ShallowEntrySuffix
 
 	dirMode = 0o700
 )
 
 // getShallowDirEntry reads the DirEntry in the placeholder associated
-// with fpath, fpath.kopia-dir, fpath.kopia-dir/.kopia-dir.
+// with fpath, fpath.blinkdisk-dir, fpath.blinkdisk-dir/.blinkdisk-dir.
 func getShallowDirEntry(t *testing.T, fpath string) *snapshot.DirEntry {
 	t.Helper()
 
@@ -655,7 +655,7 @@ func (rdc *repoDirEntryCache) repoRootRel(t *testing.T, fpath string) string {
 	return rp
 }
 
-// getRepoDirEntry retrieves the directory entry for rdc.rootid/rop via kopia
+// getRepoDirEntry retrieves the directory entry for rdc.rootid/rop via blinkdisk
 // show of the repository rdc.rootid's directory containing rdc.rootid/rop.
 // Assumption: repository paths are paths and not filepaths.
 func (rdc *repoDirEntryCache) getRepoDirEntry(t *testing.T, rop string) *snapshot.DirEntry {

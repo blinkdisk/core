@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func getPlatformVolumeSizeInfo(volumeMountPoint string) (VolumeSizeInfo, error) {

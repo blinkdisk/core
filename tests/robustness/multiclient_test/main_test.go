@@ -9,9 +9,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/kopia/kopia/tests/robustness/engine"
-	"github.com/kopia/kopia/tests/robustness/multiclient_test/framework"
-	"github.com/kopia/kopia/tests/robustness/multiclient_test/storagestats"
+	"github.com/blinkdisk/core/tests/robustness/engine"
+	"github.com/blinkdisk/core/tests/robustness/multiclient_test/framework"
+	"github.com/blinkdisk/core/tests/robustness/multiclient_test/storagestats"
 )
 
 // Variables for use in the test functions.

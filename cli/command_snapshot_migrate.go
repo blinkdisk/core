@@ -7,12 +7,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 type commandSnapshotMigrate struct {

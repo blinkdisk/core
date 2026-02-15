@@ -1,4 +1,4 @@
-package kopiarunner
+package blinkdiskrunner
 
 import (
 	"bytes"
@@ -19,7 +19,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/retry"
+	"github.com/blinkdisk/core/internal/retry"
 )
 
 const (
@@ -41,31 +41,31 @@ const (
 	aclEnabledMatchStr = "ACLs already enabled"
 )
 
-// KopiaSnapshotter implements the Snapshotter interface using Kopia commands.
-type KopiaSnapshotter struct {
+// BlinkDiskSnapshotter implements the Snapshotter interface using BlinkDisk commands.
+type BlinkDiskSnapshotter struct {
 	Runner *Runner
 }
 
-// NewKopiaSnapshotter instantiates a new KopiaSnapshotter and returns its pointer.
-func NewKopiaSnapshotter(baseDir string) (*KopiaSnapshotter, error) {
+// NewBlinkDiskSnapshotter instantiates a new BlinkDiskSnapshotter and returns its pointer.
+func NewBlinkDiskSnapshotter(baseDir string) (*BlinkDiskSnapshotter, error) {
 	runner, err := NewRunner(baseDir)
 	if err != nil {
 		return nil, err
 	}
 
-	return &KopiaSnapshotter{
+	return &BlinkDiskSnapshotter{
 		Runner: runner,
 	}, nil
 }
 
-// Cleanup cleans up the kopia Runner.
-func (ks *KopiaSnapshotter) Cleanup() {
+// Cleanup cleans up the blinkdisk Runner.
+func (ks *BlinkDiskSnapshotter) Cleanup() {
 	if ks.Runner != nil {
 		ks.Runner.Cleanup()
 	}
 }
 
-func (ks *KopiaSnapshotter) repoConnectCreate(op string, args ...string) error {
+func (ks *BlinkDiskSnapshotter) repoConnectCreate(op string, args ...string) error {
 	args = append([]string{"repo", op}, args...)
 
 	args = append(args,
@@ -79,19 +79,19 @@ func (ks *KopiaSnapshotter) repoConnectCreate(op string, args ...string) error {
 	return err
 }
 
-// CreateRepo creates a kopia repository with the provided arguments.
-func (ks *KopiaSnapshotter) CreateRepo(args ...string) (err error) {
+// CreateRepo creates a blinkdisk repository with the provided arguments.
+func (ks *BlinkDiskSnapshotter) CreateRepo(args ...string) (err error) {
 	return ks.repoConnectCreate("create", args...)
 }
 
 // ConnectRepo connects to the repository described by the provided arguments.
-func (ks *KopiaSnapshotter) ConnectRepo(args ...string) (err error) {
+func (ks *BlinkDiskSnapshotter) ConnectRepo(args ...string) (err error) {
 	return ks.repoConnectCreate("connect", args...)
 }
 
 // ConnectOrCreateRepo attempts to connect to a repo described by the provided
 // arguments, and attempts to create it if connection was unsuccessful.
-func (ks *KopiaSnapshotter) ConnectOrCreateRepo(args ...string) error {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateRepo(args ...string) error {
 	err := ks.ConnectRepo(args...)
 	if err == nil {
 		return nil
@@ -100,40 +100,40 @@ func (ks *KopiaSnapshotter) ConnectOrCreateRepo(args ...string) error {
 	return ks.CreateRepo(args...)
 }
 
-// ConnectOrCreateS3 attempts to connect to a kopia repo in the s3 bucket identified
+// ConnectOrCreateS3 attempts to connect to a blinkdisk repo in the s3 bucket identified
 // by the provided bucketName, at the provided path prefix. It will attempt to
 // create one there if connection was unsuccessful.
-func (ks *KopiaSnapshotter) ConnectOrCreateS3(bucketName, pathPrefix string) error {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateS3(bucketName, pathPrefix string) error {
 	args := []string{"s3", "--bucket", bucketName, "--prefix", pathPrefix}
 
 	return ks.ConnectOrCreateRepo(args...)
 }
 
 // ConnectOrCreateS3WithServer attempts to connect or create S3 bucket, but with TLS client/server Model.
-func (ks *KopiaSnapshotter) ConnectOrCreateS3WithServer(serverAddr, bucketName, pathPrefix string) (*exec.Cmd, string, error) {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateS3WithServer(serverAddr, bucketName, pathPrefix string) (*exec.Cmd, string, error) {
 	repoArgs := []string{"s3", "--bucket", bucketName, "--prefix", pathPrefix}
 	return ks.ConnectOrCreateRepoWithServer(serverAddr, repoArgs...)
 }
 
 // ConnectOrCreateFilesystemWithServer attempts to connect or create repo in local filesystem,
 // but with TLS server/client Model.
-func (ks *KopiaSnapshotter) ConnectOrCreateFilesystemWithServer(serverAddr, repoPath string) (*exec.Cmd, string, error) {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateFilesystemWithServer(serverAddr, repoPath string) (*exec.Cmd, string, error) {
 	repoArgs := []string{"filesystem", "--path", repoPath}
 	return ks.ConnectOrCreateRepoWithServer(serverAddr, repoArgs...)
 }
 
-// ConnectOrCreateFilesystem attempts to connect to a kopia repo in the local
+// ConnectOrCreateFilesystem attempts to connect to a blinkdisk repo in the local
 // filesystem at the path provided. It will attempt to create one there if
 // connection was unsuccessful.
-func (ks *KopiaSnapshotter) ConnectOrCreateFilesystem(repoPath string) error {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateFilesystem(repoPath string) error {
 	args := []string{"filesystem", "--path", repoPath}
 
 	return ks.ConnectOrCreateRepo(args...)
 }
 
-// CreateSnapshot implements the Snapshotter interface, issues a kopia snapshot
+// CreateSnapshot implements the Snapshotter interface, issues a blinkdisk snapshot
 // create command on the provided source path.
-func (ks *KopiaSnapshotter) CreateSnapshot(source string) (snapID string, err error) {
+func (ks *BlinkDiskSnapshotter) CreateSnapshot(source string) (snapID string, err error) {
 	stdOut, errOut, err := ks.Runner.Run("snapshot", "create", parallelFlag, strconv.Itoa(parallelSetting), noProgressFlag, source)
 	if err != nil {
 		return "", err
@@ -146,44 +146,44 @@ func (ks *KopiaSnapshotter) CreateSnapshot(source string) (snapID string, err er
 	return parseSnapID(strings.Split(errOut, "\n"))
 }
 
-// RestoreSnapshot implements the Snapshotter interface, issues a kopia snapshot
+// RestoreSnapshot implements the Snapshotter interface, issues a blinkdisk snapshot
 // restore command of the provided snapshot ID to the provided restore destination.
-func (ks *KopiaSnapshotter) RestoreSnapshot(snapID, restoreDir string) (err error) {
+func (ks *BlinkDiskSnapshotter) RestoreSnapshot(snapID, restoreDir string) (err error) {
 	_, _, err = ks.Runner.Run("snapshot", "restore", snapID, restoreDir)
 	return err
 }
 
-// VerifySnapshot implements the Snapshotter interface to verify a kopia snapshot corruption
+// VerifySnapshot implements the Snapshotter interface to verify a blinkdisk snapshot corruption
 // verify command of args to the provided parameters such as --verify-files-percent.
-func (ks *KopiaSnapshotter) VerifySnapshot(args ...string) (err error) {
+func (ks *BlinkDiskSnapshotter) VerifySnapshot(args ...string) (err error) {
 	args = append([]string{"snapshot", "verify"}, args...)
 	_, _, err = ks.Runner.Run(args...)
 
 	return err
 }
 
-// DeleteSnapshot implements the Snapshotter interface, issues a kopia snapshot
+// DeleteSnapshot implements the Snapshotter interface, issues a blinkdisk snapshot
 // delete of the provided snapshot ID.
-func (ks *KopiaSnapshotter) DeleteSnapshot(snapID string) (err error) {
+func (ks *BlinkDiskSnapshotter) DeleteSnapshot(snapID string) (err error) {
 	_, _, err = ks.Runner.Run("snapshot", "delete", snapID, "--delete")
 	return err
 }
 
-// RunGC implements the Snapshotter interface, issues a gc command to the kopia repo.
-func (ks *KopiaSnapshotter) RunGC() (err error) {
+// RunGC implements the Snapshotter interface, issues a gc command to the blinkdisk repo.
+func (ks *BlinkDiskSnapshotter) RunGC() (err error) {
 	_, _, err = ks.Runner.Run("maintenance", "run", "--full")
 	return err
 }
 
-// ListSnapshots implements the Snapshotter interface, issues a kopia snapshot
+// ListSnapshots implements the Snapshotter interface, issues a blinkdisk snapshot
 // list and parses the snapshot IDs.
-func (ks *KopiaSnapshotter) ListSnapshots() ([]string, error) {
+func (ks *BlinkDiskSnapshotter) ListSnapshots() ([]string, error) {
 	snapIDListMan, err := ks.snapIDsFromManifestList()
 	if err != nil {
 		return nil, err
 	}
 
-	// Validate the list against kopia snapshot list --all
+	// Validate the list against blinkdisk snapshot list --all
 	snapIDListSnap, err := ks.snapIDsFromSnapListAll()
 	if err != nil {
 		return nil, err
@@ -196,33 +196,33 @@ func (ks *KopiaSnapshotter) ListSnapshots() ([]string, error) {
 	return snapIDListMan, nil
 }
 
-func (ks *KopiaSnapshotter) snapIDsFromManifestList() ([]string, error) {
+func (ks *BlinkDiskSnapshotter) snapIDsFromManifestList() ([]string, error) {
 	stdout, _, err := ks.Runner.Run("manifest", "list")
 	if err != nil {
-		return nil, errors.Wrap(err, "failure during kopia manifest list")
+		return nil, errors.Wrap(err, "failure during blinkdisk manifest list")
 	}
 
 	return parseManifestListForSnapshotIDs(stdout), nil
 }
 
-func (ks *KopiaSnapshotter) snapIDsFromSnapListAll() ([]string, error) {
-	// Validate the list against kopia snapshot list --all
+func (ks *BlinkDiskSnapshotter) snapIDsFromSnapListAll() ([]string, error) {
+	// Validate the list against blinkdisk snapshot list --all
 	stdout, _, err := ks.Runner.Run("snapshot", "list", "--all", "--manifest-id", "--show-identical")
 	if err != nil {
-		return nil, errors.Wrap(err, "failure during kopia snapshot list")
+		return nil, errors.Wrap(err, "failure during blinkdisk snapshot list")
 	}
 
 	return parseSnapshotListForSnapshotIDs(stdout), nil
 }
 
-// Run implements the Snapshotter interface, issues an arbitrary kopia command and returns
+// Run implements the Snapshotter interface, issues an arbitrary blinkdisk command and returns
 // the output.
-func (ks *KopiaSnapshotter) Run(args ...string) (stdout, stderr string, err error) {
+func (ks *BlinkDiskSnapshotter) Run(args ...string) (stdout, stderr string, err error) {
 	return ks.Runner.Run(args...)
 }
 
-// CreateServer creates a new instance of Kopia Server with provided address.
-func (ks *KopiaSnapshotter) CreateServer(addr string, args ...string) (*exec.Cmd, error) {
+// CreateServer creates a new instance of BlinkDisk Server with provided address.
+func (ks *BlinkDiskSnapshotter) CreateServer(addr string, args ...string) (*exec.Cmd, error) {
 	args = append([]string{
 		"server", "start",
 		"--address", addr,
@@ -233,7 +233,7 @@ func (ks *KopiaSnapshotter) CreateServer(addr string, args ...string) (*exec.Cmd
 }
 
 // AuthorizeClient adds a client to the server's user list.
-func (ks *KopiaSnapshotter) AuthorizeClient(user, host string, args ...string) error {
+func (ks *BlinkDiskSnapshotter) AuthorizeClient(user, host string, args ...string) error {
 	args = append([]string{
 		"server", "user", "add",
 		user + "@" + host,
@@ -245,7 +245,7 @@ func (ks *KopiaSnapshotter) AuthorizeClient(user, host string, args ...string) e
 }
 
 // RemoveClient removes a client from the server's user list.
-func (ks *KopiaSnapshotter) RemoveClient(user, host string, args ...string) error {
+func (ks *BlinkDiskSnapshotter) RemoveClient(user, host string, args ...string) error {
 	args = append([]string{
 		"server", "user", "delete",
 		user + "@" + host,
@@ -256,7 +256,7 @@ func (ks *KopiaSnapshotter) RemoveClient(user, host string, args ...string) erro
 }
 
 // DisconnectClient should be called by a client to disconnect itself from the server.
-func (ks *KopiaSnapshotter) DisconnectClient(args ...string) error {
+func (ks *BlinkDiskSnapshotter) DisconnectClient(args ...string) error {
 	args = append([]string{"repo", "disconnect"}, args...)
 	_, _, err := ks.Runner.Run(args...)
 
@@ -264,7 +264,7 @@ func (ks *KopiaSnapshotter) DisconnectClient(args ...string) error {
 }
 
 // RefreshServer refreshes the server at the given address.
-func (ks *KopiaSnapshotter) RefreshServer(addr, fingerprint string, args ...string) error {
+func (ks *BlinkDiskSnapshotter) RefreshServer(addr, fingerprint string, args ...string) error {
 	addr = fmt.Sprintf("https://%v", addr)
 	args = append([]string{
 		"server", "refresh",
@@ -277,8 +277,8 @@ func (ks *KopiaSnapshotter) RefreshServer(addr, fingerprint string, args ...stri
 	return err
 }
 
-// ListClients lists the clients that are registered with the Kopia server.
-func (ks *KopiaSnapshotter) ListClients(addr, fingerprint string, args ...string) error {
+// ListClients lists the clients that are registered with the BlinkDisk server.
+func (ks *BlinkDiskSnapshotter) ListClients(addr, fingerprint string, args ...string) error {
 	args = append([]string{"server", "user", "list"}, args...)
 	_, _, err := ks.Runner.Run(args...)
 
@@ -287,7 +287,7 @@ func (ks *KopiaSnapshotter) ListClients(addr, fingerprint string, args ...string
 
 // ConnectClient connects a given client to the server at the given address using the
 // given cert fingerprint.
-func (ks *KopiaSnapshotter) ConnectClient(addr, fingerprint, user, host string, args ...string) error {
+func (ks *BlinkDiskSnapshotter) ConnectClient(addr, fingerprint, user, host string, args ...string) error {
 	addr = fmt.Sprintf("https://%v", addr)
 	args = append([]string{
 		"repo", "connect", "server",
@@ -350,8 +350,8 @@ func parseManifestListForSnapshotIDs(output string) []string {
 	return ret
 }
 
-// waitUntilServerStarted returns error if the Kopia API server fails to start before timeout.
-func (ks *KopiaSnapshotter) waitUntilServerStarted(ctx context.Context, addr, fingerprint string, serverStatusArgs ...string) error {
+// waitUntilServerStarted returns error if the BlinkDisk API server fails to start before timeout.
+func (ks *BlinkDiskSnapshotter) waitUntilServerStarted(ctx context.Context, addr, fingerprint string, serverStatusArgs ...string) error {
 	statusArgs := append([]string{
 		"server", "status",
 		"--address", addr,
@@ -370,7 +370,7 @@ func (ks *KopiaSnapshotter) waitUntilServerStarted(ctx context.Context, addr, fi
 }
 
 // ConnectOrCreateRepoWithServer creates Repository and a TLS server/client model for interaction.
-func (ks *KopiaSnapshotter) ConnectOrCreateRepoWithServer(serverAddr string, args ...string) (*exec.Cmd, string, error) {
+func (ks *BlinkDiskSnapshotter) ConnectOrCreateRepoWithServer(serverAddr string, args ...string) (*exec.Cmd, string, error) {
 	if err := ks.ConnectOrCreateRepo(args...); err != nil {
 		return nil, "", err
 	}
@@ -379,14 +379,14 @@ func (ks *KopiaSnapshotter) ConnectOrCreateRepoWithServer(serverAddr string, arg
 
 	var tempDirErr error
 
-	if tempDir, tempDirErr = os.MkdirTemp("", "kopia"); tempDirErr != nil {
+	if tempDir, tempDirErr = os.MkdirTemp("", "blinkdisk"); tempDirErr != nil {
 		return nil, "", tempDirErr
 	}
 
 	defer os.RemoveAll(tempDir)
 
-	tlsCertFile := filepath.Join(tempDir, "kopiaserver.cert")
-	tlsKeyFile := filepath.Join(tempDir, "kopiaserver.key")
+	tlsCertFile := filepath.Join(tempDir, "blinkdiskserver.cert")
+	tlsKeyFile := filepath.Join(tempDir, "blinkdiskserver.key")
 
 	serverArgs := []string{"--tls-generate-cert", "--tls-cert-file", tlsCertFile, "--tls-key-file", tlsKeyFile}
 
@@ -428,7 +428,7 @@ func (ks *KopiaSnapshotter) ConnectOrCreateRepoWithServer(serverAddr string, arg
 	return cmd, fingerprint, err
 }
 
-func (ks *KopiaSnapshotter) setServerPermissions(args ...string) error {
+func (ks *BlinkDiskSnapshotter) setServerPermissions(args ...string) error {
 	runArgs := append([]string{"server", "acl", "enable"}, args...)
 
 	// Return early if ACL is already enabled, assuming permissions have already

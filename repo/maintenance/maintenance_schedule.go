@@ -10,16 +10,16 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 const (
 	maintenanceScheduleKeySize    = 32
-	maintenanceScheduleBlobID     = "kopia.maintenance"
+	maintenanceScheduleBlobID     = "blinkdisk.maintenance"
 	maintenanceScheduleKeyPurpose = "maintenance schedule"
 )
 

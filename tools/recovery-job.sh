@@ -6,8 +6,8 @@ set -o nounset
 
 # Positional arguments:
 #
-# 1. kopia_recovery_dir
-# 2. kopia_exe_dir
+# 1. blinkdisk_recovery_dir
+# 2. blinkdisk_exe_dir
 # 3. test_duration
 # 4. test_timeout
 # 5. test_repo_path_prefix
@@ -23,8 +23,8 @@ set -o nounset
 #       restored to and fio data should be written to
 # - S3_BUCKET_NAME: Name of the S3 bucket for the repo
 
-readonly kopia_recovery_dir="${1?Specify directory with kopia recovery git repo}"
-readonly kopia_exe_dir="${2?Specify the directory of the kopia git repo to be tested}"
+readonly blinkdisk_recovery_dir="${1?Specify directory with blinkdisk recovery git repo}"
+readonly blinkdisk_exe_dir="${2?Specify the directory of the blinkdisk git repo to be tested}"
 
 readonly test_duration=${3:?"Provide a minimum duration for the testing, e.g., '15m'"}
 readonly test_timeout=${4:?"Provide a timeout for the test run, e.g., '55m'"}
@@ -35,8 +35,8 @@ shift 5
 
 cat <<EOF
 --- Job parameters ----
-kopia_recovery_dir: '${kopia_recovery_dir}'
-kopia_exe_dir: '${kopia_exe_dir}'
+blinkdisk_recovery_dir: '${blinkdisk_recovery_dir}'
+blinkdisk_exe_dir: '${blinkdisk_exe_dir}'
 test_duration: '${test_duration}'
 test_timeout: '${test_timeout}'
 test_repo_path_prefix: '${test_repo_path_prefix}'
@@ -67,22 +67,22 @@ if [ -n "${LOCAL_FIO_DATA_PATH-}" ] ; then
     df -h "${LOCAL_FIO_DATA_PATH}"
 fi
 
-readonly kopia_exe="${kopia_exe_dir}/kopia"
+readonly blinkdisk_exe="${blinkdisk_exe_dir}/blinkdisk"
 
-# Extract git metadata from the exe repo and build kopia
-pushd "${kopia_exe_dir}"
+# Extract git metadata from the exe repo and build blinkdisk
+pushd "${blinkdisk_exe_dir}"
 
-readonly kopia_git_revision=$(git rev-parse --short HEAD)
-readonly kopia_git_branch="$(git describe --tags --always --dirty)"
-readonly kopia_git_dirty=$(git diff-index --quiet HEAD -- || echo "*")
-readonly kopia_build_time=$(date +%FT%T%z)
+readonly blinkdisk_git_revision=$(git rev-parse --short HEAD)
+readonly blinkdisk_git_branch="$(git describe --tags --always --dirty)"
+readonly blinkdisk_git_dirty=$(git diff-index --quiet HEAD -- || echo "*")
+readonly blinkdisk_build_time=$(date +%FT%T%z)
 
-go build -o "${kopia_exe}" github.com/kopia/kopia
+go build -o "${blinkdisk_exe}" github.com/blinkdisk/core
 
 popd
 
 # Extract git metadata on the recovery repo, perform a recovery run
-pushd "${kopia_recovery_dir}"
+pushd "${blinkdisk_recovery_dir}"
 
 readonly robustness_git_revision=$(git rev-parse --short HEAD)
 readonly robustness_git_branch="$(git describe --tags --always --dirty)"
@@ -90,12 +90,12 @@ readonly robustness_git_dirty=$(git diff-index --quiet HEAD -- || echo "*")
 readonly robustness_build_time=$(date +%FT%T%z)
 
 readonly ld_flags="\
--X github.com/kopia/kopia/tests/robustness/engine.repoBuildTime=${kopia_build_time} \
--X github.com/kopia/kopia/tests/robustness/engine.repoGitRevision=${kopia_git_dirty:-""}${kopia_git_revision} \
--X github.com/kopia/kopia/tests/robustness/engine.repoGitBranch=${kopia_git_branch} \
--X github.com/kopia/kopia/tests/robustness/engine.testBuildTime=${robustness_build_time} \
--X github.com/kopia/kopia/tests/robustness/engine.testGitRevision=${robustness_git_dirty:-""}${robustness_git_revision} \
--X github.com/kopia/kopia/tests/robustness/engine.testGitBranch=${robustness_git_branch}"
+-X github.com/blinkdisk/core/tests/robustness/engine.repoBuildTime=${blinkdisk_build_time} \
+-X github.com/blinkdisk/core/tests/robustness/engine.repoGitRevision=${blinkdisk_git_dirty:-""}${blinkdisk_git_revision} \
+-X github.com/blinkdisk/core/tests/robustness/engine.repoGitBranch=${blinkdisk_git_branch} \
+-X github.com/blinkdisk/core/tests/robustness/engine.testBuildTime=${robustness_build_time} \
+-X github.com/blinkdisk/core/tests/robustness/engine.testGitRevision=${robustness_git_dirty:-""}${robustness_git_revision} \
+-X github.com/blinkdisk/core/tests/robustness/engine.testGitBranch=${robustness_git_branch}"
 
 readonly test_flags="-v -timeout=${test_timeout}\
  --repo-path-prefix=${test_repo_path_prefix}\
@@ -107,8 +107,8 @@ make_target="recovery-tests"
 # Run the recovery tests
 set -o verbose
 
-make -C "${kopia_recovery_dir}" \
-    KOPIA_EXE="${kopia_exe}" \
+make -C "${blinkdisk_recovery_dir}" \
+    BLINKDISK_EXE="${blinkdisk_exe}" \
     GO_TEST='go test' \
     TEST_FLAGS="${test_flags}" \
     "${make_target}"

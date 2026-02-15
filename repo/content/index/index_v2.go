@@ -10,8 +10,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
 )
 
 const (

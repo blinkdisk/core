@@ -11,7 +11,7 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/cli"
+	"github.com/blinkdisk/core/cli"
 )
 
 var envPrefixCounter = new(int32)
@@ -66,7 +66,7 @@ func (e *CLIInProcRunner) SetNextStdin(stdin io.Reader) {
 func NewInProcRunner(t *testing.T) *CLIInProcRunner {
 	t.Helper()
 
-	if os.Getenv("KOPIA_EXE") != "" && os.Getenv("KOPIA_RUN_ALL_INTEGRATION_TESTS") == "" {
+	if os.Getenv("BLINKDISK_EXE") != "" && os.Getenv("BLINKDISK_RUN_ALL_INTEGRATION_TESTS") == "" {
 		t.Skip("not running test since it's also included in the unit tests")
 	}
 

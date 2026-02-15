@@ -6,8 +6,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 // checkpointFunc is invoked when checkpoint occurs. The callback must checkpoint current state of

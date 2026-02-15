@@ -1,6 +1,6 @@
 //go:build darwin || (linux && amd64)
 
-// Package snapmeta provides Kopia implementations of Persister and Snapshotter.
+// Package snapmeta provides BlinkDisk implementations of Persister and Snapshotter.
 package snapmeta
 
 import (
@@ -9,33 +9,33 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
-// KopiaPersister implements robustness.Persister.
-type KopiaPersister struct {
+// BlinkDiskPersister implements robustness.Persister.
+type BlinkDiskPersister struct {
 	*Simple
 	localMetadataDir string
 	persistenceDir   string
-	kopiaConnector
+	blinkdiskConnector
 }
 
-var _ robustness.Persister = (*KopiaPersister)(nil)
+var _ robustness.Persister = (*BlinkDiskPersister)(nil)
 
-// NewPersister returns a Kopia based Persister.
+// NewPersister returns a BlinkDisk based Persister.
 // ConnectOrCreateRepo must be invoked to enable the interface.
-func NewPersister(baseDir string) (*KopiaPersister, error) {
-	localDir, err := os.MkdirTemp(baseDir, "kopia-local-metadata-")
+func NewPersister(baseDir string) (*BlinkDiskPersister, error) {
+	localDir, err := os.MkdirTemp(baseDir, "blinkdisk-local-metadata-")
 	if err != nil {
 		return nil, err
 	}
 
-	persistenceDir, err := os.MkdirTemp(localDir, "kopia-persistence-root")
+	persistenceDir, err := os.MkdirTemp(localDir, "blinkdisk-persistence-root")
 	if err != nil {
 		return nil, err
 	}
 
-	km := &KopiaPersister{
+	km := &BlinkDiskPersister{
 		localMetadataDir: localDir,
 		persistenceDir:   persistenceDir,
 		Simple:           NewSimple(),
@@ -53,23 +53,23 @@ func NewPersister(baseDir string) (*KopiaPersister, error) {
 
 // persisterInitS3WithServer is an adaptor for initS3() as the persister
 // does not support the server configuration.
-func (store *KopiaPersister) persisterInitS3WithServer(repoPath, bucketName, addr string) error {
+func (store *BlinkDiskPersister) persisterInitS3WithServer(repoPath, bucketName, addr string) error {
 	return store.initS3(repoPath, bucketName)
 }
 
 // persisterInitFilesystemWithServer is an adaptor for initFilesystem() as the persister
 // does not support the server configuration.
-func (store *KopiaPersister) persisterInitFilesystemWithServer(repoPath, addr string) error {
+func (store *BlinkDiskPersister) persisterInitFilesystemWithServer(repoPath, addr string) error {
 	return store.initFilesystem(repoPath)
 }
 
 // ConnectOrCreateRepo makes the Persister ready for use.
-func (store *KopiaPersister) ConnectOrCreateRepo(repoPath string) error {
+func (store *BlinkDiskPersister) ConnectOrCreateRepo(repoPath string) error {
 	return store.connectOrCreateRepo(repoPath)
 }
 
-// Cleanup cleans up the local temporary files used by a KopiaMetadata.
-func (store *KopiaPersister) Cleanup() {
+// Cleanup cleans up the local temporary files used by a BlinkDiskMetadata.
+func (store *BlinkDiskPersister) Cleanup() {
 	if store.localMetadataDir != "" {
 		os.RemoveAll(store.localMetadataDir) //nolint:errcheck
 	}
@@ -81,13 +81,13 @@ func (store *KopiaPersister) Cleanup() {
 
 // ConnectOrCreateS3 implements the RepoManager interface, connects to a repo in an S3
 // bucket or attempts to create one if connection is unsuccessful.
-func (store *KopiaPersister) ConnectOrCreateS3(bucketName, pathPrefix string) error {
+func (store *BlinkDiskPersister) ConnectOrCreateS3(bucketName, pathPrefix string) error {
 	return store.snap.ConnectOrCreateS3(bucketName, pathPrefix)
 }
 
 // ConnectOrCreateFilesystem implements the RepoManager interface, connects to a repo in the filesystem
 // or attempts to create one if connection is unsuccessful.
-func (store *KopiaPersister) ConnectOrCreateFilesystem(path string) error {
+func (store *BlinkDiskPersister) ConnectOrCreateFilesystem(path string) error {
 	return store.snap.ConnectOrCreateFilesystem(path)
 }
 
@@ -95,20 +95,20 @@ const metadataStoreFileName = "metadata-store-latest"
 
 // ConnectOrCreateS3WithServer implements the RepoManager interface, creates a server
 // connects it a repo in an S3 bucket and creates a client to perform operations.
-func (store *KopiaPersister) ConnectOrCreateS3WithServer(serverAddr, bucketName, pathPrefix string) (*exec.Cmd, string, error) {
+func (store *BlinkDiskPersister) ConnectOrCreateS3WithServer(serverAddr, bucketName, pathPrefix string) (*exec.Cmd, string, error) {
 	return store.snap.ConnectOrCreateS3WithServer(serverAddr, bucketName, pathPrefix)
 }
 
 // ConnectOrCreateFilesystemWithServer implements the RepoManager interface, creates a server
 // connects it a repo in the filesystem and creates a client to perform operations.
-func (store *KopiaPersister) ConnectOrCreateFilesystemWithServer(repoPath, serverAddr string) (*exec.Cmd, string, error) {
+func (store *BlinkDiskPersister) ConnectOrCreateFilesystemWithServer(repoPath, serverAddr string) (*exec.Cmd, string, error) {
 	return store.snap.ConnectOrCreateFilesystemWithServer(repoPath, serverAddr)
 }
 
 // LoadMetadata implements the DataPersister interface, restores the latest
-// snapshot from the kopia repository and decodes its contents, populating
+// snapshot from the blinkdisk repository and decodes its contents, populating
 // its metadata on the snapshots residing in the target test repository.
-func (store *KopiaPersister) LoadMetadata() error {
+func (store *BlinkDiskPersister) LoadMetadata() error {
 	snapIDs, err := store.snap.ListSnapshots()
 	if err != nil {
 		return err
@@ -143,15 +143,15 @@ func (store *KopiaPersister) LoadMetadata() error {
 }
 
 // GetPersistDir returns the path to the directory that will be persisted
-// as a snapshot to the kopia repository.
-func (store *KopiaPersister) GetPersistDir() string {
+// as a snapshot to the blinkdisk repository.
+func (store *BlinkDiskPersister) GetPersistDir() string {
 	return store.persistenceDir
 }
 
 // FlushMetadata implements the DataPersister interface, flushing the local
-// metadata on the target test repo's snapshots to the metadata Kopia repository
+// metadata on the target test repo's snapshots to the metadata BlinkDisk repository
 // as a snapshot create.
-func (store *KopiaPersister) FlushMetadata() error {
+func (store *BlinkDiskPersister) FlushMetadata() error {
 	metadataPath := filepath.Join(store.persistenceDir, metadataStoreFileName)
 
 	f, err := os.Create(metadataPath)

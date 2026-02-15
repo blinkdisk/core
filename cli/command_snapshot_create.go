@@ -10,14 +10,14 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/virtualfs"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/virtualfs"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 const (
@@ -62,7 +62,7 @@ func (c *commandSnapshotCreate) setup(svc appServices, parent commandParent) {
 	cmd.Flag("upload-limit-mb", "Stop the backup process after the specified amount of data (in MB) has been uploaded.").PlaceHolder("MB").Default("0").Int64Var(&c.snapshotCreateCheckpointUploadLimitMB)
 	cmd.Flag("checkpoint-interval", "Interval between periodic checkpoints (must be <= 45 minutes).").Hidden().DurationVar(&c.snapshotCreateCheckpointInterval)
 	cmd.Flag("description", "Free-form snapshot description.").StringVar(&c.snapshotCreateDescription)
-	cmd.Flag("fail-fast", "Fail fast when creating snapshot.").Envar(svc.EnvName("KOPIA_SNAPSHOT_FAIL_FAST")).BoolVar(&c.snapshotCreateFailFast)
+	cmd.Flag("fail-fast", "Fail fast when creating snapshot.").Envar(svc.EnvName("BLINKDISK_SNAPSHOT_FAIL_FAST")).BoolVar(&c.snapshotCreateFailFast)
 	cmd.Flag("force-hash", "Force hashing of source files for a given percentage of files [0.0 .. 100.0]").Default("0").Float64Var(&c.snapshotCreateForceHash)
 	cmd.Flag("parallel", "Upload N files in parallel").PlaceHolder("N").Default("0").IntVar(&c.snapshotCreateParallelUploads)
 	cmd.Flag("start-time", "Override snapshot start timestamp.").StringVar(&c.snapshotCreateStartTime)

@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 var sample1 = []byte("hello! how are you? nice to meet you.")

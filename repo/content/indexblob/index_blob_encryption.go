@@ -5,14 +5,14 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/blobcrypto"
-	"github.com/kopia/kopia/internal/blobparam"
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/contentlog/logparam"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/blobcrypto"
+	"github.com/blinkdisk/core/internal/blobparam"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/contentlog/logparam"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // Metadata is an information about a single index blob managed by Manager.

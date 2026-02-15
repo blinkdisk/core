@@ -9,20 +9,20 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/b2"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/b2"
 )
 
 const (
-	testBucketEnv = "KOPIA_B2_TEST_BUCKET"
-	testKeyIDEnv  = "KOPIA_B2_TEST_KEY_ID"
-	testKeyEnv    = "KOPIA_B2_TEST_KEY"
+	testBucketEnv = "BLINKDISK_B2_TEST_BUCKET"
+	testKeyIDEnv  = "BLINKDISK_B2_TEST_KEY_ID"
+	testKeyEnv    = "BLINKDISK_B2_TEST_KEY"
 )
 
 func getEnvOrSkip(t *testing.T, name string) string {

@@ -9,10 +9,10 @@ import (
 	"github.com/mxk/go-vss"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 func osSnapshotMode(p *policy.OSSnapshotPolicy) policy.OSSnapshotMode {

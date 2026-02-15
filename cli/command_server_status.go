@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 type commandServerStatus struct {
@@ -18,7 +18,7 @@ type commandServerStatus struct {
 }
 
 func (c *commandServerStatus) setup(svc appServices, parent commandParent) {
-	cmd := parent.Command("status", "Status of Kopia server")
+	cmd := parent.Command("status", "Status of BlinkDisk server")
 
 	cmd.Flag("remote", "Show remote sources").BoolVar(&c.remote)
 
@@ -28,7 +28,7 @@ func (c *commandServerStatus) setup(svc appServices, parent commandParent) {
 	cmd.Action(svc.serverAction(&c.sf, c.runServerStatus))
 }
 
-func (c *commandServerStatus) runServerStatus(ctx context.Context, cli *apiclient.KopiaAPIClient) error {
+func (c *commandServerStatus) runServerStatus(ctx context.Context, cli *apiclient.BlinkDiskAPIClient) error {
 	var status serverapi.SourcesResponse
 	if err := cli.Get(ctx, "control/sources", nil, &status); err != nil {
 		return errors.Wrap(err, "unable to list sources")

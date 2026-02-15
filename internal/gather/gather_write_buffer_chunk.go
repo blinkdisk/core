@@ -11,13 +11,13 @@ import (
 )
 
 const (
-	mynamespace                  = "kopia/kopia/internal/gather"
+	mynamespace                  = "blinkdisk/blinkdisk/internal/gather"
 	maxCallersToTrackAllocations = 3
 )
 
 //nolint:gochecknoglobals
 var (
-	trackChunkAllocations = os.Getenv("KOPIA_TRACK_CHUNK_ALLOC") != ""
+	trackChunkAllocations = os.Getenv("BLINKDISK_TRACK_CHUNK_ALLOC") != ""
 
 	defaultAllocator = &chunkAllocator{
 		name:            "default",

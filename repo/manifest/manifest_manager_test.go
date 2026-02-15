@@ -13,15 +13,15 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob/readonly"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob/readonly"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 func TestMain(m *testing.M) { testutil.MyTestMain(m) }

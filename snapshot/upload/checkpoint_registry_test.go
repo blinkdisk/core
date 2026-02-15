@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 func TestCheckpointRegistry(t *testing.T) {

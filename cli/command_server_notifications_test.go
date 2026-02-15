@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestServerNotifications(t *testing.T) {
@@ -67,7 +67,7 @@ func TestServerNotifications(t *testing.T) {
 		"--address=localhost:0",
 		"--insecure",
 		"--random-server-control-password",
-		"--kopiaui-notifications",
+		"--blinkdiskui-notifications",
 		"--shutdown-grace-period", "100ms",
 	)
 

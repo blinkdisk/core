@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 //nolint:maintidx

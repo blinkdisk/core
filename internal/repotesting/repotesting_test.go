@@ -6,15 +6,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 func TestTimeFuncWiring(t *testing.T) {

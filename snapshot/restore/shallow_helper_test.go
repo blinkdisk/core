@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/fs/localfs"
+	"github.com/blinkdisk/core/fs/localfs"
 )
 
 func TestSafeRemoveAll(t *testing.T) {

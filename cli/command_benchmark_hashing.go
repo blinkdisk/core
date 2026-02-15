@@ -6,11 +6,11 @@ import (
 
 	atunits "github.com/alecthomas/units"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 type commandBenchmarkHashing struct {

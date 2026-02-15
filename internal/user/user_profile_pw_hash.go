@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/crypto"
+	"github.com/blinkdisk/core/internal/crypto"
 )
 
 //nolint:gochecknoglobals

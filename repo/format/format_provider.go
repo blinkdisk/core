@@ -5,11 +5,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/ecc"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/hashing"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/ecc"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/hashing"
 )
 
 const (
@@ -19,16 +19,16 @@ const (
 	// CurrentWriteVersion is the version of the repository applied to new repositories.
 	CurrentWriteVersion = FormatVersion3
 
-	// MinSupportedWriteVersion is the minimum version that this kopia client can write.
+	// MinSupportedWriteVersion is the minimum version that this blinkdisk client can write.
 	MinSupportedWriteVersion = FormatVersion1
 
-	// MaxSupportedWriteVersion is the maximum version that this kopia client can write.
+	// MaxSupportedWriteVersion is the maximum version that this blinkdisk client can write.
 	MaxSupportedWriteVersion = FormatVersion3
 
-	// MinSupportedReadVersion is the minimum version that this kopia client can read.
+	// MinSupportedReadVersion is the minimum version that this blinkdisk client can read.
 	MinSupportedReadVersion = FormatVersion1
 
-	// MaxSupportedReadVersion is the maximum version that this kopia client can read.
+	// MaxSupportedReadVersion is the maximum version that this blinkdisk client can read.
 	MaxSupportedReadVersion = FormatVersion3
 
 	legacyIndexVersion = index.Version1

@@ -14,11 +14,11 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/timestampmeta"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/timestampmeta"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
 )
 
 const (
@@ -26,7 +26,7 @@ const (
 	writerChunkSize = 1 << 20
 	latestVersionID = ""
 
-	timeMapKey = "Kopia-Mtime" // case is important, first letter must be capitalized.
+	timeMapKey = "BlinkDisk-Mtime" // case is important, first letter must be capitalized.
 )
 
 type gcsStorage struct {
@@ -136,7 +136,7 @@ func (gcs *gcsStorage) PutBlob(ctx context.Context, b blob.ID, data blob.Bytes, 
 
 	writer := obj.NewWriter(ctx)
 	writer.ChunkSize = writerChunkSize
-	writer.ContentType = "application/x-kopia"
+	writer.ContentType = "application/x-blinkdisk"
 	writer.Metadata = timestampmeta.ToMap(opts.SetModTime, timeMapKey)
 
 	if opts.RetentionPeriod != 0 {
@@ -286,7 +286,7 @@ func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error)
 
 	// verify GCS connection is functional by listing blobs in a bucket, which will fail if the bucket
 	// does not exist. We list with a prefix that will not exist, to avoid iterating through any objects.
-	nonExistentPrefix := fmt.Sprintf("kopia-gcs-storage-initializing-%v", clock.Now().UnixNano())
+	nonExistentPrefix := fmt.Sprintf("blinkdisk-gcs-storage-initializing-%v", clock.Now().UnixNano())
 
 	err = gcs.ListBlobs(ctx, blob.ID(nonExistentPrefix), func(_ blob.Metadata) error {
 		return nil

@@ -10,8 +10,8 @@ import (
 	fspb "github.com/google/fswalker/proto/fswalker"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/tests/testdirtree"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/tests/testdirtree"
 )
 
 func TestWalk(t *testing.T) {

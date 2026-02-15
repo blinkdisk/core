@@ -1,7 +1,7 @@
 //go:build darwin || (linux && amd64)
 
-// Package kopiaclient provides a client to interact with a Kopia repo.
-package kopiaclient
+// Package blinkdiskclient provides a client to interact with a BlinkDisk repo.
+package blinkdiskclient
 
 import (
 	"bytes"
@@ -14,23 +14,23 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/virtualfs"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	"github.com/kopia/kopia/repo/blob/s3"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
-	"github.com/kopia/kopia/snapshot/upload"
-	"github.com/kopia/kopia/tests/robustness"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/virtualfs"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	"github.com/blinkdisk/core/repo/blob/s3"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/snapshot/upload"
+	"github.com/blinkdisk/core/tests/robustness"
 )
 
-// KopiaClient uses a Kopia repo to create, restore, and delete snapshots.
-type KopiaClient struct {
+// BlinkDiskClient uses a BlinkDisk repo to create, restore, and delete snapshots.
+type BlinkDiskClient struct {
 	configPath string
 	pw         string
 }
@@ -44,16 +44,16 @@ const (
 	dataFileName             = "data"
 )
 
-// NewKopiaClient returns a new KopiaClient.
-func NewKopiaClient(basePath string) *KopiaClient {
-	return &KopiaClient{
+// NewBlinkDiskClient returns a new BlinkDiskClient.
+func NewBlinkDiskClient(basePath string) *BlinkDiskClient {
+	return &BlinkDiskClient{
 		configPath: filepath.Join(basePath, configFileName),
 		pw:         password,
 	}
 }
 
-// CreateOrConnectRepo creates a new Kopia repo or connects to an existing one if possible.
-func (kc *KopiaClient) CreateOrConnectRepo(ctx context.Context, repoDir, bucketName string) error {
+// CreateOrConnectRepo creates a new BlinkDisk repo or connects to an existing one if possible.
+func (kc *BlinkDiskClient) CreateOrConnectRepo(ctx context.Context, repoDir, bucketName string) error {
 	st, err := kc.getStorage(ctx, repoDir, bucketName)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (kc *KopiaClient) CreateOrConnectRepo(ctx context.Context, repoDir, bucketN
 }
 
 // SetCacheLimits sets cache size limits to the already connected repository.
-func (kc *KopiaClient) SetCacheLimits(ctx context.Context, repoDir, bucketName string, cacheOpts *content.CachingOptions) error {
+func (kc *BlinkDiskClient) SetCacheLimits(ctx context.Context, repoDir, bucketName string, cacheOpts *content.CachingOptions) error {
 	err := repo.SetCachingOptions(ctx, kc.configPath, cacheOpts)
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func (kc *KopiaClient) SetCacheLimits(ctx context.Context, repoDir, bucketName s
 }
 
 // SnapshotCreate creates a snapshot for the given path.
-func (kc *KopiaClient) SnapshotCreate(ctx context.Context, key string, val []byte) error {
+func (kc *BlinkDiskClient) SnapshotCreate(ctx context.Context, key string, val []byte) error {
 	r, err := repo.Open(ctx, kc.configPath, kc.pw, &repo.Options{})
 	if err != nil {
 		return errors.Wrap(err, "cannot open repository")
@@ -133,7 +133,7 @@ func (kc *KopiaClient) SnapshotCreate(ctx context.Context, key string, val []byt
 }
 
 // SnapshotRestore restores the latest snapshot for the given path.
-func (kc *KopiaClient) SnapshotRestore(ctx context.Context, key string) ([]byte, error) {
+func (kc *BlinkDiskClient) SnapshotRestore(ctx context.Context, key string) ([]byte, error) {
 	r, err := repo.Open(ctx, kc.configPath, kc.pw, &repo.Options{})
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot open repository")
@@ -172,7 +172,7 @@ func (kc *KopiaClient) SnapshotRestore(ctx context.Context, key string) ([]byte,
 }
 
 // SnapshotDelete deletes all snapshots for a given path.
-func (kc *KopiaClient) SnapshotDelete(ctx context.Context, key string) error {
+func (kc *BlinkDiskClient) SnapshotDelete(ctx context.Context, key string) error {
 	r, err := repo.Open(ctx, kc.configPath, kc.pw, &repo.Options{})
 	if err != nil {
 		return errors.Wrap(err, "cannot open repository")
@@ -201,7 +201,7 @@ func (kc *KopiaClient) SnapshotDelete(ctx context.Context, key string) error {
 	return r.Close(ctx)
 }
 
-func (kc *KopiaClient) getStorage(ctx context.Context, repoDir, bucketName string) (st blob.Storage, err error) {
+func (kc *BlinkDiskClient) getStorage(ctx context.Context, repoDir, bucketName string) (st blob.Storage, err error) {
 	if bucketName != "" {
 		s3Opts := &s3.Options{
 			BucketName:      bucketName,
@@ -227,13 +227,13 @@ func (kc *KopiaClient) getStorage(ctx context.Context, repoDir, bucketName strin
 
 // getSourceForKeyVal creates a virtual directory for `key` that contains a single virtual file that
 // reads its contents from `val`.
-func (kc *KopiaClient) getSourceForKeyVal(key string, val []byte) fs.Entry {
+func (kc *BlinkDiskClient) getSourceForKeyVal(key string, val []byte) fs.Entry {
 	return virtualfs.NewStaticDirectory(key, []fs.Entry{
 		virtualfs.StreamingFileFromReader(dataFileName, io.NopCloser(bytes.NewReader(val))),
 	})
 }
 
-func (kc *KopiaClient) getSnapshotsFromKey(ctx context.Context, r repo.Repository, key string) ([]*snapshot.Manifest, error) {
+func (kc *BlinkDiskClient) getSnapshotsFromKey(ctx context.Context, r repo.Repository, key string) ([]*snapshot.Manifest, error) {
 	si := kc.getSourceInfoFromKey(r, key)
 
 	manifests, err := snapshot.ListSnapshots(ctx, r, si)
@@ -248,7 +248,7 @@ func (kc *KopiaClient) getSnapshotsFromKey(ctx context.Context, r repo.Repositor
 	return manifests, nil
 }
 
-func (kc *KopiaClient) getSourceInfoFromKey(r repo.Repository, key string) snapshot.SourceInfo {
+func (kc *BlinkDiskClient) getSourceInfoFromKey(r repo.Repository, key string) snapshot.SourceInfo {
 	return snapshot.SourceInfo{
 		Host:     r.ClientOptions().Hostname,
 		UserName: r.ClientOptions().Username,
@@ -256,7 +256,7 @@ func (kc *KopiaClient) getSourceInfoFromKey(r repo.Repository, key string) snaps
 	}
 }
 
-func (kc *KopiaClient) latestManifest(mans []*snapshot.Manifest) *snapshot.Manifest {
+func (kc *BlinkDiskClient) latestManifest(mans []*snapshot.Manifest) *snapshot.Manifest {
 	latest := mans[0]
 
 	for _, m := range mans {

@@ -3,7 +3,7 @@ package cache
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 // TestingGetFull fetches the contents of a full blob. Returns false if not found.

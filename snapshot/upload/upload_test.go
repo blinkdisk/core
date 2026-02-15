@@ -24,26 +24,26 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/fs/virtualfs"
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob/filesystem"
-	bloblogging "github.com/kopia/kopia/repo/blob/logging"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/fs/virtualfs"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob/filesystem"
+	bloblogging "github.com/blinkdisk/core/repo/blob/logging"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 const (
@@ -86,7 +86,7 @@ func newUploadTestHarness(ctx context.Context, t *testing.T) *uploadTestHarness 
 
 	t.Logf("repo dir: %v", repoDir)
 
-	configFile := filepath.Join(repoDir, ".kopia.config")
+	configFile := filepath.Join(repoDir, ".blinkdisk.config")
 	err = repo.Connect(ctx, configFile, rec, masterPassword, nil)
 	require.NoError(t, err, "unable to connect to repository")
 

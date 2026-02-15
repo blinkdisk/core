@@ -9,10 +9,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/scheduler"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/scheduler"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 var baseTime = time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)

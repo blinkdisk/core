@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/cacheprot"
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/cacheprot"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 func TestNoStorageProtection(t *testing.T) {

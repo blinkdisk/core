@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/acl"
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/acl"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo"
 )
 
 var globalPolicyLabels = map[string]string{

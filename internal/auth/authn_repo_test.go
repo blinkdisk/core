@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/user"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/user"
+	"github.com/blinkdisk/core/repo"
 )
 
 func TestRepositoryAuthenticator(t *testing.T) {

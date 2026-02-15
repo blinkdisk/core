@@ -9,16 +9,16 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // DefaultPasswordForTesting is the default password to use for all testing repositories.
@@ -156,7 +156,7 @@ func (e *Environment) Close(ctx context.Context, tb testing.TB) {
 
 // ConfigFile returns the name of the config file.
 func (e *Environment) ConfigFile() string {
-	return filepath.Join(e.configDir, "kopia.config")
+	return filepath.Join(e.configDir, "blinkdisk.config")
 }
 
 // MustReopen closes and reopens the repository.
@@ -207,7 +207,7 @@ func (e *Environment) MustConnectOpenAnother(tb testing.TB, openOpts ...func(*re
 
 	ctx := testlogging.Context(tb)
 
-	config := filepath.Join(testutil.TempDirectory(tb), "kopia.config")
+	config := filepath.Join(testutil.TempDirectory(tb), "blinkdisk.config")
 	connOpts := &repo.ConnectOptions{
 		CachingOptions: content.CachingOptions{
 			CacheDirectory: testutil.TempDirectory(tb),

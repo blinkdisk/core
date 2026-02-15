@@ -1,3 +1,3 @@
 #!/bin/sh
 export LISTEN_PID=$$
-exec $KOPIA_ORIG_EXE "${@}"
+exec $BLINKDISK_ORIG_EXE "${@}"

@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/notification/sender"
+	"github.com/blinkdisk/core/notification/sender"
 )
 
 // Options defines Pushover notification sender options.

@@ -5,18 +5,18 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 const (
 	// BackupBlobIDPrefix is the prefix for all identifiers of the BLOBs that
 	// keep a backup copy of the FormatBlobID BLOB for the purposes of rollback
 	// during upgrade.
-	BackupBlobIDPrefix = "kopia.repository.backup."
+	BackupBlobIDPrefix = "blinkdisk.repository.backup."
 
 	// LegacyIndexPoisonBlobID used to pollute V0 indexes after upgrade to prevent legacy clients from corrupting V1 indexes.
-	LegacyIndexPoisonBlobID = "n00000000000000000000000000000000-repository_unreadable_by_this_kopia_version_upgrade_required"
+	LegacyIndexPoisonBlobID = "n00000000000000000000000000000000-repository_unreadable_by_this_blinkdisk_version_upgrade_required"
 )
 
 // ErrFormatUptoDate is returned whenever a lock intent is attempted to be set
@@ -58,7 +58,7 @@ func (m *Manager) SetUpgradeLockIntent(ctx context.Context, l UpgradeLockIntent)
 
 		// backup the current repository config from local cache to the
 		// repository when we place the lock for the first time
-		if err := m.j.WriteKopiaRepositoryBlobWithID(ctx, m.blobs, m.blobCfgBlob, BackupBlobID(l)); err != nil {
+		if err := m.j.WriteBlinkDiskRepositoryBlobWithID(ctx, m.blobs, m.blobCfgBlob, BackupBlobID(l)); err != nil {
 			return nil, errors.Wrap(err, "failed to backup the repo format blob")
 		}
 
@@ -80,7 +80,7 @@ func (m *Manager) SetUpgradeLockIntent(ctx context.Context, l UpgradeLockIntent)
 	return m.repoConfig.UpgradeLock.Clone(), nil
 }
 
-// WriteLegacyIndexPoisonBlob writes a "poison blob" that will prevent old kopia clients
+// WriteLegacyIndexPoisonBlob writes a "poison blob" that will prevent old blinkdisk clients
 // that have not been upgraded from being able to open the repository after its format
 // has been upgraded.
 func WriteLegacyIndexPoisonBlob(ctx context.Context, st blob.Storage) error {
@@ -170,7 +170,7 @@ func (m *Manager) RollbackUpgrade(ctx context.Context) error {
 			return errors.Wrapf(err, "failed to read from backup %q", oldestBackup.BlobID)
 		}
 
-		if err := m.blobs.PutBlob(ctx, KopiaRepositoryBlobID, d.Bytes(), blob.PutOptions{}); err != nil {
+		if err := m.blobs.PutBlob(ctx, BlinkDiskRepositoryBlobID, d.Bytes(), blob.PutOptions{}); err != nil {
 			return errors.Wrapf(err, "failed to restore format blob from backup %q", oldestBackup.BlobID)
 		}
 
@@ -180,7 +180,7 @@ func (m *Manager) RollbackUpgrade(ctx context.Context) error {
 		}
 	}
 
-	m.cache.Remove(ctx, []blob.ID{KopiaRepositoryBlobID})
+	m.cache.Remove(ctx, []blob.ID{BlinkDiskRepositoryBlobID})
 
 	return nil
 }

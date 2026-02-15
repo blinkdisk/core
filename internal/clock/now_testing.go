@@ -19,7 +19,7 @@ var Now = func() time.Time {
 }
 
 func init() {
-	fakeTimeServer := os.Getenv("KOPIA_FAKE_CLOCK_ENDPOINT")
+	fakeTimeServer := os.Getenv("BLINKDISK_FAKE_CLOCK_ENDPOINT")
 	if fakeTimeServer == "" {
 		return
 	}
@@ -31,7 +31,7 @@ func init() {
 // increasing it client-side by certain interval until maximum is reached, at which point
 // it will ask the server again for new timestamp.
 //
-// The server endpoint must be HTTP and be set using KOPIA_FAKE_CLOCK_ENDPOINT environment
+// The server endpoint must be HTTP and be set using BLINKDISK_FAKE_CLOCK_ENDPOINT environment
 // variable.
 func getTimeFromServer(endpoint string) func() time.Time {
 	var mu sync.Mutex

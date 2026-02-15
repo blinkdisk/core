@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/acl"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/acl"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandACLAdd struct {

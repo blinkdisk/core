@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/index"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/index"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 // Checks the consistency of the mapping from content index entries to packs,
@@ -34,7 +34,7 @@ func checkContentIndexToPacks(ctx context.Context, r content.Reader) error {
 }
 
 func shouldRunContentIndexVerify(ctx context.Context) bool {
-	const envName = "KOPIA_MAINTENANCE_CONTENT_VERIFY_PERCENTAGE"
+	const envName = "BLINKDISK_MAINTENANCE_CONTENT_VERIFY_PERCENTAGE"
 
 	v := os.Getenv(envName)
 	if v == "" {

@@ -6,16 +6,16 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
-func mustCreateSource(t *testing.T, cli *apiclient.KopiaAPIClient, path string, pol *policy.Policy) {
+func mustCreateSource(t *testing.T, cli *apiclient.BlinkDiskAPIClient, path string, pol *policy.Policy) {
 	t.Helper()
 
 	_, err := serverapi.CreateSnapshotSource(testlogging.Context(t), cli, &serverapi.CreateSnapshotSourceRequest{
@@ -25,13 +25,13 @@ func mustCreateSource(t *testing.T, cli *apiclient.KopiaAPIClient, path string, 
 	require.NoError(t, err)
 }
 
-func mustSetPolicy(t *testing.T, cli *apiclient.KopiaAPIClient, si snapshot.SourceInfo, pol *policy.Policy) {
+func mustSetPolicy(t *testing.T, cli *apiclient.BlinkDiskAPIClient, si snapshot.SourceInfo, pol *policy.Policy) {
 	t.Helper()
 
 	require.NoError(t, serverapi.SetPolicy(testlogging.Context(t), cli, si, pol))
 }
 
-func mustListSources(t *testing.T, cli *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) []*serverapi.SourceStatus {
+func mustListSources(t *testing.T, cli *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) []*serverapi.SourceStatus {
 	t.Helper()
 
 	resp, err := serverapi.ListSources(testlogging.Context(t), cli, match)
@@ -40,7 +40,7 @@ func mustListSources(t *testing.T, cli *apiclient.KopiaAPIClient, match *snapsho
 	return resp.Sources
 }
 
-func mustGetTask(t *testing.T, cli *apiclient.KopiaAPIClient, taskID string) uitask.Info {
+func mustGetTask(t *testing.T, cli *apiclient.BlinkDiskAPIClient, taskID string) uitask.Info {
 	t.Helper()
 
 	resp, err := serverapi.GetTask(testlogging.Context(t), cli, taskID)
@@ -49,7 +49,7 @@ func mustGetTask(t *testing.T, cli *apiclient.KopiaAPIClient, taskID string) uit
 	return *resp
 }
 
-func mustListTasks(t *testing.T, cli *apiclient.KopiaAPIClient) []uitask.Info {
+func mustListTasks(t *testing.T, cli *apiclient.BlinkDiskAPIClient) []uitask.Info {
 	t.Helper()
 
 	resp, err := serverapi.ListTasks(testlogging.Context(t), cli)
@@ -58,7 +58,7 @@ func mustListTasks(t *testing.T, cli *apiclient.KopiaAPIClient) []uitask.Info {
 	return resp.Tasks
 }
 
-func mustGetLatestTask(t *testing.T, cli *apiclient.KopiaAPIClient) uitask.Info {
+func mustGetLatestTask(t *testing.T, cli *apiclient.BlinkDiskAPIClient) uitask.Info {
 	t.Helper()
 
 	tl := mustListTasks(t, cli)
@@ -67,7 +67,7 @@ func mustGetLatestTask(t *testing.T, cli *apiclient.KopiaAPIClient) uitask.Info 
 	return tl[0]
 }
 
-func waitForTask(t *testing.T, cli *apiclient.KopiaAPIClient, taskID string, timeout time.Duration) uitask.Info {
+func waitForTask(t *testing.T, cli *apiclient.BlinkDiskAPIClient, taskID string, timeout time.Duration) uitask.Info {
 	t.Helper()
 
 	var lastInfo uitask.Info

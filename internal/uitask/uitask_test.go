@@ -13,9 +13,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var (

@@ -3,7 +3,7 @@ set -e
 
 for f in dist/*rpm; do
   # add signature to RPMs
-  rpm --define "%_gpg_name Kopia Builder" --addsign $f
+  rpm --define "%_gpg_name BlinkDisk Builder" --addsign $f
 done
 
 # before signing checksums.txt, regenerate it since we've just signed some RPMs.

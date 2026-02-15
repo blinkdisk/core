@@ -14,19 +14,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 // foo@bar - password baz.
@@ -120,7 +120,7 @@ func testAPIServerRepository(t *testing.T, allowRepositoryUsers bool) {
 
 	t.Logf("detected server parameters %#v", sp)
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            controlUsername,
 		Password:                            controlPassword,
@@ -218,7 +218,7 @@ func testAPIServerRepository(t *testing.T, allowRepositoryUsers bool) {
 	// we are providing custom password to connect, make sure we won't be providing
 	// (different) default password via environment variable, as command-line password
 	// takes precedence over persisted password.
-	delete(e2.Environment, "KOPIA_PASSWORD")
+	delete(e2.Environment, "BLINKDISK_PASSWORD")
 
 	// should see one snapshot
 	snapshots := clitestutil.ListSnapshotsAndExpectSuccess(t, e2)
@@ -343,7 +343,7 @@ func TestFindManifestsPaginationOverGRPC(t *testing.T) {
 	defer wait()
 	defer kill()
 
-	controlClient, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	controlClient, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             sp.BaseURL,
 		Username:                            controlUsername,
 		Password:                            controlPassword,

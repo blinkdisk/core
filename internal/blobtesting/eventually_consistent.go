@@ -11,11 +11,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var eventuallyConsistentLog = logging.Module("eventually-consistent")

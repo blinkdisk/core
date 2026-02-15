@@ -66,10 +66,10 @@ endif
 
 endif
 
-# detect REPO_OWNER, e.g. 'kopia' for official builds
+# detect REPO_OWNER, e.g. 'blinkdisk' for official builds
 export REPO_OWNER=unknown-repo-owner
 ifneq ($(GITHUB_REPOSITORY),)
-export REPO_OWNER=$(GITHUB_REPOSITORY:%/kopia=%)
+export REPO_OWNER=$(GITHUB_REPOSITORY:%/blinkdisk=%)
 endif
 
 # e.g. 2021-02-19 06:56:21 -0800
@@ -142,7 +142,7 @@ else ifeq ($(GOOS),freebsd)
 	@echo Use pkg to install npm
 	@exit 1
 else
-	go run github.com/kopia/kopia/tools/gettool -tool node:$(NODE_VERSION) --output-dir $(node_base_dir)
+	go run github.com/blinkdisk/core/tools/gettool -tool node:$(NODE_VERSION) --output-dir $(node_base_dir)
 endif
 
 # linter
@@ -155,7 +155,7 @@ linter_flags=-D gofmt -D goimports
 endif
 
 $(linter):
-	go run github.com/kopia/kopia/tools/gettool --tool linter:$(GOLANGCI_LINT_VERSION) --output-dir $(linter_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool linter:$(GOLANGCI_LINT_VERSION) --output-dir $(linter_dir)
 
 install-linter: $(linter)
 
@@ -172,52 +172,52 @@ $(checklocks):
 cli2mdbin=$(TOOLS_DIR)$(slash)cli2md-current$(exe_suffix)
 
 $(cli2mdbin):
-	go build -o $(cli2mdbin) github.com/kopia/kopia/tools/cli2md
+	go build -o $(cli2mdbin) github.com/blinkdisk/core/tools/cli2md
 
 # hugo
 hugo_dir=$(TOOLS_DIR)$(slash)hugo-$(HUGO_VERSION)
 hugo=$(hugo_dir)/hugo$(exe_suffix)
 
 $(hugo):
-	go run github.com/kopia/kopia/tools/gettool --tool hugo:$(HUGO_VERSION) --output-dir $(hugo_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool hugo:$(HUGO_VERSION) --output-dir $(hugo_dir)
 
 # gitchglog
 gitchglog_dir=$(TOOLS_DIR)$(slash)gitchglog-$(GITCHGLOG_VERSION)
 gitchglog=$(gitchglog_dir)/git-chglog$(exe_suffix)
 
 $(gitchglog):
-	go run github.com/kopia/kopia/tools/gettool --tool gitchglog:$(GITCHGLOG_VERSION) --output-dir $(gitchglog_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool gitchglog:$(GITCHGLOG_VERSION) --output-dir $(gitchglog_dir)
 
 # rclone
 rclone_dir=$(TOOLS_DIR)$(slash)rclone-$(RCLONE_VERSION)
 rclone=$(rclone_dir)$(slash)rclone$(exe_suffix)
  
 $(rclone):
-	go run github.com/kopia/kopia/tools/gettool --tool rclone:$(RCLONE_VERSION) --output-dir $(rclone_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool rclone:$(RCLONE_VERSION) --output-dir $(rclone_dir)
 
 # gotestsum
 gotestsum_dir=$(TOOLS_DIR)$(slash)gotestsum-$(GOTESTSUM_VERSION)
 gotestsum=$(gotestsum_dir)$(slash)gotestsum$(exe_suffix)
 
 $(gotestsum):
-	go run github.com/kopia/kopia/tools/gettool --tool gotestsum:$(GOTESTSUM_VERSION) --output-dir $(gotestsum_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool gotestsum:$(GOTESTSUM_VERSION) --output-dir $(gotestsum_dir)
 
 install-gotestsum: $(gotestsum)
 
-# kopia 0.8 for backwards compat testing
-kopia08_version=0.8.4
-kopia08_dir=$(TOOLS_DIR)$(slash)kopia-$(kopia08_version)
-kopia08=$(kopia08_dir)$(slash)kopia$(exe_suffix)
+# blinkdisk 0.8 for backwards compat testing
+blinkdisk08_version=0.8.4
+blinkdisk08_dir=$(TOOLS_DIR)$(slash)blinkdisk-$(blinkdisk08_version)
+blinkdisk08=$(blinkdisk08_dir)$(slash)blinkdisk$(exe_suffix)
 
-$(kopia08):
-	go run github.com/kopia/kopia/tools/gettool --tool kopia:$(kopia08_version) --output-dir $(kopia08_dir)
+$(blinkdisk08):
+	go run github.com/blinkdisk/core/tools/gettool --tool blinkdisk:$(blinkdisk08_version) --output-dir $(blinkdisk08_dir)
 
-kopia017_version=0.17.0
-kopia017_dir=$(TOOLS_DIR)$(slash)kopia-$(kopia017_version)
-kopia017=$(kopia017_dir)$(slash)kopia$(exe_suffix)
+blinkdisk017_version=0.17.0
+blinkdisk017_dir=$(TOOLS_DIR)$(slash)blinkdisk-$(blinkdisk017_version)
+blinkdisk017=$(blinkdisk017_dir)$(slash)blinkdisk$(exe_suffix)
 
-$(kopia017):
-	go run github.com/kopia/kopia/tools/gettool --tool kopia:$(kopia017_version) --output-dir $(kopia017_dir)
+$(blinkdisk017):
+	go run github.com/blinkdisk/core/tools/gettool --tool blinkdisk:$(blinkdisk017_version) --output-dir $(blinkdisk017_dir)
 
 MINIO_MC_PATH=$(TOOLS_DIR)/bin/mc$(exe_suffix)
 
@@ -236,30 +236,30 @@ goreleaser_dir=$(TOOLS_DIR)$(slash)goreleaser-$(GORELEASER_VERSION)
 goreleaser=$(goreleaser_dir)$(slash)goreleaser$(exe_suffix)
 
 $(goreleaser):
-	go run github.com/kopia/kopia/tools/gettool --tool goreleaser:$(GORELEASER_VERSION) --output-dir $(goreleaser_dir)
+	go run github.com/blinkdisk/core/tools/gettool --tool goreleaser:$(GORELEASER_VERSION) --output-dir $(goreleaser_dir)
 
 ifeq ($(IS_PULL_REQUEST),false)
 
 ifneq ($(CI_TAG),)
 # CI, tagged release
-KOPIA_VERSION:=$(CI_TAG)
+BLINKDISK_VERSION:=$(CI_TAG)
 else
 # CI, non-tagged release
-KOPIA_VERSION:=v$(commit_date_ymd).0.$(commit_time_of_day)
+BLINKDISK_VERSION:=v$(commit_date_ymd).0.$(commit_time_of_day)
 endif
 
 else
 
 # non-CI, or CI in PR mode
-KOPIA_VERSION:=v$(date_ymd).0.0-$(shell git rev-parse --short HEAD)
+BLINKDISK_VERSION:=v$(date_ymd).0.0-$(shell git rev-parse --short HEAD)
 
 endif
 
-export KOPIA_VERSION_NO_PREFIX=$(KOPIA_VERSION:v%=%)
+export BLINKDISK_VERSION_NO_PREFIX=$(BLINKDISK_VERSION:v%=%)
 
 # embedded in the HTML pages
-export REACT_APP_SHORT_VERSION_INFO:=$(KOPIA_VERSION)
-export REACT_APP_FULL_VERSION_INFO:=$(KOPIA_VERSION) built on $(date_full) $(hostname)
+export REACT_APP_SHORT_VERSION_INFO:=$(BLINKDISK_VERSION)
+export REACT_APP_FULL_VERSION_INFO:=$(BLINKDISK_VERSION) built on $(date_full) $(hostname)
 
 clean-tools:
 	rm -rf $(TOOLS_DIR)
@@ -267,7 +267,7 @@ clean-tools:
 windows_signing_dir=$(TOOLS_DIR)$(slash)win_signing
 
 # name of the temporary keychain to import signing keys into (will be deleted and re-created by 'signing-tools' target)
-MACOS_KEYCHAIN=kopia-build.keychain
+MACOS_KEYCHAIN=blinkdisk-build.keychain
 export CSC_KEYCHAIN:=$(MACOS_KEYCHAIN)
 export CSC_NAME:=$(MACOS_SIGNING_IDENTITY)
 
@@ -310,15 +310,15 @@ else
 maybehugo=
 endif
 
-ALL_TOOL_VERSIONS=node:$(NODE_VERSION),linter:$(GOLANGCI_LINT_VERSION),hugo:$(HUGO_VERSION),rclone:$(RCLONE_VERSION),gotestsum:$(GOTESTSUM_VERSION),goreleaser:$(GORELEASER_VERSION),kopia:0.8.4,kopia:0.17.0,gitchglog:$(GITCHGLOG_VERSION)
+ALL_TOOL_VERSIONS=node:$(NODE_VERSION),linter:$(GOLANGCI_LINT_VERSION),hugo:$(HUGO_VERSION),rclone:$(RCLONE_VERSION),gotestsum:$(GOTESTSUM_VERSION),goreleaser:$(GORELEASER_VERSION),blinkdisk:0.8.4,blinkdisk:0.17.0,gitchglog:$(GITCHGLOG_VERSION)
 
 verify-all-tool-checksums:
-	go run github.com/kopia/kopia/tools/gettool --test-all \
+	go run github.com/blinkdisk/core/tools/gettool --test-all \
 	  --output-dir /tmp/all-tools \
 	  --tool $(ALL_TOOL_VERSIONS)
 
 regenerate-checksums:
-	go run github.com/kopia/kopia/tools/gettool --regenerate-checksums $(CURDIR)/tools/gettool/checksums.txt \
+	go run github.com/blinkdisk/core/tools/gettool --regenerate-checksums $(CURDIR)/tools/gettool/checksums.txt \
 	  --output-dir /tmp/all-tools \
 	  --tool $(ALL_TOOL_VERSIONS)
 

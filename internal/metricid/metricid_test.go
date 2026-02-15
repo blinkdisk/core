@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/metricid"
+	"github.com/blinkdisk/core/internal/metricid"
 )
 
 func TestMappings(t *testing.T) {

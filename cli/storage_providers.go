@@ -6,8 +6,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // StorageProviderServices is implemented by the cli App that allows the cli

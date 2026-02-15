@@ -1,21 +1,21 @@
-// Package serverapi contains GO types corresponding to Kopia server API.
+// Package serverapi contains GO types corresponding to BlinkDisk server API.
 package serverapi
 
 import (
 	"encoding/json"
 	"time"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 // StatusResponse is the response of 'status' HTTP API command.

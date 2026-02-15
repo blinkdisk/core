@@ -8,10 +8,10 @@ import (
 
 	atunits "github.com/alecthomas/units"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/ecc"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/ecc"
 )
 
 type commandBenchmarkEcc struct {

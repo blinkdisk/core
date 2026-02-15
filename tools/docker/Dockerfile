@@ -5,12 +5,12 @@ ARG 		TARGETARCH
 ENV 		DEBIAN_FRONTEND="noninteractive" \
 		    TERM="xterm-256color" \
 		    LC_ALL="C.UTF-8" \
-		    KOPIA_CONFIG_PATH=/app/config/repository.config \
-		    KOPIA_LOG_DIR=/app/logs \
-		    KOPIA_CACHE_DIRECTORY=/app/cache \
+		    BLINKDISK_CONFIG_PATH=/app/config/repository.config \
+		    BLINKDISK_LOG_DIR=/app/logs \
+		    BLINKDISK_CACHE_DIRECTORY=/app/cache \
 		    RCLONE_CONFIG=/app/rclone/rclone.conf \
-		    KOPIA_PERSIST_CREDENTIALS_ON_CONNECT=false \
-		    KOPIA_CHECK_FOR_UPDATES=false
+		    BLINKDISK_PERSIST_CREDENTIALS_ON_CONNECT=false \
+		    BLINKDISK_CHECK_FOR_UPDATES=false
 
 RUN 		apt-get update && \
 		    apt-get upgrade -y --with-new-pkgs && \
@@ -23,7 +23,7 @@ RUN 		apt-get update && \
 	
 WORKDIR /app
 
-COPY 		bin-${TARGETARCH}/kopia /bin/kopia
+COPY 		bin-${TARGETARCH}/blinkdisk /bin/blinkdisk
 COPY 		bin-${TARGETARCH}/rclone /bin/rclone
   
-ENTRYPOINT 	["/bin/kopia"]
+ENTRYPOINT 	["/bin/blinkdisk"]

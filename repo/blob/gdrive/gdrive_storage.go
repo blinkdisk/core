@@ -17,17 +17,17 @@ import (
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (
 	gdriveStorageType = "gdrive"
-	blobMimeType      = "application/x-kopia"
+	blobMimeType      = "application/x-blinkdisk"
 
 	uploadChunkSize   = 1 << 20
 	uploadContentType = "application/octet-stream"
@@ -566,7 +566,7 @@ func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error)
 
 	// verify Drive connection is functional by listing blobs in a bucket, which will fail if the bucket
 	// does not exist. We list with a prefix that will not exist, to avoid iterating through any objects.
-	nonExistentPrefix := fmt.Sprintf("kopia-gdrive-storage-initializing-%v", clock.Now().UnixNano())
+	nonExistentPrefix := fmt.Sprintf("blinkdisk-gdrive-storage-initializing-%v", clock.Now().UnixNano())
 
 	err = gdrive.ListBlobs(ctx, blob.ID(nonExistentPrefix), func(_ blob.Metadata) error {
 		return nil

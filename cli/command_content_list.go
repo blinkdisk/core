@@ -6,10 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/stats"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/stats"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 type commandContentList struct {

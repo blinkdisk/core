@@ -1,4 +1,4 @@
-// Package servertesting provides helpers for launching and testing Kopia server.
+// Package servertesting provides helpers for launching and testing BlinkDisk server.
 package servertesting
 
 import (
@@ -13,14 +13,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/passwordpersist"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/server"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/passwordpersist"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/server"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 const (

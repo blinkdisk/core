@@ -14,9 +14,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func TestUserAgent(t *testing.T) {
@@ -25,11 +25,11 @@ func TestUserAgent(t *testing.T) {
 	storageAccount := "testAccount"
 	storageKey := base64.StdEncoding.EncodeToString([]byte("testKey"))
 
-	var seenKopiaUserAgent atomic.Bool
+	var seenBlinkDiskUserAgent atomic.Bool
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.Header.Get("User-Agent"), blob.ApplicationID) {
-			seenKopiaUserAgent.Store(true)
+			seenBlinkDiskUserAgent.Store(true)
 		}
 
 		w.WriteHeader(http.StatusOK)
@@ -59,13 +59,13 @@ func TestUserAgent(t *testing.T) {
 	}
 
 	// Test that the User-Agent is set correctly by calling ListBlobs.
-	nonExistentPrefix := fmt.Sprintf("kopia-azure-storage-initializing-%v", clock.Now().UnixNano())
+	nonExistentPrefix := fmt.Sprintf("blinkdisk-azure-storage-initializing-%v", clock.Now().UnixNano())
 	err = raw.ListBlobs(ctx, blob.ID(nonExistentPrefix), func(_ blob.Metadata) error {
 		return nil
 	})
 	require.Error(t, err)
 
 	require.EventuallyWithT(t, func(collect *assert.CollectT) {
-		require.True(collect, seenKopiaUserAgent.Load())
+		require.True(collect, seenBlinkDiskUserAgent.Load())
 	}, time.Minute, 100*time.Millisecond)
 }

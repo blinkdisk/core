@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/term"
 
-	"github.com/kopia/kopia/internal/passwordpersist"
+	"github.com/blinkdisk/core/internal/passwordpersist"
 )
 
 func askForNewRepositoryPassword(out io.Writer) (string, error) {
@@ -71,7 +71,7 @@ func (c *App) setPasswordFromToken(pwd string) {
 func (c *App) getPasswordFromFlags(ctx context.Context, isCreate, allowPersistent bool) (string, error) {
 	switch {
 	case c.password != "":
-		// password provided via --password flag or KOPIA_PASSWORD environment variable
+		// password provided via --password flag or BLINKDISK_PASSWORD environment variable
 		return strings.TrimSpace(c.password), nil
 	case isCreate:
 		// this is a new repository, ask for password

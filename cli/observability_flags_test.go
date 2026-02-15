@@ -10,8 +10,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestMetricsPushFlags(t *testing.T) {
@@ -59,17 +59,17 @@ func TestMetricsPushFlags(t *testing.T) {
 	)
 
 	require.Equal(t, []string{
-		"/metrics/job/kopia",     // initial
-		"/metrics/job/kopia",     // final
-		"/metrics/job/kopia/a/b", // initial
-		"/metrics/job/kopia/a/b", // final
+		"/metrics/job/blinkdisk",     // initial
+		"/metrics/job/blinkdisk",     // final
+		"/metrics/job/blinkdisk/a/b", // initial
+		"/metrics/job/blinkdisk/a/b", // final
 	}, urls)
 
 	require.Equal(t, "user1:pass1", auths[len(auths)-1])
 
 	for _, b := range bodies {
-		// make sure bodies include some kopia metrics, don't need more
-		require.Contains(t, b, "kopia_cache_hit_bytes_total")
+		// make sure bodies include some blinkdisk metrics, don't need more
+		require.Contains(t, b, "blinkdisk_cache_hit_bytes_total")
 	}
 
 	env.RunAndExpectFailure(t, "repo", "status",

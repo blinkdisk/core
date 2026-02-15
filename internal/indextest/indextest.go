@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 // InfoDiff returns a list of differences between two index.Info, empty if they are equal.

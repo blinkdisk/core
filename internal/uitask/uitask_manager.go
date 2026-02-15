@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (

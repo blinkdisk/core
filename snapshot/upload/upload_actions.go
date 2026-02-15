@@ -16,10 +16,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 const (
@@ -38,11 +38,11 @@ type actionContext struct {
 
 func (hc *actionContext) envars(actionType string) []string {
 	return []string{
-		fmt.Sprintf("KOPIA_ACTION=%v", actionType),
-		fmt.Sprintf("KOPIA_SNAPSHOT_ID=%v", hc.SnapshotID),
-		fmt.Sprintf("KOPIA_SOURCE_PATH=%v", hc.SourcePath),
-		fmt.Sprintf("KOPIA_SNAPSHOT_PATH=%v", hc.SnapshotPath),
-		fmt.Sprintf("KOPIA_VERSION=%v", repo.BuildVersion),
+		fmt.Sprintf("BLINKDISK_ACTION=%v", actionType),
+		fmt.Sprintf("BLINKDISK_SNAPSHOT_ID=%v", hc.SnapshotID),
+		fmt.Sprintf("BLINKDISK_SOURCE_PATH=%v", hc.SourcePath),
+		fmt.Sprintf("BLINKDISK_SNAPSHOT_PATH=%v", hc.SnapshotPath),
+		fmt.Sprintf("BLINKDISK_VERSION=%v", repo.BuildVersion),
 	}
 }
 
@@ -71,7 +71,7 @@ func (hc *actionContext) ensureInitialized(ctx context.Context, actionType, dirP
 	hc.SourcePath = dirPathOrEmpty
 	hc.SnapshotPath = hc.SourcePath
 
-	wd, err := os.MkdirTemp("", "kopia-action")
+	wd, err := os.MkdirTemp("", "blinkdisk-action")
 	if err != nil {
 		return errors.Wrap(err, "error temporary directory for action execution")
 	}
@@ -210,18 +210,18 @@ func (u *Uploader) executeBeforeFolderAction(ctx context.Context, actionType str
 	uploadLog(ctx).Debugf("running action %v on %v %#v", actionType, hc.SourcePath, *h)
 
 	captures := map[string]string{
-		"KOPIA_SNAPSHOT_PATH": "",
+		"BLINKDISK_SNAPSHOT_PATH": "",
 	}
 
 	if err := runActionCommand(ctx, actionType, h, hc.envars(actionType), captures, hc.WorkDir); err != nil {
 		return nil, errors.Wrapf(err, "error running '%v' action", actionType)
 	}
 
-	if p := captures["KOPIA_SNAPSHOT_PATH"]; p != "" {
+	if p := captures["BLINKDISK_SNAPSHOT_PATH"]; p != "" {
 		hc.SnapshotPath = p
 		d, err := localfs.Directory(hc.SnapshotPath)
 
-		return d, errors.Wrap(err, "error getting local directory specified in KOPIA_SNAPSHOT_PATH")
+		return d, errors.Wrap(err, "error getting local directory specified in BLINKDISK_SNAPSHOT_PATH")
 	}
 
 	return nil, nil

@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 func restoreCounters(s restore.Stats) map[string]uitask.CounterValue {

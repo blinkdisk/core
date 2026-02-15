@@ -5,9 +5,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 // ContentFormat describes the rules for formatting contents in repository.
@@ -16,11 +16,11 @@ type ContentFormat struct {
 	Encryption         string `json:"encryption,omitempty"`                  // identifier of the encryption algorithm used
 	ECC                string `json:"ecc,omitempty"`                         // identifier of the ecc algorithm used
 	ECCOverheadPercent int    `json:"eccOverheadPercent,omitempty"`          // space overhead for ecc
-	HMACSecret         []byte `json:"secret,omitempty" kopia:"sensitive"`    // HMAC secret used to generate encryption keys
-	MasterKey          []byte `json:"masterKey,omitempty" kopia:"sensitive"` // master encryption key (SIV-mode encryption only)
+	HMACSecret         []byte `json:"secret,omitempty" blinkdisk:"sensitive"`    // HMAC secret used to generate encryption keys
+	MasterKey          []byte `json:"masterKey,omitempty" blinkdisk:"sensitive"` // master encryption key (SIV-mode encryption only)
 	MutableParameters
 
-	EnablePasswordChange bool `json:"enablePasswordChange"` // disables replication of kopia.repository blob in packs
+	EnablePasswordChange bool `json:"enablePasswordChange"` // disables replication of blinkdisk.repository blob in packs
 }
 
 // ResolveFormatVersion applies format options parameters based on the format version.

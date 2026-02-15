@@ -18,16 +18,16 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/tlsutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
-	"github.com/kopia/kopia/repo/jsonencoding"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/tlsutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/jsonencoding"
 )
 
 const (
@@ -44,17 +44,17 @@ const (
 	awsStsEndpointUSWest2 = "https://sts.us-west-2.amazonaws.com"
 
 	// env vars need to be set to execute TestS3StorageAWS.
-	testEndpointEnv        = "KOPIA_S3_TEST_ENDPOINT"
-	testAccessKeyIDEnv     = "KOPIA_S3_TEST_ACCESS_KEY_ID"
-	testSecretAccessKeyEnv = "KOPIA_S3_TEST_SECRET_ACCESS_KEY"
-	testBucketEnv          = "KOPIA_S3_TEST_BUCKET"
-	testLockedBucketEnv    = "KOPIA_S3_TEST_LOCKED_BUCKET"
-	testRegionEnv          = "KOPIA_S3_TEST_REGION"
-	testRoleEnv            = "KOPIA_S3_TEST_ROLE"
+	testEndpointEnv        = "BLINKDISK_S3_TEST_ENDPOINT"
+	testAccessKeyIDEnv     = "BLINKDISK_S3_TEST_ACCESS_KEY_ID"
+	testSecretAccessKeyEnv = "BLINKDISK_S3_TEST_SECRET_ACCESS_KEY"
+	testBucketEnv          = "BLINKDISK_S3_TEST_BUCKET"
+	testLockedBucketEnv    = "BLINKDISK_S3_TEST_LOCKED_BUCKET"
+	testRegionEnv          = "BLINKDISK_S3_TEST_REGION"
+	testRoleEnv            = "BLINKDISK_S3_TEST_ROLE"
 	// additional env vars need to be set to execute TestS3StorageAWSSTS.
-	testSTSAccessKeyIDEnv     = "KOPIA_S3_TEST_STS_ACCESS_KEY_ID"
-	testSTSSecretAccessKeyEnv = "KOPIA_S3_TEST_STS_SECRET_ACCESS_KEY"
-	testSessionTokenEnv       = "KOPIA_S3_TEST_SESSION_TOKEN"
+	testSTSAccessKeyIDEnv     = "BLINKDISK_S3_TEST_STS_ACCESS_KEY_ID"
+	testSTSSecretAccessKeyEnv = "BLINKDISK_S3_TEST_STS_SECRET_ACCESS_KEY"
+	testSessionTokenEnv       = "BLINKDISK_S3_TEST_SESSION_TOKEN"
 
 	expiredBadSSL       = "https://expired.badssl.com/"
 	selfSignedBadSSL    = "https://self-signed.badssl.com/"
@@ -63,10 +63,10 @@ const (
 )
 
 var providerCreds = map[string]string{
-	"S3":               "KOPIA_S3_CREDS",
-	"S3-Versioned":     "KOPIA_S3_VERSIONED_CREDS",
-	"Wasabi":           "KOPIA_S3_WASABI_CREDS",
-	"Wasabi-Versioned": "KOPIA_S3_WASABI_VERSIONED_CREDS",
+	"S3":               "BLINKDISK_S3_CREDS",
+	"S3-Versioned":     "BLINKDISK_S3_VERSIONED_CREDS",
+	"Wasabi":           "BLINKDISK_S3_WASABI_CREDS",
+	"Wasabi-Versioned": "BLINKDISK_S3_WASABI_VERSIONED_CREDS",
 }
 
 // startDockerMinioOrSkip starts ephemeral minio instance on a random port and returns the endpoint ("localhost:xxx").
@@ -493,7 +493,7 @@ func TestS3StorageMinioSTS(t *testing.T) {
 
 	time.Sleep(2 * time.Second)
 
-	kopiaCreds := createMinioSessionToken(t, minioEndpoint, minioRootAccessKeyID, minioRootSecretAccessKey, minioBucketName)
+	blinkdiskCreds := createMinioSessionToken(t, minioEndpoint, minioRootAccessKeyID, minioRootSecretAccessKey, minioBucketName)
 
 	createBucket(t, &Options{
 		Endpoint:        minioEndpoint,
@@ -504,15 +504,15 @@ func TestS3StorageMinioSTS(t *testing.T) {
 		DoNotUseTLS:     true,
 	})
 
-	require.NotEqual(t, minioRootAccessKeyID, kopiaCreds.AccessKeyID)
-	require.NotEqual(t, minioRootSecretAccessKey, kopiaCreds.SecretAccessKey)
-	require.NotEmpty(t, kopiaCreds.SessionToken)
+	require.NotEqual(t, minioRootAccessKeyID, blinkdiskCreds.AccessKeyID)
+	require.NotEqual(t, minioRootSecretAccessKey, blinkdiskCreds.SecretAccessKey)
+	require.NotEmpty(t, blinkdiskCreds.SessionToken)
 
 	testStorage(t, &Options{
 		Endpoint:        minioEndpoint,
-		AccessKeyID:     kopiaCreds.AccessKeyID,
-		SecretAccessKey: kopiaCreds.SecretAccessKey,
-		SessionToken:    kopiaCreds.SessionToken,
+		AccessKeyID:     blinkdiskCreds.AccessKeyID,
+		SecretAccessKey: blinkdiskCreds.SecretAccessKey,
+		SessionToken:    blinkdiskCreds.SessionToken,
 		BucketName:      minioBucketName,
 		Region:          minioRegion,
 		DoNotUseTLS:     true,
@@ -746,12 +746,12 @@ func makeBucket(tb testing.TB, cli *minio.Client, opt *Options, objectLocking bo
 	}
 }
 
-func createMinioSessionToken(t *testing.T, minioEndpoint, kopiaUserName, kopiaUserPasswd, bucketName string) credentials.Value {
+func createMinioSessionToken(t *testing.T, minioEndpoint, blinkdiskUserName, blinkdiskUserPasswd, bucketName string) credentials.Value {
 	t.Helper()
 
 	stsOpts := credentials.STSAssumeRoleOptions{
-		AccessKey:       kopiaUserName,
-		SecretKey:       kopiaUserPasswd,
+		AccessKey:       blinkdiskUserName,
+		SecretKey:       blinkdiskUserPasswd,
 		DurationSeconds: 900,
 		Policy: fmt.Sprintf(`{
 			"Version":"2012-10-17",
@@ -771,7 +771,7 @@ func createMinioSessionToken(t *testing.T, minioEndpoint, kopiaUserName, kopiaUs
 			]}`, bucketName, bucketName),
 		// RoleArn and RoleSessionName are not meaningful for MinIO and can be set to any value
 		RoleARN:         "arn:xxx:xxx:xxx:xxxx",
-		RoleSessionName: "kopiaTestSession",
+		RoleSessionName: "blinkdiskTestSession",
 	}
 
 	if !strings.HasPrefix(minioEndpoint, "http") {

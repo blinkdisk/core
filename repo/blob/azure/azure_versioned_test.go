@@ -10,13 +10,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/azure"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/azure"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 func TestGetBlobVersionsFailsWhenVersioningDisabled(t *testing.T) {
@@ -50,7 +50,7 @@ func TestGetBlobVersionsFailsWhenVersioningDisabled(t *testing.T) {
 	})
 
 	// required for PIT versioning check
-	err = st.PutBlob(ctx, format.KopiaRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
+	err = st.PutBlob(ctx, format.BlinkDiskRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
 	require.NoError(t, err)
 
 	pit := clock.Now()
@@ -92,9 +92,9 @@ func TestGetBlobVersions(t *testing.T) {
 	})
 
 	// required for PIT versioning check
-	err = st.PutBlob(ctx, format.KopiaRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
+	err = st.PutBlob(ctx, format.BlinkDiskRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
 	require.NoError(t, err)
-	err = st.DeleteBlob(ctx, format.KopiaRepositoryBlobID) // blob can be deleted and still work
+	err = st.DeleteBlob(ctx, format.BlinkDiskRepositoryBlobID) // blob can be deleted and still work
 	require.NoError(t, err)
 
 	const (
@@ -203,7 +203,7 @@ func TestGetBlobVersionsWithDeletion(t *testing.T) {
 	})
 
 	// required for PIT versioning check
-	err = st.PutBlob(ctx, format.KopiaRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
+	err = st.PutBlob(ctx, format.BlinkDiskRepositoryBlobID, gather.FromSlice([]byte(nil)), blob.PutOptions{})
 	require.NoError(t, err)
 
 	const (

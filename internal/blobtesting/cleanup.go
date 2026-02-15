@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/parallelwork"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/parallelwork"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // MinCleanupAge is the default cleanup age.

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/crypto"
+	"github.com/blinkdisk/core/internal/crypto"
 )
 
 func TestDeriveKeyFromMasterKey(t *testing.T) {

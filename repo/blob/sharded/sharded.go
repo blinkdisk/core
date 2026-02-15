@@ -11,10 +11,10 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/parallelwork"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/parallelwork"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 // CompleteBlobSuffix is the extension for sharded blobs that have completed writing.

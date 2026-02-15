@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/impossible"
+	"github.com/blinkdisk/core/internal/impossible"
 )
 
 const compressionHeaderSize = 4

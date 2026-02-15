@@ -9,12 +9,12 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/content/indexblob"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/content/indexblob"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 type commandRepositoryUpgrade struct {
@@ -35,9 +35,9 @@ type commandRepositoryUpgrade struct {
 const (
 	experimentalWarning = `WARNING: The upgrade command is an EXPERIMENTAL feature. Please DO NOT use it, it may corrupt your repository and cause data loss.
 
-You will need to set the env variable KOPIA_UPGRADE_LOCK_ENABLED in order to use this feature.
+You will need to set the env variable BLINKDISK_UPGRADE_LOCK_ENABLED in order to use this feature.
 `
-	upgradeLockFeatureEnv         = "KOPIA_UPGRADE_LOCK_ENABLED"
+	upgradeLockFeatureEnv         = "BLINKDISK_UPGRADE_LOCK_ENABLED"
 	maxPermittedClockDriftDefault = 5 * time.Minute
 )
 
@@ -58,7 +58,7 @@ func (c *commandRepositoryUpgrade) setup(svc advancedAppServices, parent command
 		})
 
 	beginCmd := parent.Command("begin", "Begin upgrade.")
-	beginCmd.Flag("io-drain-timeout", "Max time it should take all other Kopia clients to drop repository connections").Default(format.DefaultRepositoryBlobCacheDuration.String()).DurationVar(&c.ioDrainTimeout)
+	beginCmd.Flag("io-drain-timeout", "Max time it should take all other BlinkDisk clients to drop repository connections").Default(format.DefaultRepositoryBlobCacheDuration.String()).DurationVar(&c.ioDrainTimeout)
 	beginCmd.Flag("allow-unsafe-upgrade", "Force using an unsafe io-drain-timeout for the upgrade lock").Default("false").Hidden().BoolVar(&c.allowUnsafeUpgradeTimings)
 	beginCmd.Flag("status-poll-interval", "An advisory polling interval to check for the status of upgrade").Default("60s").DurationVar(&c.statusPollInterval)
 	beginCmd.Flag("max-permitted-clock-drift", "The maximum drift between repository and client clocks").Default(maxPermittedClockDriftDefault.String()).DurationVar(&c.maxPermittedClockDrift)
@@ -412,7 +412,7 @@ func (c *commandRepositoryUpgrade) drainAllClients(ctx context.Context, rep repo
 		upgradeTime := l.UpgradeTime()
 		now := rep.Time()
 
-		log(ctx).Infof("Waiting for %s to allow all other kopia clients to drain ...", upgradeTime.Sub(rep.Time()).Round(time.Second))
+		log(ctx).Infof("Waiting for %s to allow all other blinkdisk clients to drain ...", upgradeTime.Sub(rep.Time()).Round(time.Second))
 
 		locked, writersDrained := l.IsLocked(now)
 		if locked {

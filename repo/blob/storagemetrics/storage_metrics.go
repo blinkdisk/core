@@ -5,9 +5,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type blobMetrics struct {

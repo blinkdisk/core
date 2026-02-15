@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 const (

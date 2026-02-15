@@ -1,10 +1,10 @@
 # Multi-client Robustness Test
 
-The Kopia multi-client robustness test is intended to verify the correct restoration of application persistent data over time. The test design is similar to the standard Kopia robustness test, reusing the main test engine and most of its components. However, this test suite uses Kopia's client-server mechanisms to run multiple clients concurrently.
+The BlinkDisk multi-client robustness test is intended to verify the correct restoration of application persistent data over time. The test design is similar to the standard BlinkDisk robustness test, reusing the main test engine and most of its components. However, this test suite uses BlinkDisk's client-server mechanisms to run multiple clients concurrently.
 
 ## Components
 
-The multi-client Kopia robustness test has the following components:
+The multi-client BlinkDisk robustness test has the following components:
 
 - `MultiClientFileWriter`  
   This is an implementation of the `robustness.FileWriter` interface that creates and manages client `FileWriter`'s. In addition, the `MultiClientFileWriter` delegates `FileWriter` function calls to a client's specific `FileWriter`.
@@ -13,15 +13,15 @@ The multi-client Kopia robustness test has the following components:
   This is an implementation of the `Snapshotter` interface that creates and manages a single `Server` and one `ClientSnapshotter` per client. In addition, the `MultiClientSnapshotter` delegates `Snapshotter` function calls to a client's specific `ClientSnapshotter`.
 
 - `Server`  
-  This is the component responsible for setting up and managing the Kopia server. It has the following functionality:
-  - Set up or connect to a Kopia repository and create a server for clients to connect to
+  This is the component responsible for setting up and managing the BlinkDisk server. It has the following functionality:
+  - Set up or connect to a BlinkDisk repository and create a server for clients to connect to
   - Add and remove permissions for new clients
-  - Run commands directly on the Kopia repo, such as garbage collection
+  - Run commands directly on the BlinkDisk repo, such as garbage collection
 
 - `ClientSnapshotter`  
   This is a `Snapshotter` with the added functionality of being able to connect to and disconnect from a server.
 
-The diagram below shows the standard Kopia robustness test framework on the left and the multi-client framework on the right. It illustrates how the components described above fit into the engine and delegate actions to client instantiations of the `FileWriter` and `ClientSnapshotter` components.
+The diagram below shows the standard BlinkDisk robustness test framework on the left and the multi-client framework on the right. It illustrates how the components described above fit into the engine and delegate actions to client instantiations of the `FileWriter` and `ClientSnapshotter` components.
 
 ![robustness-test-diagram](./multiclient-diagram.svg)
 

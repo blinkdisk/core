@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 // Directory returns an error due to mounting being unsupported on current operating system.

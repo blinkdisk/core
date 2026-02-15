@@ -5,9 +5,9 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // storageInMemoryFlags is in-memory storage initialization flags for cli

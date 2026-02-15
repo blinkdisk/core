@@ -8,16 +8,16 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 func TestGetRepositoryStatus(t *testing.T) {
 	repoDir := t.TempDir()
 
 	ks, err := NewSnapshotter(repoDir)
-	if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-		t.Skip("KOPIA_EXE not set, skipping test")
+	if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+		t.Skip("BLINKDISK_EXE not set, skipping test")
 	}
 
 	err = ks.ConnectOrCreateRepo(repoDir)

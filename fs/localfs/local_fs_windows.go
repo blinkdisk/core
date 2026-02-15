@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 var isWindows = runtime.GOOS == "windows"

@@ -7,12 +7,12 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/mount"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/mount"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 //nolint:interfacebloat

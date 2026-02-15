@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/feature"
+	"github.com/blinkdisk/core/internal/feature"
 )
 
 // RepositoryConfig describes the format of objects in a repository.
@@ -24,7 +24,7 @@ type EncryptedRepositoryConfig struct {
 }
 
 // decryptRepositoryConfig decrypts RepositoryConfig stored in EncryptedFormatBytes.
-func (f *KopiaRepositoryJSON) decryptRepositoryConfig(masterKey []byte) (*RepositoryConfig, error) {
+func (f *BlinkDiskRepositoryJSON) decryptRepositoryConfig(masterKey []byte) (*RepositoryConfig, error) {
 	switch f.EncryptionAlgorithm {
 	case aes256GcmEncryption:
 		plainText, err := decryptRepositoryBlobBytesAes256Gcm(f.EncryptedFormatBytes, masterKey, f.UniqueID)
@@ -45,7 +45,7 @@ func (f *KopiaRepositoryJSON) decryptRepositoryConfig(masterKey []byte) (*Reposi
 }
 
 // EncryptRepositoryConfig encrypts the provided repository config and stores it in EncryptedFormatBytes.
-func (f *KopiaRepositoryJSON) EncryptRepositoryConfig(format *RepositoryConfig, masterKey []byte) error {
+func (f *BlinkDiskRepositoryJSON) EncryptRepositoryConfig(format *RepositoryConfig, masterKey []byte) error {
 	switch f.EncryptionAlgorithm {
 	case aes256GcmEncryption:
 		data, err := json.Marshal(&EncryptedRepositoryConfig{Format: *format})

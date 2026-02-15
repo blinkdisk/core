@@ -7,10 +7,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/cli"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/cli"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestRepositoryUpgrade(t *testing.T) {
@@ -19,7 +19,7 @@ func (s *formatSpecificTestSuite) TestRepositoryUpgrade(t *testing.T) {
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir)
 	out := env.RunAndExpectSuccess(t, "repository", "status", "--upgrade-no-block")
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	switch s.formatVersion {
 	case format.FormatVersion1:
@@ -62,7 +62,7 @@ func (s *formatSpecificTestSuite) TestRepositoryCorruptedUpgrade(t *testing.T) {
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir)
 	out := env.RunAndExpectSuccess(t, "repository", "status", "--upgrade-no-block")
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	switch s.formatVersion {
 	case format.FormatVersion1:
@@ -108,7 +108,7 @@ func (s *formatSpecificTestSuite) TestRepositoryUpgradeCommitNever(t *testing.T)
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir)
 	stdout := env.RunAndExpectSuccess(t, "repository", "status", "--upgrade-no-block")
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	switch s.formatVersion {
 	case format.FormatVersion1:
@@ -157,7 +157,7 @@ func (s *formatSpecificTestSuite) TestRepositoryUpgradeCommitAlways(t *testing.T
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir)
 	out := env.RunAndExpectSuccess(t, "repository", "status", "--upgrade-no-block")
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	switch s.formatVersion {
 	case format.FormatVersion1:
@@ -216,7 +216,7 @@ func (s *formatSpecificTestSuite) TestRepositoryUpgradeStatusWhileLocked(t *test
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir)
 	out := env.RunAndExpectSuccess(t, "repository", "status", "--upgrade-no-block")
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	switch s.formatVersion {
 	case format.FormatVersion1:

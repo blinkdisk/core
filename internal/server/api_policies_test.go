@@ -8,21 +8,21 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/servertesting"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/servertesting"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 func TestPolicies(t *testing.T) {
 	ctx, env := repotesting.NewEnvironment(t, repotesting.FormatNotImportant)
 	srvInfo := servertesting.StartServer(t, env, false)
 
-	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+	cli, err := apiclient.NewBlinkDiskAPIClient(apiclient.Options{
 		BaseURL:                             srvInfo.BaseURL,
 		TrustedServerCertificateFingerprint: srvInfo.TrustedServerCertificateFingerprint,
 		Username:                            servertesting.TestUIUsername,

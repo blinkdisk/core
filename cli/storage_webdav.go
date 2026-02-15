@@ -6,8 +6,8 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/webdav"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/webdav"
 )
 
 type storageWebDAVFlags struct {
@@ -18,8 +18,8 @@ type storageWebDAVFlags struct {
 func (c *storageWebDAVFlags) Setup(svc StorageProviderServices, cmd *kingpin.CmdClause) {
 	cmd.Flag("url", "URL of WebDAV server").Required().StringVar(&c.options.URL)
 	cmd.Flag("flat", "Use flat directory structure").BoolVar(&c.connectFlat)
-	cmd.Flag("webdav-username", "WebDAV username").Envar(svc.EnvName("KOPIA_WEBDAV_USERNAME")).StringVar(&c.options.Username)
-	cmd.Flag("webdav-password", "WebDAV password").Envar(svc.EnvName("KOPIA_WEBDAV_PASSWORD")).StringVar(&c.options.Password)
+	cmd.Flag("webdav-username", "WebDAV username").Envar(svc.EnvName("BLINKDISK_WEBDAV_USERNAME")).StringVar(&c.options.Username)
+	cmd.Flag("webdav-password", "WebDAV password").Envar(svc.EnvName("BLINKDISK_WEBDAV_PASSWORD")).StringVar(&c.options.Password)
 	cmd.Flag("list-parallelism", "Set list parallelism").Hidden().IntVar(&c.options.ListParallelism)
 	cmd.Flag("atomic-writes", "Assume WebDAV provider implements atomic writes").BoolVar(&c.options.AtomicWrites)
 

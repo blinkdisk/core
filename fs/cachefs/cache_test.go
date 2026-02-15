@@ -14,8 +14,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 const expirationTime = 10 * time.Hour

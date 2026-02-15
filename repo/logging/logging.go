@@ -1,4 +1,4 @@
-// Package logging provides loggers for Kopia.
+// Package logging provides loggers for BlinkDisk.
 package logging
 
 import (
@@ -8,10 +8,10 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/internal/zaplogutil"
+	"github.com/blinkdisk/core/internal/zaplogutil"
 )
 
-// Logger is used by Kopia to emit various logs.
+// Logger is used by BlinkDisk to emit various logs.
 type Logger = *zap.SugaredLogger
 
 // LoggerFactory retrieves a named logger for a given module.

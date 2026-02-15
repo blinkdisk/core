@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 const numEntriesToRead = 100 // number of directory entries to read in one shot

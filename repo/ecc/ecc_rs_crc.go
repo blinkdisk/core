@@ -7,8 +7,8 @@ import (
 	"github.com/klauspost/reedsolomon"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/encryption"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/encryption"
 )
 
 const (

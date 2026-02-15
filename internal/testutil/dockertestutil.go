@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 // RunDockerAndGetOutputOrSkip runs Docker and returns the output as a string.

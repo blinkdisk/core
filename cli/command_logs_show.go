@@ -6,9 +6,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/blobcrypto"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/blobcrypto"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandLogsShow struct {

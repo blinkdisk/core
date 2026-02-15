@@ -6,8 +6,8 @@ import (
 
 	"github.com/kylelemons/godebug/pretty"
 
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestIndexRecover(t *testing.T) {

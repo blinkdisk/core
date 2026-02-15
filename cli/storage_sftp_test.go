@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/blob/sftp"
-	"github.com/kopia/kopia/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/blob/sftp"
+	"github.com/blinkdisk/core/repo/blob/sharded"
 )
 
 func TestSFTPOptions(t *testing.T) {

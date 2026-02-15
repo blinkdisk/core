@@ -18,20 +18,20 @@ import (
 	azblobmodels "github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/timestampmeta"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/timestampmeta"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (
 	azStorageType   = "azureBlob"
 	latestVersionID = ""
 
-	timeMapKey = "Kopiamtime" // this must be capital letter followed by lowercase, to comply with AZ tags naming convention.
+	timeMapKey = "BlinkDiskmtime" // this must be capital letter followed by lowercase, to comply with AZ tags naming convention.
 )
 
 type azStorage struct {
@@ -254,8 +254,8 @@ func (az *azStorage) getBlobMeta(it *azblobmodels.BlobItem) blob.Metadata {
 		Length: *it.Properties.ContentLength,
 	}
 
-	// see if we have 'Kopiamtime' metadata, if so - trust it.
-	if t, ok := timestampmeta.FromValue(stringDefault(it.Metadata["kopiamtime"], "")); ok {
+	// see if we have 'BlinkDiskmtime' metadata, if so - trust it.
+	if t, ok := timestampmeta.FromValue(stringDefault(it.Metadata["blinkdiskmtime"], "")); ok {
 		bm.Timestamp = t
 	} else {
 		bm.Timestamp = *it.Properties.LastModified
@@ -281,7 +281,7 @@ func (az *azStorage) putBlob(ctx context.Context, b blob.ID, data blob.Bytes, op
 	}
 
 	if opts.HasRetentionOptions() {
-		// kopia delete marker blob must be "Unlocked", thus it cannot be overridden to "Locked" here.
+		// blinkdisk delete marker blob must be "Unlocked", thus it cannot be overridden to "Locked" here.
 		mode := azblobblob.ImmutabilityPolicySetting(opts.RetentionMode)
 		retainUntilDate := clock.Now().Add(opts.RetentionPeriod).UTC()
 		uo.ImmutabilityPolicyMode = &mode
@@ -393,7 +393,7 @@ func New(ctx context.Context, opt *Options, isCreate bool) (blob.Storage, error)
 
 	// verify Azure connection is functional by listing blobs in a bucket, which will fail if the container
 	// does not exist. We list with a prefix that will not exist, to avoid iterating through any objects.
-	nonExistentPrefix := fmt.Sprintf("kopia-azure-storage-initializing-%v", clock.Now().UnixNano())
+	nonExistentPrefix := fmt.Sprintf("blinkdisk-azure-storage-initializing-%v", clock.Now().UnixNano())
 
 	if err := raw.ListBlobs(ctx, blob.ID(nonExistentPrefix), func(_ blob.Metadata) error {
 		return nil

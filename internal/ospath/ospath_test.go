@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/ospath"
+	"github.com/blinkdisk/core/internal/ospath"
 )
 
 func TestIsAbs(t *testing.T) {

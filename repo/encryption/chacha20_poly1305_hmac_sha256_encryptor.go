@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/chacha20poly1305"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 const chacha20poly1305hmacSha256EncryptorOverhead = 28

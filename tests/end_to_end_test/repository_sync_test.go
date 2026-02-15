@@ -3,9 +3,9 @@ package endtoend_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/clitestutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/clitestutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestRepositorySync(t *testing.T) {

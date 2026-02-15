@@ -9,9 +9,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 type commandCacheInfo struct {
@@ -101,8 +101,8 @@ func (c *commandCacheInfo) run(ctx context.Context, _ repo.Repository) error {
 		c.out.printStdout("%v: %v files %v%v\n", subdir, fileCount, units.BytesString(totalFileSize), maybeLimit)
 	}
 
-	c.out.printStderr("To adjust cache sizes use 'kopia cache set'.\n")
-	c.out.printStderr("To clear caches use 'kopia cache clear'.\n")
+	c.out.printStderr("To adjust cache sizes use 'blinkdisk cache set'.\n")
+	c.out.printStderr("To clear caches use 'blinkdisk cache clear'.\n")
 
 	return nil
 }

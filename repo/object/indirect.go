@@ -13,7 +13,7 @@ func (i *IndirectObjectEntry) endOffset() int64 {
 
 /*
 
-{"stream":"kopia:indirect","entries":[
+{"stream":"blinkdisk:indirect","entries":[
 {"l":1698099,"o":"D13ea27f9ad891ad4a2edfa983906863d"},
 {"s":1698099,"l":1302081,"o":"De8ca8327cd3af5f4edbd5ed1009c525e"},
 {"s":3000180,"l":4352499,"o":"D6b6eb48ca5361d06d72fe193813e42e1"},

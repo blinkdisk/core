@@ -6,10 +6,10 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 type commandRepositoryRepair struct {
@@ -62,7 +62,7 @@ func (c *commandRepositoryRepair) runRepairCommandWithStorage(ctx context.Contex
 		var tmp gather.WriteBuffer
 		defer tmp.Close()
 
-		if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &tmp); err == nil {
+		if err := st.GetBlob(ctx, format.BlinkDiskRepositoryBlobID, 0, -1, &tmp); err == nil {
 			log(ctx).Info("format blob already exists, not recovering, pass --recover-format=yes")
 			return nil
 		}
@@ -88,7 +88,7 @@ func (c *commandRepositoryRepair) recoverFormatBlob(ctx context.Context, st blob
 
 			if b, err := format.RecoverFormatBlob(ctx, st, bi.BlobID, bi.Length); err == nil {
 				if !c.repairDryRun {
-					if puterr := st.PutBlob(ctx, format.KopiaRepositoryBlobID, gather.FromSlice(b), blob.PutOptions{}); puterr != nil {
+					if puterr := st.PutBlob(ctx, format.BlinkDiskRepositoryBlobID, gather.FromSlice(b), blob.PutOptions{}); puterr != nil {
 						return errors.Wrap(puterr, "error writing format blob")
 					}
 				}

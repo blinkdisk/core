@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap/buffer"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 // PreciseLayout is a variant of time.RFC3339Nano but with microsecond precision

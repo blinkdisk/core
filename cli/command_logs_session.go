@@ -10,9 +10,9 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/repodiag"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/repodiag"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type logSessionInfo struct {

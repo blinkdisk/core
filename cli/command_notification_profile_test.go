@@ -5,10 +5,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/sender/webhook"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/sender/webhook"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestNotificationProfile(t *testing.T) {

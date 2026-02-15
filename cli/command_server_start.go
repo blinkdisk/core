@@ -19,11 +19,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	htpasswd "github.com/tg123/go-htpasswd"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/server"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/sender/jsonsender"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/server"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/sender/jsonsender"
+	"github.com/blinkdisk/core/repo"
 )
 
 const (
@@ -71,7 +71,7 @@ type commandServerStart struct {
 	minMaintenanceInterval              time.Duration
 
 	shutdownGracePeriod  time.Duration
-	kopiauiNotifications bool
+	blinkdiskuiNotifications bool
 
 	logServerRequests bool
 
@@ -83,7 +83,7 @@ type commandServerStart struct {
 }
 
 func (c *commandServerStart) setup(svc advancedAppServices, parent commandParent) {
-	cmd := parent.Command("start", "Start Kopia server")
+	cmd := parent.Command("start", "Start BlinkDisk server")
 	cmd.Flag("html", "Server the provided HTML at the root URL").ExistingDirVar(&c.serverStartHTMLPath)
 	cmd.Flag("ui", "Start the server with HTML UI").Default("true").BoolVar(&c.serverStartUI)
 
@@ -99,10 +99,10 @@ func (c *commandServerStart) setup(svc advancedAppServices, parent commandParent
 	cmd.Flag("htpasswd-file", "Path to htpasswd file that contains allowed user@hostname entries").Hidden().ExistingFileVar(&c.serverStartHtpasswdFile)
 
 	cmd.Flag("random-server-control-password", "Generate random server control password and print to stderr").Hidden().BoolVar(&c.randomServerControlPassword)
-	cmd.Flag("server-control-username", "Server control username").Default(defaultServerControlUsername).Envar(svc.EnvName("KOPIA_SERVER_CONTROL_USER")).StringVar(&c.serverControlUsername)
-	cmd.Flag("server-control-password", "Server control password").PlaceHolder("PASSWORD").Envar(svc.EnvName("KOPIA_SERVER_CONTROL_PASSWORD")).StringVar(&c.serverControlPassword)
+	cmd.Flag("server-control-username", "Server control username").Default(defaultServerControlUsername).Envar(svc.EnvName("BLINKDISK_SERVER_CONTROL_USER")).StringVar(&c.serverControlUsername)
+	cmd.Flag("server-control-password", "Server control password").PlaceHolder("PASSWORD").Envar(svc.EnvName("BLINKDISK_SERVER_CONTROL_PASSWORD")).StringVar(&c.serverControlPassword)
 
-	cmd.Flag("auth-cookie-signing-key", "Force particular auth cookie signing key").Envar(svc.EnvName("KOPIA_AUTH_COOKIE_SIGNING_KEY")).Hidden().StringVar(&c.serverAuthCookieSingingKey)
+	cmd.Flag("auth-cookie-signing-key", "Force particular auth cookie signing key").Envar(svc.EnvName("BLINKDISK_AUTH_COOKIE_SIGNING_KEY")).Hidden().StringVar(&c.serverAuthCookieSingingKey)
 	cmd.Flag("log-scheduler", "Enable logging of scheduler actions").Hidden().Default("true").BoolVar(&c.debugScheduler)
 	cmd.Flag("min-maintenance-interval", "Minimum maintenance interval").Hidden().Default("60s").DurationVar(&c.minMaintenanceInterval)
 
@@ -118,7 +118,7 @@ func (c *commandServerStart) setup(svc advancedAppServices, parent commandParent
 
 	cmd.Flag("async-repo-connect", "Connect to repository asynchronously").Hidden().BoolVar(&c.asyncRepoConnect)
 	cmd.Flag("persistent-logs", "Persist logs in a file").Default("true").BoolVar(&c.persistentLogs)
-	cmd.Flag("ui-title-prefix", "UI title prefix").Hidden().Envar(svc.EnvName("KOPIA_UI_TITLE_PREFIX")).StringVar(&c.uiTitlePrefix)
+	cmd.Flag("ui-title-prefix", "UI title prefix").Hidden().Envar(svc.EnvName("BLINKDISK_UI_TITLE_PREFIX")).StringVar(&c.uiTitlePrefix)
 	cmd.Flag("ui-preferences-file", "Path to JSON file storing UI preferences").StringVar(&c.uiPreferencesFile)
 
 	cmd.Flag("log-server-requests", "Log server requests").Hidden().BoolVar(&c.logServerRequests)
@@ -126,7 +126,7 @@ func (c *commandServerStart) setup(svc advancedAppServices, parent commandParent
 
 	cmd.Flag("shutdown-grace-period", "Grace period for shutting down the server").Default("5s").DurationVar(&c.shutdownGracePeriod)
 
-	cmd.Flag("kopiaui-notifications", "Enable notifications to be printed to stdout for KopiaUI").BoolVar(&c.kopiauiNotifications)
+	cmd.Flag("blinkdiskui-notifications", "Enable notifications to be printed to stdout for BlinkDiskUI").BoolVar(&c.blinkdiskuiNotifications)
 
 	c.sf.setup(svc, cmd)
 	c.co.setup(svc, cmd)
@@ -281,8 +281,8 @@ func (c *commandServerStart) run(ctx context.Context) (reterr error) {
 
 	onExternalConfigReloadRequest(srv.Refresh)
 
-	// enable notification to be printed to stderr where KopiaUI will pick it up
-	if c.kopiauiNotifications {
+	// enable notification to be printed to stderr where BlinkDiskUI will pick it up
+	if c.blinkdiskuiNotifications {
 		notification.AdditionalSenders = append(notification.AdditionalSenders,
 			jsonsender.NewJSONSender(
 				"NOTIFICATION: ",
@@ -383,7 +383,7 @@ func (c *commandServerStart) getAuthenticator(ctx context.Context) (auth.Authent
 
 	log(ctx).Infof(`
 Server will allow connections from users whose accounts are stored in the repository.
-User accounts can be added using 'kopia server user add'.
+User accounts can be added using 'blinkdisk server user add'.
 `)
 
 	// handle user accounts stored in the repository

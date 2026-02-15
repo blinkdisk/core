@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sys/windows"
 
-	"github.com/kopia/kopia/internal/atomicfile"
+	"github.com/blinkdisk/core/internal/atomicfile"
 )
 
 //nolint:revive

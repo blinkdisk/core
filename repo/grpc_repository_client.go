@@ -17,22 +17,22 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	apipb "github.com/kopia/kopia/internal/grpcapi"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/internal/tlsutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/repo/object"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	apipb "github.com/blinkdisk/core/internal/grpcapi"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/internal/tlsutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/repo/object"
 )
 
 // MaxGRPCMessageSize is the maximum size of a message sent or received over GRPC API when talking to
-// Kopia repository server. This is bigger than the size of any possible content, which is
+// BlinkDisk repository server. This is bigger than the size of any possible content, which is
 // defined by supported splitters.
 const MaxGRPCMessageSize = 20 << 20
 
@@ -57,7 +57,7 @@ func errNoSessionResponse() error {
 }
 
 // grpcRepositoryClient is an implementation of Repository that connects to an instance of
-// GPRC API server hosted by `kopia server`.
+// GPRC API server hosted by `blinkdisk server`.
 type grpcRepositoryClient struct {
 	conn *grpc.ClientConn
 
@@ -99,7 +99,7 @@ type grpcInnerSession struct {
 	// +checklocks:activeRequestsMutex
 	activeRequests map[int64]chan *apipb.SessionResponse
 
-	cli        apipb.KopiaRepository_SessionClient
+	cli        apipb.BlinkDiskRepository_SessionClient
 	repoParams *apipb.RepositoryParameters
 
 	wg sync.WaitGroup
@@ -836,14 +836,14 @@ func (c grpcCreds) GetRequestMetadata(_ context.Context, uri ...string) (map[str
 	_ = uri
 
 	return map[string]string{
-		"kopia-hostname":   c.hostname,
-		"kopia-username":   c.username,
-		"kopia-password":   c.password,
-		"kopia-version":    BuildVersion,
-		"kopia-build-info": BuildInfo,
-		"kopia-repo":       BuildGitHubRepo,
-		"kopia-os":         runtime.GOOS,
-		"kopia-arch":       runtime.GOARCH,
+		"blinkdisk-hostname":   c.hostname,
+		"blinkdisk-username":   c.username,
+		"blinkdisk-password":   c.password,
+		"blinkdisk-version":    BuildVersion,
+		"blinkdisk-build-info": BuildInfo,
+		"blinkdisk-repo":       BuildGitHubRepo,
+		"blinkdisk-os":         runtime.GOOS,
+		"blinkdisk-arch":       runtime.GOARCH,
 	}, nil
 }
 
@@ -899,7 +899,7 @@ func baseURLToURI(baseURL string) (uri string, err error) {
 		return "", errors.Wrap(err, "unable to parse server URL")
 	}
 
-	if u.Scheme != "kopia" && u.Scheme != "https" && u.Scheme != "unix+https" {
+	if u.Scheme != "blinkdisk" && u.Scheme != "https" && u.Scheme != "unix+https" {
 		return "", errors.New("invalid server address, must be 'https://host:port' or 'unix+https://<path>")
 	}
 
@@ -916,7 +916,7 @@ func (r *grpcRepositoryClient) getOrEstablishInnerSession(ctx context.Context) (
 	defer r.innerSessionMutex.Unlock()
 
 	if r.innerSession == nil {
-		cli := apipb.NewKopiaRepositoryClient(r.conn)
+		cli := apipb.NewBlinkDiskRepositoryClient(r.conn)
 
 		log(ctx).Debugf("establishing new GRPC streaming session (purpose=%v)", r.opt.Purpose)
 

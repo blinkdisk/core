@@ -7,16 +7,16 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/apiclient"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/repo/blob/throttling"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/apiclient"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 // CreateSnapshotSource creates snapshot source with a given path.
-func CreateSnapshotSource(ctx context.Context, c *apiclient.KopiaAPIClient, req *CreateSnapshotSourceRequest) (*CreateSnapshotSourceResponse, error) {
+func CreateSnapshotSource(ctx context.Context, c *apiclient.BlinkDiskAPIClient, req *CreateSnapshotSourceRequest) (*CreateSnapshotSourceResponse, error) {
 	resp := &CreateSnapshotSourceResponse{}
 	if err := c.Post(ctx, "sources", req, resp); err != nil {
 		return nil, errors.Wrap(err, "CreateSnapshotSource")
@@ -26,7 +26,7 @@ func CreateSnapshotSource(ctx context.Context, c *apiclient.KopiaAPIClient, req 
 }
 
 // Estimate starts snapshot estimation task for a given directory.
-func Estimate(ctx context.Context, c *apiclient.KopiaAPIClient, req *EstimateRequest) (*uitask.Info, error) {
+func Estimate(ctx context.Context, c *apiclient.BlinkDiskAPIClient, req *EstimateRequest) (*uitask.Info, error) {
 	resp := &uitask.Info{}
 	if err := c.Post(ctx, "estimate", req, resp); err != nil {
 		return nil, errors.Wrap(err, "Estimate")
@@ -36,7 +36,7 @@ func Estimate(ctx context.Context, c *apiclient.KopiaAPIClient, req *EstimateReq
 }
 
 // Restore starts snapshot restore task for a given directory.
-func Restore(ctx context.Context, c *apiclient.KopiaAPIClient, req *RestoreRequest) (*uitask.Info, error) {
+func Restore(ctx context.Context, c *apiclient.BlinkDiskAPIClient, req *RestoreRequest) (*uitask.Info, error) {
 	resp := &uitask.Info{}
 	if err := c.Post(ctx, "restore", req, resp); err != nil {
 		return nil, errors.Wrap(err, "Restore")
@@ -46,7 +46,7 @@ func Restore(ctx context.Context, c *apiclient.KopiaAPIClient, req *RestoreReque
 }
 
 // GetTask starts snapshot estimation task for a given directory.
-func GetTask(ctx context.Context, c *apiclient.KopiaAPIClient, taskID string) (*uitask.Info, error) {
+func GetTask(ctx context.Context, c *apiclient.BlinkDiskAPIClient, taskID string) (*uitask.Info, error) {
 	resp := &uitask.Info{}
 	if err := c.Get(ctx, "tasks/"+taskID, nil, resp); err != nil {
 		return nil, errors.Wrap(err, "GetTask")
@@ -56,7 +56,7 @@ func GetTask(ctx context.Context, c *apiclient.KopiaAPIClient, taskID string) (*
 }
 
 // UploadSnapshots triggers snapshot upload on matching snapshots.
-func UploadSnapshots(ctx context.Context, c *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) (*MultipleSourceActionResponse, error) {
+func UploadSnapshots(ctx context.Context, c *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) (*MultipleSourceActionResponse, error) {
 	resp := &MultipleSourceActionResponse{}
 	if err := c.Post(ctx, "sources/upload"+matchSourceParameters(match), &Empty{}, resp); err != nil {
 		return nil, errors.Wrap(err, "UploadSnapshots")
@@ -66,7 +66,7 @@ func UploadSnapshots(ctx context.Context, c *apiclient.KopiaAPIClient, match *sn
 }
 
 // CancelUpload cancels snapshot upload on matching snapshots.
-func CancelUpload(ctx context.Context, c *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) (*MultipleSourceActionResponse, error) {
+func CancelUpload(ctx context.Context, c *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) (*MultipleSourceActionResponse, error) {
 	resp := &MultipleSourceActionResponse{}
 	if err := c.Post(ctx, "sources/cancel"+matchSourceParameters(match), &Empty{}, resp); err != nil {
 		return nil, errors.Wrap(err, "CancelUpload")
@@ -76,31 +76,31 @@ func CancelUpload(ctx context.Context, c *apiclient.KopiaAPIClient, match *snaps
 }
 
 // CreateRepository invokes the 'repo/create' API.
-func CreateRepository(ctx context.Context, c *apiclient.KopiaAPIClient, req *CreateRepositoryRequest) error {
+func CreateRepository(ctx context.Context, c *apiclient.BlinkDiskAPIClient, req *CreateRepositoryRequest) error {
 	//nolint:wrapcheck
 	return c.Post(ctx, "repo/create", req, &StatusResponse{})
 }
 
 // ConnectToRepository invokes the 'repo/connect' API.
-func ConnectToRepository(ctx context.Context, c *apiclient.KopiaAPIClient, req *ConnectRepositoryRequest) error {
+func ConnectToRepository(ctx context.Context, c *apiclient.BlinkDiskAPIClient, req *ConnectRepositoryRequest) error {
 	//nolint:wrapcheck
 	return c.Post(ctx, "repo/connect", req, &StatusResponse{})
 }
 
 // DisconnectFromRepository invokes the 'repo/disconnect' API.
-func DisconnectFromRepository(ctx context.Context, c *apiclient.KopiaAPIClient) error {
+func DisconnectFromRepository(ctx context.Context, c *apiclient.BlinkDiskAPIClient) error {
 	//nolint:wrapcheck
 	return c.Post(ctx, "repo/disconnect", &Empty{}, &Empty{})
 }
 
 // Shutdown invokes the 'control/shutdown' API.
-func Shutdown(ctx context.Context, c *apiclient.KopiaAPIClient) error {
+func Shutdown(ctx context.Context, c *apiclient.BlinkDiskAPIClient) error {
 	//nolint:wrapcheck
 	return c.Post(ctx, "control/shutdown", &Empty{}, &Empty{})
 }
 
 // RepoStatus invokes the 'repo/status' API.
-func RepoStatus(ctx context.Context, c *apiclient.KopiaAPIClient) (*StatusResponse, error) {
+func RepoStatus(ctx context.Context, c *apiclient.BlinkDiskAPIClient) (*StatusResponse, error) {
 	resp := &StatusResponse{}
 	if err := c.Get(ctx, "repo/status", nil, resp); err != nil {
 		return nil, errors.Wrap(err, "Status")
@@ -110,7 +110,7 @@ func RepoStatus(ctx context.Context, c *apiclient.KopiaAPIClient) (*StatusRespon
 }
 
 // Status invokes the 'control/status' API.
-func Status(ctx context.Context, c *apiclient.KopiaAPIClient) (*StatusResponse, error) {
+func Status(ctx context.Context, c *apiclient.BlinkDiskAPIClient) (*StatusResponse, error) {
 	resp := &StatusResponse{}
 	if err := c.Get(ctx, "control/status", nil, resp); err != nil {
 		return nil, errors.Wrap(err, "Status")
@@ -120,7 +120,7 @@ func Status(ctx context.Context, c *apiclient.KopiaAPIClient) (*StatusResponse, 
 }
 
 // GetThrottlingLimits gets the throttling limits.
-func GetThrottlingLimits(ctx context.Context, c *apiclient.KopiaAPIClient) (throttling.Limits, error) {
+func GetThrottlingLimits(ctx context.Context, c *apiclient.BlinkDiskAPIClient) (throttling.Limits, error) {
 	resp := throttling.Limits{}
 	if err := c.Get(ctx, "repo/throttle", nil, &resp); err != nil {
 		return throttling.Limits{}, errors.Wrap(err, "throttling")
@@ -130,7 +130,7 @@ func GetThrottlingLimits(ctx context.Context, c *apiclient.KopiaAPIClient) (thro
 }
 
 // SetThrottlingLimits sets the throttling limits.
-func SetThrottlingLimits(ctx context.Context, c *apiclient.KopiaAPIClient, l throttling.Limits) error {
+func SetThrottlingLimits(ctx context.Context, c *apiclient.BlinkDiskAPIClient, l throttling.Limits) error {
 	if err := c.Put(ctx, "repo/throttle", &l, &Empty{}); err != nil {
 		return errors.Wrap(err, "throttling")
 	}
@@ -139,7 +139,7 @@ func SetThrottlingLimits(ctx context.Context, c *apiclient.KopiaAPIClient, l thr
 }
 
 // ListSources lists the snapshot sources managed by the server.
-func ListSources(ctx context.Context, c *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) (*SourcesResponse, error) {
+func ListSources(ctx context.Context, c *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) (*SourcesResponse, error) {
 	resp := &SourcesResponse{}
 	if err := c.Get(ctx, "sources"+matchSourceParameters(match), nil, resp); err != nil {
 		return nil, errors.Wrap(err, "ListSources")
@@ -149,7 +149,7 @@ func ListSources(ctx context.Context, c *apiclient.KopiaAPIClient, match *snapsh
 }
 
 // ListSnapshots lists the snapshots managed by the server for a given source source.
-func ListSnapshots(ctx context.Context, c *apiclient.KopiaAPIClient, src snapshot.SourceInfo, all bool) (*SnapshotsResponse, error) {
+func ListSnapshots(ctx context.Context, c *apiclient.BlinkDiskAPIClient, src snapshot.SourceInfo, all bool) (*SnapshotsResponse, error) {
 	resp := &SnapshotsResponse{}
 
 	u := "snapshots" + matchSourceParameters(&src)
@@ -165,7 +165,7 @@ func ListSnapshots(ctx context.Context, c *apiclient.KopiaAPIClient, src snapsho
 }
 
 // ListPolicies lists the policies managed by the server for a given target filter.
-func ListPolicies(ctx context.Context, c *apiclient.KopiaAPIClient, match *snapshot.SourceInfo) (*PoliciesResponse, error) {
+func ListPolicies(ctx context.Context, c *apiclient.BlinkDiskAPIClient, match *snapshot.SourceInfo) (*PoliciesResponse, error) {
 	resp := &PoliciesResponse{}
 	if err := c.Get(ctx, "policies"+matchSourceParameters(match), nil, resp); err != nil {
 		return nil, errors.Wrap(err, "ListPolicies")
@@ -179,7 +179,7 @@ func policyTargetURLParameters(si snapshot.SourceInfo) string {
 }
 
 // SetPolicy sets the policy.
-func SetPolicy(ctx context.Context, c *apiclient.KopiaAPIClient, si snapshot.SourceInfo, pol *policy.Policy) error {
+func SetPolicy(ctx context.Context, c *apiclient.BlinkDiskAPIClient, si snapshot.SourceInfo, pol *policy.Policy) error {
 	resp := &Empty{}
 	if err := c.Put(ctx, "policy?"+policyTargetURLParameters(si), pol, resp); err != nil {
 		return errors.Wrap(err, "SetPolicy")
@@ -189,7 +189,7 @@ func SetPolicy(ctx context.Context, c *apiclient.KopiaAPIClient, si snapshot.Sou
 }
 
 // ResolvePolicy resolves the policy.
-func ResolvePolicy(ctx context.Context, c *apiclient.KopiaAPIClient, si snapshot.SourceInfo, req *ResolvePolicyRequest) (*ResolvePolicyResponse, error) {
+func ResolvePolicy(ctx context.Context, c *apiclient.BlinkDiskAPIClient, si snapshot.SourceInfo, req *ResolvePolicyRequest) (*ResolvePolicyResponse, error) {
 	resp := &ResolvePolicyResponse{}
 
 	if err := c.Post(ctx, "policy/resolve?"+policyTargetURLParameters(si), req, resp); err != nil {
@@ -200,7 +200,7 @@ func ResolvePolicy(ctx context.Context, c *apiclient.KopiaAPIClient, si snapshot
 }
 
 // ListTasks lists the tasks.
-func ListTasks(ctx context.Context, c *apiclient.KopiaAPIClient) (*TaskListResponse, error) {
+func ListTasks(ctx context.Context, c *apiclient.BlinkDiskAPIClient) (*TaskListResponse, error) {
 	resp := &TaskListResponse{}
 	if err := c.Get(ctx, "tasks", nil, resp); err != nil {
 		return nil, errors.Wrap(err, "ListTasks")
@@ -210,7 +210,7 @@ func ListTasks(ctx context.Context, c *apiclient.KopiaAPIClient) (*TaskListRespo
 }
 
 // GetObject returns the object payload.
-func GetObject(ctx context.Context, c *apiclient.KopiaAPIClient, objectID string) ([]byte, error) {
+func GetObject(ctx context.Context, c *apiclient.BlinkDiskAPIClient, objectID string) ([]byte, error) {
 	var b []byte
 
 	if err := c.Get(ctx, "objects/"+objectID, object.ErrObjectNotFound, &b); err != nil {

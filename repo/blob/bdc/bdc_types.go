@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/websocket"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // Request represents a WebSocket request message

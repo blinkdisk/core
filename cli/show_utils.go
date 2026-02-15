@@ -14,8 +14,8 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/exp/constraints"
 
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/units"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/units"
 )
 
 const oneHundredPercent = 100.0

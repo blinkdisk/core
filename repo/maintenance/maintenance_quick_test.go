@@ -9,14 +9,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot/snapshotmaintenance"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot/snapshotmaintenance"
 )
 
 // Ensure quick maintenance runs when the epoch manager is enabled.

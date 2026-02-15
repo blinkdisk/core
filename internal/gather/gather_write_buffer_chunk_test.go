@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 func TestWriteBufferChunk(t *testing.T) {

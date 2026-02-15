@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 var log = logging.Module("repomodel") // +checklocksignore

@@ -1,7 +1,7 @@
 package epoch
 
 import (
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // RangeMetadata represents a range of indexes for [min,max] epoch range. Both min and max are inclusive.

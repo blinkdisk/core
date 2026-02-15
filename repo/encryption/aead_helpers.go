@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
+	"github.com/blinkdisk/core/internal/gather"
 )
 
 // aeadSealWithRandomNonce returns AEAD-sealed content prepended with random nonce.

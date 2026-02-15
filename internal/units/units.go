@@ -17,7 +17,7 @@ var (
 )
 
 const (
-	bytesStringBase2Envar = "KOPIA_BYTES_STRING_BASE_2"
+	bytesStringBase2Envar = "BLINKDISK_BYTES_STRING_BASE_2"
 )
 
 func niceNumber(f float64) string {

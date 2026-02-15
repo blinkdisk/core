@@ -9,11 +9,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/tests/robustness"
-	"github.com/kopia/kopia/tests/robustness/engine"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/tests/robustness"
+	"github.com/blinkdisk/core/tests/robustness/engine"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
 )
 
 func TestManySmallFiles(t *testing.T) {

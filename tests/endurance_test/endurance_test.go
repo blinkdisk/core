@@ -14,10 +14,10 @@ import (
 
 	"golang.org/x/net/webdav"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/faketime"
-	"github.com/kopia/kopia/tests/testdirtree"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/faketime"
+	"github.com/blinkdisk/core/tests/testdirtree"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 const (
@@ -77,7 +77,7 @@ func TestEndurance(t *testing.T) {
 	ft := httptest.NewServer(fts)
 	defer ft.Close()
 
-	e.Environment["KOPIA_FAKE_CLOCK_ENDPOINT"] = ft.URL
+	e.Environment["BLINKDISK_FAKE_CLOCK_ENDPOINT"] = ft.URL
 
 	sts := httptest.NewServer(&webdav.Handler{
 		FileSystem: webdavDirWithFakeClock{webdav.Dir(tmpDir), fts},
@@ -213,7 +213,7 @@ func actionAddNewSource(t *testing.T, e *testenv.CLITest, s *runnerState) {
 		return
 	}
 
-	srcDir, err := os.MkdirTemp("", "kopiasrc")
+	srcDir, err := os.MkdirTemp("", "blinkdisksrc")
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
@@ -267,8 +267,8 @@ func enduranceRunner(t *testing.T, runnerID int, fakeTimeServer, webdavServer st
 	runner := testenv.NewExeRunner(t)
 	e := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, runner)
 
-	e.Environment["KOPIA_FAKE_CLOCK_ENDPOINT"] = fakeTimeServer
-	e.Environment["KOPIA_CHECK_FOR_UPDATES"] = "false"
+	e.Environment["BLINKDISK_FAKE_CLOCK_ENDPOINT"] = fakeTimeServer
+	e.Environment["BLINKDISK_CHECK_FOR_UPDATES"] = "false"
 
 	e.RunAndExpectSuccess(t, "repo", "connect", "webdav", "--url", webdavServer, "--override-username="+fmt.Sprintf("runner-%v", runnerID))
 

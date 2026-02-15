@@ -1,4 +1,4 @@
-// Package metrics provides unified way of emitting metrics inside Kopia.
+// Package metrics provides unified way of emitting metrics inside BlinkDisk.
 package metrics
 
 import (
@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/releasable"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/releasable"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("metrics")

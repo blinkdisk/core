@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	apipb "github.com/kopia/kopia/internal/grpcapi"
-	"github.com/kopia/kopia/notification/notifydata"
+	apipb "github.com/blinkdisk/core/internal/grpcapi"
+	"github.com/blinkdisk/core/notification/notifydata"
 )
 
 func TestUnmarshalEventArgs(t *testing.T) {

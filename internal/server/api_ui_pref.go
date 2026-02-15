@@ -9,7 +9,7 @@ import (
 	"github.com/natefinch/atomic"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/serverapi"
+	"github.com/blinkdisk/core/internal/serverapi"
 )
 
 func getUIPreferencesOrEmpty(s serverInterface) (serverapi.UIPreferences, error) {

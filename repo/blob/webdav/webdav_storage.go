@@ -15,12 +15,12 @@ import (
 	"github.com/pkg/errors"
 	"github.com/studio-b12/gowebdav"
 
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/internal/tlsutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/retrying"
-	"github.com/kopia/kopia/repo/blob/sharded"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/internal/tlsutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/retrying"
+	"github.com/blinkdisk/core/repo/blob/sharded"
 )
 
 const (

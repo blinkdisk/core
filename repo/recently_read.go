@@ -3,7 +3,7 @@ package repo
 import (
 	"sync"
 
-	"github.com/kopia/kopia/repo/content"
+	"github.com/blinkdisk/core/repo/content"
 )
 
 type recentlyRead struct {

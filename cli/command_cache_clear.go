@@ -7,9 +7,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo"
 )
 
 type commandCacheClear struct {

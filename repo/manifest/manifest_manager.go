@@ -13,12 +13,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (
@@ -26,7 +26,7 @@ const (
 	manifestIDLength        = 16
 )
 
-var log = logging.Module("kopia/manifest") // +checklocksignore
+var log = logging.Module("blinkdisk/manifest") // +checklocksignore
 
 // ErrNotFound is returned when the metadata item is not found.
 var ErrNotFound = errors.New("not found")

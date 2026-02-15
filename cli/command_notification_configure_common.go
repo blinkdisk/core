@@ -8,10 +8,10 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifyprofile"
-	"github.com/kopia/kopia/notification/sender"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifyprofile"
+	"github.com/blinkdisk/core/notification/sender"
+	"github.com/blinkdisk/core/repo"
 )
 
 // commonNotificationOptions is a common configuration for notification methods.

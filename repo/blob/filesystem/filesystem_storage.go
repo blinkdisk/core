@@ -13,13 +13,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/dirutil"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/dirutil"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("repo/filesystem")
@@ -110,7 +110,7 @@ func (fs *fsImpl) GetBlobFromPath(ctx context.Context, dirPath, path string, off
 				if st, err := f.Stat(); err == nil && st.Size() == 0 {
 					// this sometimes fails on macOS for unknown reasons, likely a bug in the filesystem
 					// retry deals with this transient state.
-					// see https://github.com/kopia/kopia/issues/299
+					// see https://github.com/blinkdisk/core/issues/299
 					return errRetriableInvalidLength
 				}
 			}

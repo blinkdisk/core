@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kopia/kopia/repo/blob/sharded"
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/sharded"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options for sftp-backed storage.
@@ -16,9 +16,9 @@ type Options struct {
 	Port     int    `json:"port"`
 	Username string `json:"username"`
 	// if password is specified Keyfile/Keydata is ignored.
-	Password       string `json:"password"                 kopia:"sensitive"`
+	Password       string `json:"password"                 blinkdisk:"sensitive"`
 	Keyfile        string `json:"keyfile,omitempty"`
-	KeyData        string `json:"keyData,omitempty"        kopia:"sensitive"`
+	KeyData        string `json:"keyData,omitempty"        blinkdisk:"sensitive"`
 	KnownHostsFile string `json:"knownHostsFile,omitempty"`
 	KnownHostsData string `json:"knownHostsData,omitempty"`
 

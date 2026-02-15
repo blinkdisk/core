@@ -10,11 +10,11 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/maintenance"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/maintenance"
 )
 
 type testServer struct {

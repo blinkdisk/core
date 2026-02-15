@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/tests/robustness/engine"
-	"github.com/kopia/kopia/tests/robustness/fiofilewriter"
-	"github.com/kopia/kopia/tests/robustness/snapmeta"
-	"github.com/kopia/kopia/tests/tools/fio"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/tests/robustness/engine"
+	"github.com/blinkdisk/core/tests/robustness/fiofilewriter"
+	"github.com/blinkdisk/core/tests/robustness/snapmeta"
+	"github.com/blinkdisk/core/tests/tools/fio"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 const (
@@ -39,7 +39,7 @@ func NewHarness(ctx context.Context) *TestHarness {
 	return th
 }
 
-// TestHarness provides a Kopia robustness.Engine.
+// TestHarness provides a BlinkDisk robustness.Engine.
 type TestHarness struct {
 	dataRepoPath string
 	metaRepoPath string
@@ -47,7 +47,7 @@ type TestHarness struct {
 	baseDirPath string
 	fileWriter  *MultiClientFileWriter
 	snapshotter *MultiClientSnapshotter
-	persister   *snapmeta.KopiaPersisterLight
+	persister   *snapmeta.BlinkDiskPersisterLight
 	engine      *engine.Engine
 
 	skipTest bool
@@ -130,12 +130,12 @@ func (th *TestHarness) getSnapshotter() bool {
 
 	s, err := NewMultiClientSnapshotter(th.baseDirPath, newClientFn)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			log.Println("Skipping robustness tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			log.Println("Skipping robustness tests because BLINKDISK_EXE is not set")
 
 			th.skipTest = true
 		} else {
-			log.Println("Error creating multiclient kopia Snapshotter:", err)
+			log.Println("Error creating multiclient blinkdisk Snapshotter:", err)
 		}
 
 		return false
@@ -144,14 +144,14 @@ func (th *TestHarness) getSnapshotter() bool {
 	th.snapshotter = s
 
 	if err = s.ConnectOrCreateRepo(th.dataRepoPath); err != nil {
-		log.Println("Error initializing kopia Snapshotter:", err)
+		log.Println("Error initializing blinkdisk Snapshotter:", err)
 
 		return false
 	}
 
 	// Set size limits for content cache and metadata cache for repository under test.
 	if err = s.setCacheSizeLimits(contentCacheLimitMB, metadataCacheLimitMB); err != nil {
-		log.Println("Error setting hard cache size limits for kopia snapshotter:", err)
+		log.Println("Error setting hard cache size limits for blinkdisk snapshotter:", err)
 
 		return false
 	}
@@ -162,14 +162,14 @@ func (th *TestHarness) getSnapshotter() bool {
 func (th *TestHarness) getPersister() bool {
 	kp, err := snapmeta.NewPersisterLight(th.baseDirPath)
 	if err != nil {
-		log.Println("Error creating kopia Persister:", err)
+		log.Println("Error creating blinkdisk Persister:", err)
 		return false
 	}
 
 	th.persister = kp
 
 	if err = kp.ConnectOrCreateRepo(th.metaRepoPath); err != nil {
-		log.Println("Error initializing kopia Persister:", err)
+		log.Println("Error initializing blinkdisk Persister:", err)
 		return false
 	}
 
@@ -178,7 +178,7 @@ func (th *TestHarness) getPersister() bool {
 		ContentCacheSizeLimitBytes:  500,
 		MetadataCacheSizeLimitBytes: 500,
 	}); err != nil {
-		log.Println("Error setting cache size limits for kopia Persister:", err)
+		log.Println("Error setting cache size limits for blinkdisk Persister:", err)
 		return false
 	}
 
@@ -214,7 +214,7 @@ func (th *TestHarness) getEngine(ctx context.Context) bool {
 	return true
 }
 
-// Engine returns the Kopia robustness test engine.
+// Engine returns the BlinkDisk robustness test engine.
 func (th *TestHarness) Engine() *engine.Engine {
 	return th.engine
 }
@@ -274,7 +274,7 @@ func (th *TestHarness) Cleanup(ctx context.Context) (retErr error) {
 	if th.snapshotter != nil {
 		if sc := th.snapshotter.ServerCmd(); sc != nil {
 			if err := sc.Process.Signal(syscall.SIGTERM); err != nil {
-				log.Println("Warning: Failed to send termination signal to kopia server process:", err)
+				log.Println("Warning: Failed to send termination signal to blinkdisk server process:", err)
 			}
 		}
 
@@ -307,7 +307,7 @@ func (th *TestHarness) GetDirsToLog(ctx context.Context) []string {
 		th.dataRepoPath, // repo under test base dir
 		th.metaRepoPath, // metadata repository base dir
 		path.Join(th.fileWriter.DataDirectory(ctx), ".."), // LocalFioDataPathEnvKey
-		th.engine.MetaStore.GetPersistDir(),               // kopia-persistence-root-
+		th.engine.MetaStore.GetPersistDir(),               // blinkdisk-persistence-root-
 		th.baseDirPath,                                    // engine-data dir
 	)
 

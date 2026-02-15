@@ -3,8 +3,8 @@ package cli_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) TestRepositoryChangePassword(t *testing.T) {
@@ -38,7 +38,7 @@ func (s *formatSpecificTestSuite) TestRepositoryChangePassword(t *testing.T) {
 	env3.RunAndExpectFailure(t, "repo", "connect", "filesystem", "--path", env1.RepoDir, "--disable-repository-format-cache")
 
 	// new connections will succeed when using new password
-	env3.Environment["KOPIA_PASSWORD"] = "newPass"
+	env3.Environment["BLINKDISK_PASSWORD"] = "newPass"
 
 	env3.RunAndExpectSuccess(t, "repo", "connect", "filesystem", "--path", env1.RepoDir, "--disable-repository-format-cache")
 }

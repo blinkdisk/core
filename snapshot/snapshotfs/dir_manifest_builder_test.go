@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 func TestAddEntry(t *testing.T) {

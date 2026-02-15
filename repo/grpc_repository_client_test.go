@@ -3,8 +3,8 @@ package repo_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 const maxGRPCMessageOverhead = 1024

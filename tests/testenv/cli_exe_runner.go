@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 // CLIExeRunner is a CLIExeRunner that invokes the commands via external executable.
@@ -63,18 +63,18 @@ func (e *CLIExeRunner) Start(tb testing.TB, ctx context.Context, args []string, 
 	}
 }
 
-// NewExeRunner returns a CLIRunner that will execute kopia commands by launching subprocesses
-// for each. The kopia executable must be passed via KOPIA_EXE environment variable. The test
+// NewExeRunner returns a CLIRunner that will execute blinkdisk commands by launching subprocesses
+// for each. The blinkdisk executable must be passed via BLINKDISK_EXE environment variable. The test
 // will be skipped if it's not provided (unless running inside an IDE in which case system-wide
-// `kopia` will be used by default).
+// `blinkdisk` will be used by default).
 func NewExeRunner(tb testing.TB) *CLIExeRunner {
 	tb.Helper()
 
-	exe := os.Getenv("KOPIA_EXE")
+	exe := os.Getenv("BLINKDISK_EXE")
 	if exe == "" {
 		if os.Getenv("VSCODE_PID") != "" {
-			// we're launched from VSCode, use system-installed kopia executable.
-			exe = "kopia"
+			// we're launched from VSCode, use system-installed blinkdisk executable.
+			exe = "blinkdisk"
 		} else {
 			tb.Skip()
 		}
@@ -83,13 +83,13 @@ func NewExeRunner(tb testing.TB) *CLIExeRunner {
 	return NewExeRunnerWithBinary(tb, exe)
 }
 
-// NewExeRunnerWithBinary returns a CLIRunner that will execute kopia commands by launching subprocesses
+// NewExeRunnerWithBinary returns a CLIRunner that will execute blinkdisk commands by launching subprocesses
 // for each.
 func NewExeRunnerWithBinary(tb testing.TB, exe string) *CLIExeRunner {
 	tb.Helper()
 
 	// unset environment variables that disrupt tests when passed to subprocesses.
-	os.Unsetenv("KOPIA_PASSWORD")
+	os.Unsetenv("BLINKDISK_PASSWORD")
 
 	logsDir := testutil.TempLogDirectory(tb)
 

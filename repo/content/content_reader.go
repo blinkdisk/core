@@ -3,8 +3,8 @@ package content
 import (
 	"context"
 
-	"github.com/kopia/kopia/internal/epoch"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/internal/epoch"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 // Reader defines content read API.

@@ -3,9 +3,9 @@ package cli
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/snapshot/snapshotmaintenance"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/snapshot/snapshotmaintenance"
 )
 
 type commandMaintenanceRun struct {

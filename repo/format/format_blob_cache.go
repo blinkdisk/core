@@ -10,14 +10,14 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/internal/cache"
-	"github.com/kopia/kopia/internal/cachedir"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/internal/cache"
+	"github.com/blinkdisk/core/internal/cachedir"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
-// DefaultRepositoryBlobCacheDuration is the duration for which we treat cached kopia.repository
+// DefaultRepositoryBlobCacheDuration is the duration for which we treat cached blinkdisk.repository
 // as valid.
 const DefaultRepositoryBlobCacheDuration = 15 * time.Minute
 

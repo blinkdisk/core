@@ -93,7 +93,7 @@ for f in $rpm_files; do
     for d in $dists; do
       packages_dir=$WORK_DIR/$d/$arch
       cp -av $f $packages_dir
-      rpm --define "%_gpg_name Kopia Builder" --addsign "$packages_dir/$bn"
+      rpm --define "%_gpg_name BlinkDisk Builder" --addsign "$packages_dir/$bn"
     done
   fi
 done

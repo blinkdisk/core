@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/impossible"
+	"github.com/blinkdisk/core/internal/impossible"
 )
 
 func TestImpossible(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/atomicfile"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/atomicfile"
 )
 
 // PathIfPlaceholder returns the placeholder suffix trimmed from path or the

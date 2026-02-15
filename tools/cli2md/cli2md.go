@@ -15,8 +15,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/cli"
-	_ "github.com/kopia/kopia/internal/logfile"
+	"github.com/blinkdisk/core/cli"
+	_ "github.com/blinkdisk/core/internal/logfile"
 )
 
 //nolint:gochecknoglobals
@@ -43,7 +43,7 @@ func escapeFlags(text string) string {
 //nolint:gochecknoglobals
 var overrideDefault = map[string]string{
 	"config-file": "repository.config",
-	"log-dir":     "kopia",
+	"log-dir":     "blinkdisk",
 }
 
 func emitFlags(w io.Writer, flags []*kingpin.FlagModel) {
@@ -311,7 +311,7 @@ hide_summary: true
 		}
 	}
 
-	fmt.Fprintf(f, "```shell\n$ kopia %v%v%v\n```\n\n", cmd.FullCommand, flagSummary.String(), argSummary.String()) //nolint:errcheck
+	fmt.Fprintf(f, "```shell\n$ blinkdisk %v%v%v\n```\n\n", cmd.FullCommand, flagSummary.String(), argSummary.String()) //nolint:errcheck
 	fmt.Fprintf(f, "%v\n\n", escapeFlags(cmd.Help))                                                                 //nolint:errcheck
 
 	emitFlags(f, cmd.Flags)
@@ -328,7 +328,7 @@ func main() {
 	_ = os.RemoveAll(filepath.Join(*baseDir, commonSection))
 	_ = os.RemoveAll(filepath.Join(*baseDir, advancedSection))
 
-	kingpinApp := kingpin.New("kopia", "Kopia - Fast And Secure Open-Source Backup").Author("http://kopia.github.io/")
+	kingpinApp := kingpin.New("blinkdisk", "BlinkDisk - Fast And Secure Open-Source Backup").Author("https://blinkdisk.com/")
 	cli.NewApp().Attach(kingpinApp)
 
 	app := kingpinApp.Model()

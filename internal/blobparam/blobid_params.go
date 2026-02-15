@@ -2,8 +2,8 @@
 package blobparam
 
 import (
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type blobMetadataListParam struct {

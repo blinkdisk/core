@@ -10,10 +10,10 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 type fileEnt struct {

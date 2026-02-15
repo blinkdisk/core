@@ -3,8 +3,8 @@ package repomodel
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/manifest"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/manifest"
 )
 
 // RepositorySession models the behavior of a single session in an repository.

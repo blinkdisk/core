@@ -9,11 +9,11 @@ import (
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/ignorefs"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/ignorefs"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 var (
@@ -53,7 +53,7 @@ var defaultPolicy = policy.BuildTree(map[string]*policy.Policy{
 	".": {
 		FilesPolicy: policy.FilesPolicy{
 			DotIgnoreFiles: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 			},
 			MaxFileSize: int64(len(tooLargeFileContents)) - 1,
 			IgnoreRules: []string{
@@ -67,7 +67,7 @@ var rootAndSrcPolicy = policy.BuildTree(map[string]*policy.Policy{
 	".": {
 		FilesPolicy: policy.FilesPolicy{
 			DotIgnoreFiles: []string{
-				".kopiaignore",
+				".blinkdiskignore",
 			},
 			MaxFileSize: int64(len(tooLargeFileContents)) - 1,
 			IgnoreRules: []string{
@@ -119,9 +119,9 @@ var cases = []struct {
 		desc:       "default policy, have dotignore",
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{"file[12]"}, 0)
+			root.AddFileLines(".blinkdiskignore", []string{"file[12]"}, 0)
 		},
-		addedFiles: []string{"./.kopiaignore"},
+		addedFiles: []string{"./.blinkdiskignore"},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
 			"./largefile1",
@@ -133,12 +133,12 @@ var cases = []struct {
 		desc:       "default policy, have dotignore #2",
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"pkg",
 				"file*",
 			}, 0)
 		},
-		addedFiles: []string{"./.kopiaignore"},
+		addedFiles: []string{"./.blinkdiskignore"},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
 			"./largefile1",
@@ -153,12 +153,12 @@ var cases = []struct {
 		desc:       "default policy, have dotignore #3",
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"pkg",
 				"file*",
 			}, 0)
 		},
-		addedFiles: []string{"./.kopiaignore"},
+		addedFiles: []string{"./.blinkdiskignore"},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
 			"./largefile1",
@@ -173,13 +173,13 @@ var cases = []struct {
 		desc:       "default policy, have dotignore #4",
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"file[12]",
 				"**/some-src",
 				"bin/",
 			}, 0)
 		},
-		addedFiles: []string{"./.kopiaignore"},
+		addedFiles: []string{"./.blinkdiskignore"},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
 			"./largefile1",
@@ -196,13 +196,13 @@ var cases = []struct {
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
 			dir := root.AddDir("ignoredir", 0)
-			dir.AddFileLines("kopiaignore", []string{"file[12]"}, 0)
-			root.AddSymlink(".kopiaignore", "./ignoredir/kopiaignore", 0)
+			dir.AddFileLines("blinkdiskignore", []string{"file[12]"}, 0)
+			root.AddSymlink(".blinkdiskignore", "./ignoredir/blinkdiskignore", 0)
 		},
 		addedFiles: []string{
-			"./.kopiaignore",
+			"./.blinkdiskignore",
 			"./ignoredir/",
-			"./ignoredir/kopiaignore",
+			"./ignoredir/blinkdiskignore",
 		},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
@@ -216,13 +216,13 @@ var cases = []struct {
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
 			dir := root.AddDir("ignoredir", 0)
-			dir.AddFileLines("kopiaignore", []string{"file[12]"}, 0)
-			root.AddSymlink(".kopiaignore", "/ignoredir/kopiaignore", 0)
+			dir.AddFileLines("blinkdiskignore", []string{"file[12]"}, 0)
+			root.AddSymlink(".blinkdiskignore", "/ignoredir/blinkdiskignore", 0)
 		},
 		addedFiles: []string{
-			"./.kopiaignore",
+			"./.blinkdiskignore",
 			"./ignoredir/",
-			"./ignoredir/kopiaignore",
+			"./ignoredir/blinkdiskignore",
 		},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
@@ -236,15 +236,15 @@ var cases = []struct {
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
 			dir := root.AddDir("ignoredir", 0)
-			dir.AddFileLines("kopiaignore", []string{"file[12]"}, 0)
-			root.AddSymlink(".ignorelink", "/ignoredir/kopiaignore", 0)
-			root.AddSymlink(".kopiaignore", "/.ignorelink", 0)
+			dir.AddFileLines("blinkdiskignore", []string{"file[12]"}, 0)
+			root.AddSymlink(".ignorelink", "/ignoredir/blinkdiskignore", 0)
+			root.AddSymlink(".blinkdiskignore", "/.ignorelink", 0)
 		},
 		addedFiles: []string{
-			"./.kopiaignore",
+			"./.blinkdiskignore",
 			"./.ignorelink",
 			"./ignoredir/",
-			"./ignoredir/kopiaignore",
+			"./ignoredir/blinkdiskignore",
 		},
 		ignoredFiles: []string{
 			"./ignored-by-rule",
@@ -374,7 +374,7 @@ var cases = []struct {
 		desc:       "exclude all but specific wildcard",
 		policyTree: defaultPolicy,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"*",
 				"!*.txt  ",
 				"!*/",
@@ -415,7 +415,7 @@ var cases = []struct {
 		policyTree:       defaultPolicy,
 		skipDefaultFiles: true,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"*",
 				"!*.txt",
 				"!*/",
@@ -430,7 +430,7 @@ var cases = []struct {
 			root.Subdir("A").Subdir("AA").AddFile("file.go", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.txt", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.go", dummyFileContents, 0)
-			root.Subdir("A").AddFileLines(".kopiaignore", []string{
+			root.Subdir("A").AddFileLines(".blinkdiskignore", []string{
 				"*.txt",
 				"!*.go",
 			}, 0)
@@ -461,7 +461,7 @@ var cases = []struct {
 		policyTree:       defaultPolicy,
 		skipDefaultFiles: true,
 		setup: func(root *mockfs.Directory) {
-			root.AddFileLines(".kopiaignore", []string{
+			root.AddFileLines(".blinkdiskignore", []string{
 				"*",
 				"!*.txt",
 				"!*/",
@@ -476,11 +476,11 @@ var cases = []struct {
 			root.Subdir("A").Subdir("AA").AddFile("file.go", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.txt", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.go", dummyFileContents, 0)
-			root.Subdir("A").Subdir("AB").AddFileLines(".kopiaignore", []string{
+			root.Subdir("A").Subdir("AB").AddFileLines(".blinkdiskignore", []string{
 				"!*.txt",
 			}, 0)
 
-			root.Subdir("A").AddFileLines(".kopiaignore", []string{
+			root.Subdir("A").AddFileLines(".blinkdiskignore", []string{
 				"*.txt",
 				"!*.go",
 				"!/AB/",
@@ -523,7 +523,7 @@ var cases = []struct {
 			root.Subdir("A").Subdir("AA").AddFile("file.go", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.txt", dummyFileContents, 0)
 			root.Subdir("A").Subdir("AB").AddFile("file.go", dummyFileContents, 0)
-			root.Subdir("A").AddFileLines(".kopiaignore", []string{
+			root.Subdir("A").AddFileLines(".blinkdiskignore", []string{
 				"AB/",
 				"*.go",
 			}, 0)
@@ -536,19 +536,19 @@ var cases = []struct {
 			root.Subdir("B").Subdir("AA").AddFile("file.go", dummyFileContents, 0)
 			root.Subdir("B").Subdir("AB").AddFile("file.txt", dummyFileContents, 0)
 			root.Subdir("B").Subdir("AB").AddFile("file.go", dummyFileContents, 0)
-			root.Subdir("B").AddFileLines(".kopiaignore", []string{
+			root.Subdir("B").AddFileLines(".blinkdiskignore", []string{
 				"AA/",
 				"*.txt",
 			}, 0)
 		},
 		addedFiles: []string{
 			"./A/",
-			"./A/.kopiaignore",
+			"./A/.blinkdiskignore",
 			"./A/file.txt",
 			"./A/AA/",
 			"./A/AA/file.txt",
 			"./B/",
-			"./B/.kopiaignore",
+			"./B/.blinkdiskignore",
 			"./B/file.go",
 			"./B/AB/",
 			"./B/AB/file.go",

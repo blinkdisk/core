@@ -18,12 +18,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/diff"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/tests/recovery/blobmanipulator"
-	"github.com/kopia/kopia/tests/testenv"
-	"github.com/kopia/kopia/tests/tools/kopiarunner"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/diff"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/tests/recovery/blobmanipulator"
+	"github.com/blinkdisk/core/tests/testenv"
+	"github.com/blinkdisk/core/tests/tools/blinkdiskrunner"
 )
 
 func TestSnapshotFix(t *testing.T) {
@@ -37,8 +37,8 @@ func TestSnapshotFix(t *testing.T) {
 
 	bm, err := blobmanipulator.NewBlobManipulator(baseDir, dataRepoPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			t.Skip("Skipping recovery tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			t.Skip("Skipping recovery tests because BLINKDISK_EXE is not set")
 		} else {
 			t.Skip("Error creating Blob Manipulator:", err)
 		}
@@ -46,7 +46,7 @@ func TestSnapshotFix(t *testing.T) {
 
 	bm.DataRepoPath = dataRepoPath
 
-	// populate the kopia repo under test with random snapshots
+	// populate the blinkdisk repo under test with random snapshots
 	bm.CanRunMaintenance = false
 
 	err = bm.SetUpSystemUnderTest()
@@ -55,15 +55,15 @@ func TestSnapshotFix(t *testing.T) {
 	}
 
 	ctx := testlogging.Context(t)
-	kopiaExe := os.Getenv("KOPIA_EXE")
-	cmd := exec.CommandContext(ctx, kopiaExe, "maintenance", "run", "--full", "--force", "--safety", "none")
+	blinkdiskExe := os.Getenv("BLINKDISK_EXE")
+	cmd := exec.CommandContext(ctx, blinkdiskExe, "maintenance", "run", "--full", "--force", "--safety", "none")
 
 	err = cmd.Start()
 	if err != nil {
 		t.FailNow()
 	}
 
-	// kill the kopia command before it exits
+	// kill the blinkdisk command before it exits
 	time.AfterFunc(10*time.Millisecond, func() {
 		cmd.Process.Kill()
 	})
@@ -72,7 +72,7 @@ func TestSnapshotFix(t *testing.T) {
 	// assumption: the repo contains "p" blobs to delete, else the test will fail
 	err = bm.DeleteBlob("")
 	if err != nil {
-		log.Println("Error deleting kopia blob: ", err)
+		log.Println("Error deleting blinkdisk blob: ", err)
 		t.FailNow()
 	}
 
@@ -94,7 +94,7 @@ func TestSnapshotFix(t *testing.T) {
 
 	stdout, err = bm.SnapshotFixRemoveFilesByBlobID(blobID)
 	if err != nil {
-		log.Println("Error repairing the kopia repository:", stdout, err)
+		log.Println("Error repairing the blinkdisk repository:", stdout, err)
 		t.FailNow()
 	}
 
@@ -114,8 +114,8 @@ func TestSnapshotFixInvalidFiles(t *testing.T) {
 
 	bm, err := blobmanipulator.NewBlobManipulator(baseDir, dataRepoPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			log.Println("Skipping recovery tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			log.Println("Skipping recovery tests because BLINKDISK_EXE is not set")
 		} else {
 			log.Println("Error creating Blob Manipulator:", err)
 		}
@@ -125,7 +125,7 @@ func TestSnapshotFixInvalidFiles(t *testing.T) {
 
 	bm.DataRepoPath = dataRepoPath
 
-	// populate the kopia repo under test with random snapshots
+	// populate the blinkdisk repo under test with random snapshots
 	bm.CanRunMaintenance = false
 
 	err = bm.SetUpSystemUnderTest()
@@ -134,15 +134,15 @@ func TestSnapshotFixInvalidFiles(t *testing.T) {
 	}
 
 	ctx := testlogging.Context(t)
-	kopiaExe := os.Getenv("KOPIA_EXE")
-	cmd := exec.CommandContext(ctx, kopiaExe, "maintenance", "run", "--full", "--force", "--safety", "none")
+	blinkdiskExe := os.Getenv("BLINKDISK_EXE")
+	cmd := exec.CommandContext(ctx, blinkdiskExe, "maintenance", "run", "--full", "--force", "--safety", "none")
 
 	err = cmd.Start()
 	if err != nil {
 		t.FailNow()
 	}
 
-	// kill the kopia command before it exits
+	// kill the blinkdisk command before it exits
 	time.AfterFunc(10*time.Millisecond, func() {
 		cmd.Process.Kill()
 	})
@@ -151,7 +151,7 @@ func TestSnapshotFixInvalidFiles(t *testing.T) {
 	// assumption: the repo contains "p" blobs to delete, else the test will fail
 	err = bm.DeleteBlob("")
 	if err != nil {
-		log.Println("Error deleting kopia blob: ", err)
+		log.Println("Error deleting blinkdisk blob: ", err)
 		t.FailNow()
 	}
 
@@ -168,7 +168,7 @@ func TestSnapshotFixInvalidFiles(t *testing.T) {
 	// fix all the invalid files
 	stdout, err := bm.SnapshotFixInvalidFiles("--verify-files-percent=100")
 	if err != nil {
-		log.Println("Error repairing the kopia repository:", stdout, err)
+		log.Println("Error repairing the blinkdisk repository:", stdout, err)
 		t.FailNow()
 	}
 
@@ -187,8 +187,8 @@ func TestConsistencyWhenKill9AfterModify(t *testing.T) {
 
 	bm, err := blobmanipulator.NewBlobManipulator(baseDir, dataRepoPath)
 	if err != nil {
-		if errors.Is(err, kopiarunner.ErrExeVariableNotSet) {
-			t.Skip("Skipping crash consistency tests because KOPIA_EXE is not set")
+		if errors.Is(err, blinkdiskrunner.ErrExeVariableNotSet) {
+			t.Skip("Skipping crash consistency tests because BLINKDISK_EXE is not set")
 		}
 
 		t.Skip("Error creating SnapshotTester:", err)
@@ -212,11 +212,11 @@ func TestConsistencyWhenKill9AfterModify(t *testing.T) {
 	newDir := bm.PathToTakeSnapshot
 	ctx := testlogging.Context(t)
 
-	// connect with repository with the environment configuration, otherwise it will display "ERROR open repository: repository is not connected.kopia connect repo".
-	kopiaExe := os.Getenv("KOPIA_EXE")
+	// connect with repository with the environment configuration, otherwise it will display "ERROR open repository: repository is not connected.blinkdisk connect repo".
+	blinkdiskExe := os.Getenv("BLINKDISK_EXE")
 
-	cmd := exec.CommandContext(ctx, kopiaExe, "repo", "connect", "filesystem", "--path="+dataRepoPath, "--content-cache-size-mb", "500", "--metadata-cache-size-mb", "500", "--no-check-for-updates")
-	env := []string{"KOPIA_PASSWORD=" + testenv.TestRepoPassword}
+	cmd := exec.CommandContext(ctx, blinkdiskExe, "repo", "connect", "filesystem", "--path="+dataRepoPath, "--content-cache-size-mb", "500", "--metadata-cache-size-mb", "500", "--no-check-for-updates")
+	env := []string{"BLINKDISK_PASSWORD=" + testenv.TestRepoPassword}
 	cmd.Env = append(os.Environ(), env...)
 
 	o, err := cmd.CombinedOutput()
@@ -224,10 +224,10 @@ func TestConsistencyWhenKill9AfterModify(t *testing.T) {
 	t.Log(string(o))
 
 	// create snapshot with StderrPipe
-	cmd = exec.CommandContext(ctx, kopiaExe, "snap", "create", newDir, "--json", "--parallel=1")
+	cmd = exec.CommandContext(ctx, blinkdiskExe, "snap", "create", newDir, "--json", "--parallel=1")
 
-	// kill the kopia command before it exits
-	t.Logf("Kill the kopia command before it exits:")
+	// kill the blinkdisk command before it exits
+	t.Logf("Kill the blinkdisk command before it exits:")
 	killOnCondition(t, cmd)
 
 	t.Logf("Verify snapshot corruption:")

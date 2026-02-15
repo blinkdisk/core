@@ -8,7 +8,7 @@ import (
 
 	"github.com/natefinch/atomic"
 
-	"github.com/kopia/kopia/internal/ospath"
+	"github.com/blinkdisk/core/internal/ospath"
 )
 
 // Do not prefix files shorter than this, we are intentionally using less than MAX_PATH

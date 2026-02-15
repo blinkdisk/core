@@ -1,6 +1,6 @@
 package policy
 
-import "github.com/kopia/kopia/snapshot"
+import "github.com/blinkdisk/core/snapshot"
 
 // DirLoggingPolicy represents the policy for logging directory information when snapshotting.
 type DirLoggingPolicy struct {

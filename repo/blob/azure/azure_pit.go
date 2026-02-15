@@ -8,9 +8,9 @@ import (
 	azblobmodels "github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/readonly"
-	"github.com/kopia/kopia/repo/format"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/readonly"
+	"github.com/blinkdisk/core/repo/format"
 )
 
 type azPointInTimeStorage struct {
@@ -91,7 +91,7 @@ func getOlderThan(vs []versionMetadata, t time.Time) []versionMetadata {
 		}
 
 		// The DeleteMarker blob takes the Timestamp of the previous version but has its own Version.
-		// If there was a Kopia Delete Marker (the blob was protected) it will be caught above but if
+		// If there was a BlinkDisk Delete Marker (the blob was protected) it will be caught above but if
 		// the container has versioning enabled but no blob retention protection (or the blob was deleted outside
 		// of the protection window) then we need to check the time of the VersionID because there could be a situation
 		// where Azure's DeleteMarker version has Timestamp 2023-10-20 but Version 2023-10-27...then if PIT was 2023-10-22 the DeleteMarker
@@ -112,7 +112,7 @@ func getOlderThan(vs []versionMetadata, t time.Time) []versionMetadata {
 }
 
 // listBlobVersions returns a list of blob versions but the blob is deleted, it returns Azure's delete marker version but excludes
-// the Kopia delete marker version that is used to get around immutability protections.
+// the BlinkDisk delete marker version that is used to get around immutability protections.
 func (az *azPointInTimeStorage) listBlobVersions(ctx context.Context, prefix blob.ID, callback func(vm versionMetadata) error) error {
 	prefixStr := az.getObjectNameString(prefix)
 
@@ -189,11 +189,11 @@ func maybePointInTimeStore(ctx context.Context, s *azStorage, pointInTime *time.
 		pointInTime: *pointInTime, // not used for the check
 	}
 
-	err := pit.getBlobVersions(ctx, format.KopiaRepositoryBlobID, func(_ versionMetadata) error {
+	err := pit.getBlobVersions(ctx, format.BlinkDiskRepositoryBlobID, func(_ versionMetadata) error {
 		return nil
 	})
 	if err != nil {
-		return nil, errors.Wrap(err, "versioning must be enabled and a Kopia repository must exist")
+		return nil, errors.Wrap(err, "versioning must be enabled and a BlinkDisk repository must exist")
 	}
 
 	return readonly.NewWrapper(pit), nil

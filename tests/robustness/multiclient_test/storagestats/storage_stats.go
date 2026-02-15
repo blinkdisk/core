@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/kopia/kopia/tests/robustness/multiclient_test/framework"
+	"github.com/blinkdisk/core/tests/robustness/multiclient_test/framework"
 )
 
 const (
@@ -76,7 +76,7 @@ func getSize(dirPath string) (int64, error) {
 }
 
 func getLogFilePath() string {
-	logFileName := "multiclient_kopia_cache_dir_usage_" + time.Now().UTC().Format("20060102_150405") + ".json" //nolint:forbidigo
+	logFileName := "multiclient_blinkdisk_cache_dir_usage_" + time.Now().UTC().Format("20060102_150405") + ".json" //nolint:forbidigo
 	filePath := path.Join(*framework.RepoPathPrefix, logFileSubpath, logFileName)
 
 	return filePath

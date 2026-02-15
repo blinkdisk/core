@@ -9,16 +9,16 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/atomicfile"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/atomicfile"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // Helpers to implement storing of "shallow" placeholders for files or
 // directory trees in a restore image. A placeholder for directory d1 is
-// d1.kopia-entry/.kopia-entry. As a result, d1.kopia-entry will stat as
+// d1.blinkdisk-entry/.blinkdisk-entry. As a result, d1.blinkdisk-entry will stat as
 // a directory and show up nicely in colorized ls output. A placeholder
-// for a file f1 is f1.kopia-entry.
+// for a file f1 is f1.blinkdisk-entry.
 
 func placeholderPath(path string, et snapshot.EntryType) (string, error) {
 	switch et {

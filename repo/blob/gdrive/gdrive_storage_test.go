@@ -13,12 +13,12 @@ import (
 	"github.com/stretchr/testify/require"
 	drive "google.golang.org/api/drive/v3"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/gdrive"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/gdrive"
 )
 
 func TestCleanupOldData(t *testing.T) {
@@ -62,16 +62,16 @@ func TestGdriveStorageInvalid(t *testing.T) {
 	t.Parallel()
 	testutil.ProviderTest(t)
 
-	folderID := os.Getenv("KOPIA_GDRIVE_TEST_FOLDER_ID")
+	folderID := os.Getenv("BLINKDISK_GDRIVE_TEST_FOLDER_ID")
 	if folderID == "" {
-		t.Skip("KOPIA_GDRIVE_TEST_FOLDER_ID not provided")
+		t.Skip("BLINKDISK_GDRIVE_TEST_FOLDER_ID not provided")
 	}
 
 	ctx := testlogging.Context(t)
 
 	if _, err := gdrive.New(ctx, &gdrive.Options{
 		FolderID:                      folderID + "-no-such-folder",
-		ServiceAccountCredentialsFile: os.Getenv("KOPIA_GDRIVE_CREDENTIALS_FILE"),
+		ServiceAccountCredentialsFile: os.Getenv("BLINKDISK_GDRIVE_CREDENTIALS_FILE"),
 	}, false); err == nil {
 		t.Fatalf("unexpected success connecting to Drive, wanted error")
 	}
@@ -91,12 +91,12 @@ func gunzip(d []byte) ([]byte, error) {
 func mustGetOptionsOrSkip(t *testing.T) *gdrive.Options {
 	t.Helper()
 
-	folderID := os.Getenv("KOPIA_GDRIVE_TEST_FOLDER_ID")
+	folderID := os.Getenv("BLINKDISK_GDRIVE_TEST_FOLDER_ID")
 	if folderID == "" {
-		t.Skip("KOPIA_GDRIVE_TEST_FOLDER_ID not provided")
+		t.Skip("BLINKDISK_GDRIVE_TEST_FOLDER_ID not provided")
 	}
 
-	credDataGZ, err := base64.StdEncoding.DecodeString(os.Getenv("KOPIA_GDRIVE_CREDENTIALS_JSON_GZIP"))
+	credDataGZ, err := base64.StdEncoding.DecodeString(os.Getenv("BLINKDISK_GDRIVE_CREDENTIALS_JSON_GZIP"))
 	if err != nil {
 		t.Skip("skipping test because GDrive credentials file can't be decoded")
 	}

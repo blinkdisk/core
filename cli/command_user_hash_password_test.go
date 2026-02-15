@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestServerUserHashPassword(t *testing.T) {
@@ -65,7 +65,7 @@ func TestServerUserHashPassword(t *testing.T) {
 	cr := testenv.NewInProcRunner(t)
 	clientEnv := testenv.NewCLITest(t, testenv.RepoFormatNotImportant, cr)
 
-	delete(clientEnv.Environment, "KOPIA_PASSWORD")
+	delete(clientEnv.Environment, "BLINKDISK_PASSWORD")
 
 	clientEnv.RunAndExpectSuccess(t, "repo", "connect", "server",
 		"--url", sp.BaseURL,

@@ -17,8 +17,8 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/kopia/kopia/tests/tools/fswalker/reporter"
-	"github.com/kopia/kopia/tests/tools/fswalker/walker"
+	"github.com/blinkdisk/core/tests/tools/fswalker/reporter"
+	"github.com/blinkdisk/core/tests/tools/fswalker/walker"
 )
 
 // WalkCompare is a checker.Comparer that utilizes the fswalker

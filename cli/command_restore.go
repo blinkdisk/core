@@ -15,16 +15,16 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/timetrack"
-	"github.com/kopia/kopia/internal/units"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/restore"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/timetrack"
+	"github.com/blinkdisk/core/internal/units"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/restore"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 const (
@@ -66,7 +66,7 @@ has been set (to prevent overwrite of each type):
 
 If the '--shallow' option is provided, files and directories this
 depth and below in the directory hierarchy will be represented by
-compact placeholder files of the form 'entry.kopia-entry' instead of
+compact placeholder files of the form 'entry.blinkdisk-entry' instead of
 being restored. (I.e. setting '--shallow' to 0 will only shallow
 restore.) Snapshots created of directory contents represented by
 placeholder files will be identical to snapshots of the equivalent
@@ -75,12 +75,12 @@ fully expanded tree.
 In the expanding-a-placeholder mode:
 
 The source to be restored is a pre-existing placeholder entry of the form
-'entry.kopia-entry'. The target will be 'entry'. '--shallow' controls the depth
+'entry.blinkdisk-entry'. The target will be 'entry'. '--shallow' controls the depth
 of the expansion and defaults to 0. For example:
 
-'restore d3.kopiadir'
+'restore d3.blinkdiskdir'
 
-will remove the d3.kopiadir placeholder and restore the referenced repository
+will remove the d3.blinkdiskdir placeholder and restore the referenced repository
 contents into path d3 where the contents of the newly created path d3 will
 themselves be placeholder files.
 `
@@ -90,7 +90,7 @@ directory ID and optionally a sub-directory path. For example,
 'kffbb7c28ea6c34d6cbe555d1cf80faa9/subdir1/subdir2'
 followed by the path of the directory for the contents to be restored.
 
-2. one or more placeholder files of the form path.kopia-entry
+2. one or more placeholder files of the form path.blinkdisk-entry
 `
 
 	unlimitedDepth = math.MaxInt32
@@ -145,7 +145,7 @@ func (c *commandRestore) setup(svc appServices, parent commandParent) {
 	cmd.Flag("overwrite-files", "Specifies whether or not to overwrite already existing files").Default("true").BoolVar(&c.restoreOverwriteFiles)
 	cmd.Flag("overwrite-symlinks", "Specifies whether or not to overwrite already existing symlinks").Default("true").BoolVar(&c.restoreOverwriteSymlinks)
 	cmd.Flag("write-sparse-files", "When doing a restore, attempt to write files sparsely-allocating the minimum amount of disk space needed.").Default("false").BoolVar(&c.restoreWriteSparseFiles)
-	cmd.Flag("consistent-attributes", "When multiple snapshots match, fail if they have inconsistent attributes").Envar(svc.EnvName("KOPIA_RESTORE_CONSISTENT_ATTRIBUTES")).BoolVar(&c.restoreConsistentAttributes)
+	cmd.Flag("consistent-attributes", "When multiple snapshots match, fail if they have inconsistent attributes").Envar(svc.EnvName("BLINKDISK_RESTORE_CONSISTENT_ATTRIBUTES")).BoolVar(&c.restoreConsistentAttributes)
 	cmd.Flag("mode", "Override restore mode").Default(restoreModeAuto).EnumVar(&c.restoreMode, restoreModeAuto, restoreModeLocal, restoreModeZip, restoreModeZipNoCompress, restoreModeTar, restoreModeTgz)
 	cmd.Flag("parallel", "Restore parallelism (1=disable)").Default("8").IntVar(&c.restoreParallel)
 	cmd.Flag("skip-owners", "Skip owners during restore").BoolVar(&c.restoreSkipOwners)
@@ -586,7 +586,7 @@ func computeMaxTime(timespec string) (time.Time, error) {
 		format    string
 		precision time.Duration
 	}{
-		// Used by kopia output
+		// Used by blinkdisk output
 		{"2006-01-02 15:04:05 MST", time.Second},
 		{"2006-01-02 15:04:05.000 MST", time.Millisecond},
 

@@ -6,7 +6,7 @@ import (
 	azblobmodels "github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // versionMetadata has metadata for a single BLOB version.

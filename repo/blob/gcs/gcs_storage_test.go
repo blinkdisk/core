@@ -12,19 +12,19 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/gcs"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/gcs"
 )
 
 const (
-	testBucketEnv                 = "KOPIA_GCS_TEST_BUCKET"
-	testBucketProjectID           = "KOPIA_GCS_TEST_PROJECT_ID"
-	testBucketCredentialsJSONGzip = "KOPIA_GCS_CREDENTIALS_JSON_GZIP"
-	testImmutableBucketEnv        = "KOPIA_GCS_TEST_IMMUTABLE_BUCKET"
+	testBucketEnv                 = "BLINKDISK_GCS_TEST_BUCKET"
+	testBucketProjectID           = "BLINKDISK_GCS_TEST_PROJECT_ID"
+	testBucketCredentialsJSONGzip = "BLINKDISK_GCS_CREDENTIALS_JSON_GZIP"
+	testImmutableBucketEnv        = "BLINKDISK_GCS_TEST_IMMUTABLE_BUCKET"
 )
 
 func TestCleanupOldData(t *testing.T) {

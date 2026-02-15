@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 func TestFrozen(t *testing.T) {

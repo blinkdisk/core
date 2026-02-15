@@ -3,7 +3,7 @@ package snapshot
 import (
 	"sync/atomic"
 
-	"github.com/kopia/kopia/fs"
+	"github.com/blinkdisk/core/fs"
 )
 
 // Stats keeps track of snapshot generation statistics.

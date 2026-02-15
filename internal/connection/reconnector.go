@@ -9,8 +9,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/retry"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/retry"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("connection")

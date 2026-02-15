@@ -10,15 +10,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/bigmap"
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/internal/workshare"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/bigmap"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/internal/workshare"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 var dirRewriterLog = logging.Module("dirRewriter")
@@ -270,7 +270,7 @@ func RewriteAsStub(rep repo.RepositoryWriter) RewriteFailedEntryCallback {
 		e.SetIndent("  ", "    ")
 
 		if err := e.Encode(UnreadableDirEntryReplacement{
-			"Kopia replaced the original entry with this stub because of an error.",
+			"BlinkDisk replaced the original entry with this stub because of an error.",
 			originalErr.Error(),
 			input,
 		}); err != nil {

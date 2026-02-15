@@ -2,8 +2,8 @@
 package contentparam
 
 import (
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/repo/content/index"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/repo/content/index"
 )
 
 const maxLoggedContentIDLength = 5

@@ -12,7 +12,7 @@ import (
 	"github.com/google/fswalker"
 	fspb "github.com/google/fswalker/proto/fswalker"
 
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestWalkChecker_GatherCompare(t *testing.T) {

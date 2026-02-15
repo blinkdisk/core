@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/diff"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/diff"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 type commandDiff struct {
@@ -30,7 +30,7 @@ func (c *commandDiff) setup(svc appServices, parent commandParent) {
 	cmd.Arg("object-path2", "Second object/path").Required().StringVar(&c.diffSecondObjectPath)
 	cmd.Flag("files", "Compare files by launching diff command for all pairs of (old,new)").Short('f').BoolVar(&c.diffCompareFiles)
 	cmd.Flag("stats-only", "Displays only aggregate statistics of the changes between two repository objects").BoolVar(&c.diffStatsOnly)
-	cmd.Flag("diff-command", "Displays differences between two repository objects (files or directories)").Default(defaultDiffCommand()).Envar(svc.EnvName("KOPIA_DIFF")).StringVar(&c.diffCommandCommand)
+	cmd.Flag("diff-command", "Displays differences between two repository objects (files or directories)").Default(defaultDiffCommand()).Envar(svc.EnvName("BLINKDISK_DIFF")).StringVar(&c.diffCommandCommand)
 	cmd.Action(svc.repositoryReaderAction(c.run))
 
 	c.out.setup(svc)

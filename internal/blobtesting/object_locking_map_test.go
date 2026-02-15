@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 func TestObjectLockingStorage(t *testing.T) {

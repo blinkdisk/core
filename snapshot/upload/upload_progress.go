@@ -4,7 +4,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/kopia/kopia/internal/uitask"
+	"github.com/blinkdisk/core/internal/uitask"
 )
 
 const (

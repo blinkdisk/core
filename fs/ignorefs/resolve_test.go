@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestNoInfiniteResolveLink(t *testing.T) {

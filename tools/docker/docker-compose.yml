@@ -1,7 +1,7 @@
 services:
-  kopia:
-      image: kopia/kopia:latest
-      container_name: Kopia
+  blinkdisk:
+      image: blinkdisk/blinkdisk:latest
+      container_name: BlinkDisk
       user: "0:0"
       restart: "unless-stopped"
       privileged: true
@@ -21,13 +21,13 @@ services:
         - --server-username=XXX
         - --server-password=XXX
       volumes:
-        - /mnt/kopia:/tmp:shared
-        - /home/XXX/docker/Kopia-Ubuntu/config:/app/config
-        - /home/XXX/docker/Kopia-Ubuntu/cache:/app/cache
-        - /home/XXX/docker/Kopia-Ubuntu/logs:/app/logs
+        - /mnt/blinkdisk:/tmp:shared
+        - /home/XXX/docker/BlinkDisk-Ubuntu/config:/app/config
+        - /home/XXX/docker/BlinkDisk-Ubuntu/cache:/app/cache
+        - /home/XXX/docker/BlinkDisk-Ubuntu/logs:/app/logs
         - /:/data:ro
       environment:
-        KOPIA_PASSWORD: XXX
+        BLINKDISK_PASSWORD: XXX
         TZ: Europe/Berlin
         USER: XXX
         

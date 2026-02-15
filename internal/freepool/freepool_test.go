@@ -3,7 +3,7 @@ package freepool_test
 import (
 	"testing"
 
-	"github.com/kopia/kopia/internal/freepool"
+	"github.com/blinkdisk/core/internal/freepool"
 )
 
 func TestNewStruct(t *testing.T) {

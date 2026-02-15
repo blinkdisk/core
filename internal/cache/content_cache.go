@@ -6,11 +6,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/cacheprot"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/internal/metrics"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/cacheprot"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/internal/metrics"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 // ContentCache caches contents stored in pack blobs.

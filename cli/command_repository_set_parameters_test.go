@@ -6,12 +6,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/repotesting"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/repotesting"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func (s *formatSpecificTestSuite) setupInMemoryRepo(t *testing.T) *testenv.CLITest {
@@ -145,7 +145,7 @@ func (s *formatSpecificTestSuite) TestRepositorySetParametersUpgrade(t *testing.
 		env.RunAndExpectSuccess(t, "index", "epoch", "list")
 	}
 
-	env.Environment["KOPIA_UPGRADE_LOCK_ENABLED"] = "1"
+	env.Environment["BLINKDISK_UPGRADE_LOCK_ENABLED"] = "1"
 
 	{
 		cmd := []string{

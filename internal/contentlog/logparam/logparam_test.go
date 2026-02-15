@@ -8,8 +8,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/contentlog"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/contentlog"
 )
 
 func TestString(t *testing.T) {

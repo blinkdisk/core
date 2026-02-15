@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/stat"
+	"github.com/blinkdisk/core/internal/stat"
 )
 
 func TestSparseCopy(t *testing.T) {

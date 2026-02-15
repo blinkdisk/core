@@ -6,11 +6,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/scrubber"
+	"github.com/blinkdisk/core/internal/scrubber"
 )
 
 type S struct {
-	SomePassword1 string `kopia:"sensitive"`
+	SomePassword1 string `blinkdisk:"sensitive"`
 	NonPassword   string
 	InnerPtr      *Q
 	InnerIf       any
@@ -20,7 +20,7 @@ type S struct {
 }
 
 type Q struct {
-	SomePassword1 string `kopia:"sensitive"`
+	SomePassword1 string `blinkdisk:"sensitive"`
 	NonPassword   string
 }
 

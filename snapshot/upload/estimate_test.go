@@ -7,13 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/virtualfs"
-	"github.com/kopia/kopia/internal/mockfs"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/upload"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/virtualfs"
+	"github.com/blinkdisk/core/internal/mockfs"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/upload"
 )
 
 type fakeProgress struct {

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/kopia/kopia/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/blob/throttling"
 )
 
 // Options defines options Google Cloud Storage-backed storage.
@@ -19,7 +19,7 @@ type Options struct {
 	ServiceAccountCredentialsFile string `json:"credentialsFile,omitempty"`
 
 	// ServiceAccountCredentialJSON specifies the raw JSON credentials.
-	ServiceAccountCredentialJSON json.RawMessage `json:"credentials,omitempty" kopia:"sensitive"`
+	ServiceAccountCredentialJSON json.RawMessage `json:"credentials,omitempty" blinkdisk:"sensitive"`
 
 	// ReadOnly causes GCS connection to be opened with read-only scope to prevent accidental mutations.
 	ReadOnly bool `json:"readOnly,omitempty"`

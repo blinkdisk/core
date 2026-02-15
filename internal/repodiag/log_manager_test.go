@@ -10,10 +10,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/contentlog"
-	"github.com/kopia/kopia/internal/repodiag"
-	"github.com/kopia/kopia/internal/testlogging"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/contentlog"
+	"github.com/blinkdisk/core/internal/repodiag"
+	"github.com/blinkdisk/core/internal/testlogging"
 )
 
 func TestLogManager_Enabled(t *testing.T) {

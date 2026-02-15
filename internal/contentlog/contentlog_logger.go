@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kopia/kopia/internal/clock"
+	"github.com/blinkdisk/core/internal/clock"
 )
 
 // WriterTo is a type that can write itself to a JSON writer.

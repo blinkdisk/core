@@ -14,9 +14,9 @@ import (
 
 	"github.com/pkg/profile"
 
-	"github.com/kopia/kopia/internal/bigmap"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/internal/bigmap"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 const (

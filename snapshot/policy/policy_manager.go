@@ -7,10 +7,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/manifest"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/manifest"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // ManifestType is the type of the manifest that represents policy.
@@ -37,7 +37,7 @@ const typeKey = manifest.TypeLabelKey
 //nolint:gochecknoglobals
 var GlobalPolicySourceInfo = snapshot.SourceInfo{}
 
-var log = logging.Module("kopia/snapshot/policy")
+var log = logging.Module("blinkdisk/snapshot/policy")
 
 // GetEffectivePolicy calculates effective snapshot policy for a given source by combining the source-specific policy (if any)
 // with parent policies. The source must contain a path.
@@ -145,7 +145,7 @@ func GetDefinedPolicy(ctx context.Context, rep repo.Repository, si snapshot.Sour
 	// arbitrarily pick first pick ID to return in case there's more than one
 	// this is possible when two repository clients independently create manifests at approximately the same time
 	// so it should not really matter which one we pick.
-	// see https://github.com/kopia/kopia/issues/391
+	// see https://github.com/blinkdisk/core/issues/391
 	manifestID := manifest.PickLatestID(md)
 
 	p := &Policy{}

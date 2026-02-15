@@ -1,4 +1,4 @@
-// Package feature tracks features that are supported by Kopia client to ensure forwards and backwards
+// Package feature tracks features that are supported by BlinkDisk client to ensure forwards and backwards
 // compatibility.
 package feature
 
@@ -7,7 +7,7 @@ import (
 	"slices"
 )
 
-// IfNotUnderstood describes the behavior of Kopia when a required feature is not understood.
+// IfNotUnderstood describes the behavior of BlinkDisk when a required feature is not understood.
 type IfNotUnderstood struct {
 	Warn             bool   `json:"warn"`                       // warn instead of failing
 	Message          string `json:"message,omitempty"`          // message to show to users
@@ -15,7 +15,7 @@ type IfNotUnderstood struct {
 	UpgradeToVersion string `json:"upgradeToVersion,omitempty"` // suggest upgrading to a particular version
 }
 
-// Feature identifies a feature that particular Kopia client must understand.
+// Feature identifies a feature that particular BlinkDisk client must understand.
 type Feature string
 
 // Required describes a single required feature that a client must understand
@@ -27,7 +27,7 @@ type Required struct {
 
 // UnsupportedMessage returns a message to display to users if the feature is unsupported.
 func (r Required) UnsupportedMessage() string {
-	msg := fmt.Sprintf("This version of Kopia does not support feature '%v'.", r.Feature)
+	msg := fmt.Sprintf("This version of BlinkDisk does not support feature '%v'.", r.Feature)
 
 	if r.IfNotUnderstood.Message != "" {
 		msg += "\n" + r.IfNotUnderstood.Message

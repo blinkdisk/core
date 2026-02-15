@@ -10,11 +10,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/internal/parallelwork"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/internal/parallelwork"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 var log = logging.Module("restore")

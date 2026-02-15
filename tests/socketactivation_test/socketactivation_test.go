@@ -14,15 +14,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/tests/testenv"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/tests/testenv"
 )
 
 func TestServerControlSocketActivated(t *testing.T) {
 	var port int
 
-	serverExe := os.Getenv("KOPIA_SERVER_EXE")
+	serverExe := os.Getenv("BLINKDISK_SERVER_EXE")
 	if serverExe == "" {
 		t.Skip("skipping socket-activation test")
 	}
@@ -35,7 +35,7 @@ func TestServerControlSocketActivated(t *testing.T) {
 	env.RunAndExpectSuccess(t, "repo", "create", "filesystem", "--path", env.RepoDir, "--override-username=another-user", "--override-hostname=another-host")
 	env.RunAndExpectSuccess(t, "snap", "create", dir0)
 
-	// The KOPIA_EXE wrapper will set the LISTEN_PID variable for us
+	// The BLINKDISK_EXE wrapper will set the LISTEN_PID variable for us
 	env.Environment["LISTEN_FDS"] = "1"
 
 	ctx := testlogging.Context(t)
@@ -101,7 +101,7 @@ func TestServerControlSocketActivated(t *testing.T) {
 }
 
 func TestServerControlSocketActivatedTooManyFDs(t *testing.T) {
-	serverExe := os.Getenv("KOPIA_SERVER_EXE")
+	serverExe := os.Getenv("BLINKDISK_SERVER_EXE")
 	if serverExe == "" {
 		t.Skip("skipping socket-activation test")
 	}
@@ -136,7 +136,7 @@ func TestServerControlSocketActivatedTooManyFDs(t *testing.T) {
 	t.Cleanup(func() { l2File.Close() })
 
 	runner.ExtraFiles = append(runner.ExtraFiles, l1File, l2File)
-	// The KOPIA_EXE wrapper will set the LISTEN_PID variable for us
+	// The BLINKDISK_EXE wrapper will set the LISTEN_PID variable for us
 	env.Environment["LISTEN_FDS"] = "2"
 
 	var gotExpectedErrorMessage atomic.Bool

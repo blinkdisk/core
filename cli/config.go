@@ -10,10 +10,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/fs"
-	"github.com/kopia/kopia/fs/localfs"
-	"github.com/kopia/kopia/internal/ospath"
-	"github.com/kopia/kopia/repo"
+	"github.com/blinkdisk/core/fs"
+	"github.com/blinkdisk/core/fs/localfs"
+	"github.com/blinkdisk/core/internal/ospath"
+	"github.com/blinkdisk/core/repo"
 )
 
 func (c *App) onRepositoryFatalError(f func(err error)) {
@@ -45,7 +45,7 @@ func (c *App) openRepository(ctx context.Context, required bool) (repo.Repositor
 			return nil, nil
 		}
 
-		return nil, errors.New("repository is not connected. See https://kopia.io/docs/repositories/")
+		return nil, errors.New("repository is not connected. See https://blinkdisk.com/docs/repositories/")
 	}
 
 	c.maybePrintUpdateNotification(ctx)
@@ -57,7 +57,7 @@ func (c *App) openRepository(ctx context.Context, required bool) (repo.Repositor
 
 	r, err := repo.Open(ctx, c.repositoryConfigFileName(), pass, c.optionsFromFlags(ctx))
 	if os.IsNotExist(err) {
-		return nil, errors.New("not connected to a repository, use 'kopia connect'")
+		return nil, errors.New("not connected to a repository, use 'blinkdisk connect'")
 	}
 
 	return r, errors.Wrap(err, "unable to open repository")

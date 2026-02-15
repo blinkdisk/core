@@ -4,7 +4,7 @@ package mount
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo/logging"
+	"github.com/blinkdisk/core/repo/logging"
 )
 
 var log = logging.Module("mount")

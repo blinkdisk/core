@@ -3,7 +3,7 @@ package policy
 import (
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/snapshot"
+	"github.com/blinkdisk/core/snapshot"
 )
 
 // UploadPolicy describes policy to apply when uploading snapshots.

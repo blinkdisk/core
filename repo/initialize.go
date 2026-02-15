@@ -8,13 +8,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/content"
-	"github.com/kopia/kopia/repo/ecc"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/splitter"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/content"
+	"github.com/blinkdisk/core/repo/ecc"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/splitter"
 )
 
 const (
@@ -52,9 +52,9 @@ func Initialize(ctx context.Context, st blob.Storage, opt *NewRepositoryOptions,
 	return format.Initialize(ctx, st, formatBlob, repoConfig, blobcfg, password)
 }
 
-func formatBlobFromOptions(opt *NewRepositoryOptions) *format.KopiaRepositoryJSON {
-	return &format.KopiaRepositoryJSON{
-		Tool:                   "https://github.com/kopia/kopia",
+func formatBlobFromOptions(opt *NewRepositoryOptions) *format.BlinkDiskRepositoryJSON {
+	return &format.BlinkDiskRepositoryJSON{
+		Tool:                   "https://github.com/blinkdisk/core",
 		BuildInfo:              BuildInfo,
 		BuildVersion:           BuildVersion,
 		KeyDerivationAlgorithm: opt.FormatBlockKeyDerivationAlgorithm,

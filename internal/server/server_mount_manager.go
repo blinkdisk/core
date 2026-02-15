@@ -7,10 +7,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/mount"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot/snapshotfs"
+	"github.com/blinkdisk/core/internal/mount"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot/snapshotfs"
 )
 
 func (s *Server) getMountController(ctx context.Context, rep repo.Repository, oid object.ID, createIfNotFound bool) (mount.Controller, error) {

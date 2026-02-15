@@ -3,8 +3,8 @@ package maintenance
 import (
 	"context"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/maintenancestats"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/maintenancestats"
 )
 
 // helpers exported for tests

@@ -7,19 +7,19 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/ecc"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/splitter"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/ecc"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/splitter"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
-const runValidationNote = `NOTE: To validate that your provider is compatible with Kopia, please run:
+const runValidationNote = `NOTE: To validate that your provider is compatible with BlinkDisk, please run:
 
-$ kopia repository validate-provider
+$ blinkdisk repository validate-provider
 
 `
 
@@ -185,7 +185,7 @@ func (c *commandRepositoryCreate) populateRepository(ctx context.Context, passwo
 
 		c.out.printStdout("%v\n", alignedPolicyTableRows(rows))
 
-		c.out.printStderr("\nTo find more information about default policy run 'kopia policy get'.\nTo change the policy use 'kopia policy set' command.\n")
+		c.out.printStderr("\nTo find more information about default policy run 'blinkdisk policy get'.\nTo change the policy use 'blinkdisk policy set' command.\n")
 
 		if err := setDefaultMaintenanceParameters(ctx, w); err != nil {
 			return errors.Wrap(err, "unable to set maintenance parameters")

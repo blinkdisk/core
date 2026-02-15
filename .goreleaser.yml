@@ -12,7 +12,7 @@ builds:
   flags:
     - -trimpath
   ldflags:
-  - -s -w -X "github.com/kopia/kopia/repo.BuildVersion={{.Version}}" -X "github.com/kopia/kopia/repo.BuildInfo={{.Commit}}" -X "github.com/kopia/kopia/repo.BuildGitHubRepo={{.Env.GITHUB_REPOSITORY}}"
+  - -s -w -X "github.com/blinkdisk/core/repo.BuildVersion={{.Version}}" -X "github.com/blinkdisk/core/repo.BuildInfo={{.Commit}}" -X "github.com/blinkdisk/core/repo.BuildGitHubRepo={{.Env.GITHUB_REPOSITORY}}"
 release:
   draft: false
 archives:
@@ -33,11 +33,11 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: '{{ .Env.KOPIA_VERSION_NO_PREFIX }}'
+  name_template: '{{ .Env.BLINKDISK_VERSION_NO_PREFIX }}'
 nfpms:
-  - homepage: https://kopia.io
-    vendor: Kopia Project
-    maintainer: Kopia Project <kopia-pmc@googlegroups.com>
+  - homepage: https://blinkdisk.com
+    vendor: BlinkDisk Project
+    maintainer: BlinkDisk Project <blinkdisk-pmc@googlegroups.com>
     description: Fast and secure open source backup.
     license: Apache 2.0
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"

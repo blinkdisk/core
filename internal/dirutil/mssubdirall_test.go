@@ -8,8 +8,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kopia/kopia/internal/dirutil"
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/dirutil"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 type testOSI struct {

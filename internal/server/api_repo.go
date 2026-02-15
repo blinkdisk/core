@@ -9,21 +9,21 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/passwordpersist"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/throttling"
-	"github.com/kopia/kopia/repo/compression"
-	"github.com/kopia/kopia/repo/ecc"
-	"github.com/kopia/kopia/repo/encryption"
-	"github.com/kopia/kopia/repo/format"
-	"github.com/kopia/kopia/repo/hashing"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/repo/splitter"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/passwordpersist"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/throttling"
+	"github.com/blinkdisk/core/repo/compression"
+	"github.com/blinkdisk/core/repo/ecc"
+	"github.com/blinkdisk/core/repo/encryption"
+	"github.com/blinkdisk/core/repo/format"
+	"github.com/blinkdisk/core/repo/hashing"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/repo/splitter"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 const syncConnectWaitTime = 5 * time.Second
@@ -181,7 +181,7 @@ func handleRepoExists(ctx context.Context, rc requestContext) (any, *apiError) {
 	var tmp gather.WriteBuffer
 	defer tmp.Close()
 
-	if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &tmp); err != nil {
+	if err := st.GetBlob(ctx, format.BlinkDiskRepositoryBlobID, 0, -1, &tmp); err != nil {
 		if errors.Is(err, blob.ErrBlobNotFound) {
 			return nil, requestError(serverapi.ErrorNotInitialized, "repository not initialized")
 		}
@@ -191,7 +191,7 @@ func handleRepoExists(ctx context.Context, rc requestContext) (any, *apiError) {
 
 	blobData := tmp.ToByteSlice()
 
-	var repoJSON format.KopiaRepositoryJSON
+	var repoJSON format.BlinkDiskRepositoryJSON
 	if err := json.Unmarshal(blobData, &repoJSON); err != nil {
 		return nil, internalServerError(errors.Wrap(err, "failed to decode repository JSON"))
 	}

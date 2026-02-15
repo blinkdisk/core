@@ -2,7 +2,7 @@ package testutil
 
 import "strings"
 
-// Pattern in stderr that `kopia server` uses to pass ephemeral data.
+// Pattern in stderr that `blinkdisk server` uses to pass ephemeral data.
 const (
 	serverOutputAddress         = "SERVER ADDRESS: "
 	serverOutputCertSHA256      = "SERVER CERT SHA256: "
@@ -11,7 +11,7 @@ const (
 )
 
 // ServerParameters encapsulates parameters captured by processing stderr of
-// 'kopia server start'.
+// 'blinkdisk server start'.
 type ServerParameters struct {
 	BaseURL               string
 	SHA256Fingerprint     string

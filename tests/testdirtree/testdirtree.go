@@ -18,9 +18,9 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/internal/testutil"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/internal/testutil"
 )
 
 var globalRandomNameCounter = new(int32)

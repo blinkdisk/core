@@ -8,11 +8,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/blobcrypto"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/iocopy"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/blob"
+	"github.com/blinkdisk/core/internal/blobcrypto"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/iocopy"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/blob"
 )
 
 type commandBlobShow struct {

@@ -1,6 +1,6 @@
 package policy
 
-import "github.com/kopia/kopia/snapshot"
+import "github.com/blinkdisk/core/snapshot"
 
 // OSSnapshotPolicy describes settings for OS-level snapshots.
 type OSSnapshotPolicy struct {

@@ -19,24 +19,24 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/kopia/kopia/internal/blobtesting"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/gather"
-	"github.com/kopia/kopia/internal/providervalidation"
-	"github.com/kopia/kopia/internal/testlogging"
-	"github.com/kopia/kopia/internal/testutil"
-	"github.com/kopia/kopia/repo/blob"
-	"github.com/kopia/kopia/repo/blob/logging"
-	"github.com/kopia/kopia/repo/blob/rclone"
-	"github.com/kopia/kopia/repo/blob/sharded"
+	"github.com/blinkdisk/core/internal/blobtesting"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/gather"
+	"github.com/blinkdisk/core/internal/providervalidation"
+	"github.com/blinkdisk/core/internal/testlogging"
+	"github.com/blinkdisk/core/internal/testutil"
+	"github.com/blinkdisk/core/repo/blob"
+	"github.com/blinkdisk/core/repo/blob/logging"
+	"github.com/blinkdisk/core/repo/blob/rclone"
+	"github.com/blinkdisk/core/repo/blob/sharded"
 )
 
 const cleanupAge = 4 * time.Hour
 
 var rcloneExternalProviders = map[string]string{
-	"GoogleDrive": "gdrive:/kopia",
-	"OneDrive":    "onedrive:/kopia",
-	"DropBox":     "dropbox:/kopia",
+	"GoogleDrive": "gdrive:/blinkdisk",
+	"OneDrive":    "onedrive:/blinkdisk",
+	"DropBox":     "dropbox:/blinkdisk",
 }
 
 func mustGetRcloneExeOrSkip(t *testing.T) string {
@@ -122,7 +122,7 @@ func TestRCloneStorage(t *testing.T) {
 	var eg errgroup.Group
 
 	// trigger multiple parallel reads to ensure we're properly preventing race
-	// described in https://github.com/kopia/kopia/issues/624
+	// described in https://github.com/blinkdisk/core/issues/624
 	for range 100 {
 		eg.Go(func() error {
 			var tmp gather.WriteBuffer
@@ -219,16 +219,16 @@ func TestRCloneProviders(t *testing.T) {
 		embeddedConfig string
 	)
 
-	if cfg := os.Getenv("KOPIA_RCLONE_EMBEDDED_CONFIG_B64"); cfg != "" {
+	if cfg := os.Getenv("BLINKDISK_RCLONE_EMBEDDED_CONFIG_B64"); cfg != "" {
 		b, err := base64.StdEncoding.DecodeString(cfg)
 		if err != nil {
-			t.Fatalf("unable to decode KOPIA_RCLONE_EMBEDDED_CONFIG_B64: %v", err)
+			t.Fatalf("unable to decode BLINKDISK_RCLONE_EMBEDDED_CONFIG_B64: %v", err)
 		}
 
 		embeddedConfig = string(b)
 	}
 
-	if cfg := os.Getenv("KOPIA_RCLONE_CONFIG_FILE"); cfg != "" {
+	if cfg := os.Getenv("BLINKDISK_RCLONE_CONFIG_FILE"); cfg != "" {
 		rcloneArgs = append(rcloneArgs, "--config="+cfg)
 	}
 
@@ -236,7 +236,7 @@ func TestRCloneProviders(t *testing.T) {
 
 	// Try some performance-improving caching, recommended in various places as a way to speed
 	// up rclone. Some of them unfortunately enable write-back which does not guarantee full crash
-	// consistency required by Kopia.
+	// consistency required by BlinkDisk.
 	//
 	// The rclone provider will be ignoring and overriding some of these parameters.
 	rcloneArgs = append(rcloneArgs,
@@ -249,7 +249,7 @@ func TestRCloneProviders(t *testing.T) {
 	)
 
 	if len(rcloneArgs)+len(embeddedConfig) == 0 {
-		t.Skipf("Either KOPIA_RCLONE_EMBEDDED_CONFIG_B64 or KOPIA_RCLONE_CONFIG_FILE must be provided")
+		t.Skipf("Either BLINKDISK_RCLONE_EMBEDDED_CONFIG_B64 or BLINKDISK_RCLONE_CONFIG_FILE must be provided")
 	}
 
 	rcloneExe := mustGetRcloneExeOrSkip(t)
@@ -341,12 +341,12 @@ func TestRCloneProviders(t *testing.T) {
 func cleanupOldData(t *testing.T, rcloneExe, remotePath string) {
 	t.Helper()
 
-	configFile := os.Getenv("KOPIA_RCLONE_CONFIG_FILE")
+	configFile := os.Getenv("BLINKDISK_RCLONE_CONFIG_FILE")
 
-	if cfg := os.Getenv("KOPIA_RCLONE_EMBEDDED_CONFIG_B64"); cfg != "" {
+	if cfg := os.Getenv("BLINKDISK_RCLONE_EMBEDDED_CONFIG_B64"); cfg != "" {
 		b, err := base64.StdEncoding.DecodeString(cfg)
 		if err != nil {
-			t.Fatalf("unable to decode KOPIA_RCLONE_EMBEDDED_CONFIG_B64: %v", err)
+			t.Fatalf("unable to decode BLINKDISK_RCLONE_EMBEDDED_CONFIG_B64: %v", err)
 		}
 
 		tmpDir := testutil.TempDirectory(t)

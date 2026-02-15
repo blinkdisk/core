@@ -1,4 +1,4 @@
-// Package server implements Kopia API server handlers.
+// Package server implements BlinkDisk API server handlers.
 package server
 
 import (
@@ -20,26 +20,26 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/auth"
-	"github.com/kopia/kopia/internal/clock"
-	"github.com/kopia/kopia/internal/mount"
-	"github.com/kopia/kopia/internal/passwordpersist"
-	"github.com/kopia/kopia/internal/scheduler"
-	"github.com/kopia/kopia/internal/serverapi"
-	"github.com/kopia/kopia/internal/uitask"
-	"github.com/kopia/kopia/notification"
-	"github.com/kopia/kopia/notification/notifydata"
-	"github.com/kopia/kopia/notification/notifytemplate"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/repo/logging"
-	"github.com/kopia/kopia/repo/maintenance"
-	"github.com/kopia/kopia/repo/object"
-	"github.com/kopia/kopia/snapshot"
-	"github.com/kopia/kopia/snapshot/policy"
-	"github.com/kopia/kopia/snapshot/snapshotmaintenance"
+	"github.com/blinkdisk/core/internal/auth"
+	"github.com/blinkdisk/core/internal/clock"
+	"github.com/blinkdisk/core/internal/mount"
+	"github.com/blinkdisk/core/internal/passwordpersist"
+	"github.com/blinkdisk/core/internal/scheduler"
+	"github.com/blinkdisk/core/internal/serverapi"
+	"github.com/blinkdisk/core/internal/uitask"
+	"github.com/blinkdisk/core/notification"
+	"github.com/blinkdisk/core/notification/notifydata"
+	"github.com/blinkdisk/core/notification/notifytemplate"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/repo/logging"
+	"github.com/blinkdisk/core/repo/maintenance"
+	"github.com/blinkdisk/core/repo/object"
+	"github.com/blinkdisk/core/snapshot"
+	"github.com/blinkdisk/core/snapshot/policy"
+	"github.com/blinkdisk/core/snapshot/snapshotmaintenance"
 )
 
-var userLog = logging.Module("kopia/server")
+var userLog = logging.Module("blinkdisk/server")
 
 const (
 	// retry initialization of repository starting at 1s doubling delay each time up to max 5 minutes
@@ -47,10 +47,10 @@ const (
 	retryInitRepositorySleepOnError    = 1 * time.Second
 	maxRetryInitRepositorySleepOnError = 5 * time.Minute
 
-	kopiaAuthCookie         = "Kopia-Auth"
-	kopiaAuthCookieTTL      = 1 * time.Minute
-	kopiaAuthCookieAudience = "kopia"
-	kopiaAuthCookieIssuer   = "kopia-server"
+	blinkdiskAuthCookie         = "BlinkDisk-Auth"
+	blinkdiskAuthCookieTTL      = 1 * time.Minute
+	blinkdiskAuthCookieAudience = "blinkdisk"
+	blinkdiskAuthCookieIssuer   = "blinkdisk-server"
 )
 
 type csrfTokenOption int
@@ -62,7 +62,7 @@ const (
 
 type apiRequestFunc func(ctx context.Context, rc requestContext) (any, *apiError)
 
-// Server exposes simple HTTP API for programmatically accessing Kopia features.
+// Server exposes simple HTTP API for programmatically accessing BlinkDisk features.
 type Server struct {
 	//nolint:containedctx
 	rootctx context.Context // +checklocksignore
@@ -203,13 +203,13 @@ func (s *Server) isAuthenticated(rc requestContext) bool {
 
 	username, password, ok := rc.req.BasicAuth()
 	if !ok {
-		rc.w.Header().Set("WWW-Authenticate", `Basic realm="Kopia"`)
+		rc.w.Header().Set("WWW-Authenticate", `Basic realm="BlinkDisk"`)
 		http.Error(rc.w, "Missing credentials.\n", http.StatusUnauthorized)
 
 		return false
 	}
 
-	if c, err := rc.req.Cookie(kopiaAuthCookie); err == nil && c != nil {
+	if c, err := rc.req.Cookie(blinkdiskAuthCookie); err == nil && c != nil {
 		if rc.srv.isAuthCookieValid(username, c.Value) {
 			// found a short-term JWT cookie that matches given username, trust it.
 			// this avoids potentially expensive password hashing inside the authenticator.
@@ -218,7 +218,7 @@ func (s *Server) isAuthenticated(rc requestContext) bool {
 	}
 
 	if !authn.IsValid(rc.req.Context(), rc.rep, username, password) {
-		rc.w.Header().Set("WWW-Authenticate", `Basic realm="Kopia"`)
+		rc.w.Header().Set("WWW-Authenticate", `Basic realm="BlinkDisk"`)
 		http.Error(rc.w, "Access denied.\n", http.StatusUnauthorized)
 
 		// Log failed authentication attempt
@@ -234,9 +234,9 @@ func (s *Server) isAuthenticated(rc requestContext) bool {
 		userLog(rc.req.Context()).Errorf("unable to generate short-term auth cookie: %v", err)
 	} else {
 		http.SetCookie(rc.w, &http.Cookie{
-			Name:    kopiaAuthCookie,
+			Name:    blinkdiskAuthCookie,
 			Value:   ac,
-			Expires: now.Add(kopiaAuthCookieTTL),
+			Expires: now.Add(blinkdiskAuthCookieTTL),
 			Path:    "/",
 		})
 
@@ -270,11 +270,11 @@ func (s *Server) generateShortTermAuthCookie(username string, now time.Time) (st
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.RegisteredClaims{
 		Subject:   username,
 		NotBefore: jwt.NewNumericDate(now.Add(-time.Minute)),
-		ExpiresAt: jwt.NewNumericDate(now.Add(kopiaAuthCookieTTL)),
+		ExpiresAt: jwt.NewNumericDate(now.Add(blinkdiskAuthCookieTTL)),
 		IssuedAt:  jwt.NewNumericDate(now),
-		Audience:  jwt.ClaimStrings{kopiaAuthCookieAudience},
+		Audience:  jwt.ClaimStrings{blinkdiskAuthCookieAudience},
 		ID:        uuid.New().String(),
-		Issuer:    kopiaAuthCookieIssuer,
+		Issuer:    blinkdiskAuthCookieIssuer,
 	}).SignedString(s.authCookieSigningKey)
 }
 
@@ -760,10 +760,10 @@ func (s *Server) patchIndexBytes(sessionID string, b []byte) []byte {
 
 	csrfToken := s.generateCSRFToken(sessionID)
 
-	// insert <meta name="kopia-csrf-token" content="..." /> just before closing head tag.
+	// insert <meta name="blinkdisk-csrf-token" content="..." /> just before closing head tag.
 	b = bytes.ReplaceAll(b,
 		[]byte(`</head>`),
-		[]byte(`<meta name="kopia-csrf-token" content="`+csrfToken+`" /></head>`))
+		[]byte(`<meta name="blinkdisk-csrf-token" content="`+csrfToken+`" /></head>`))
 
 	return b
 }
@@ -810,21 +810,21 @@ func (s *Server) ServeStaticFiles(m *mux.Router, fs http.FileSystem) {
 
 		//nolint:contextcheck
 		if !requireUIUser(rc.req.Context(), rc) {
-			http.Error(w, `UI Access denied. See https://github.com/kopia/kopia/issues/880#issuecomment-798421751 for more information.`, http.StatusForbidden)
+			http.Error(w, `UI Access denied. See https://github.com/blinkdisk/core/issues/880#issuecomment-798421751 for more information.`, http.StatusForbidden)
 			return
 		}
 
 		if r.URL.Path == "/" && indexBytes != nil {
 			var sessionID string
 
-			if cookie, err := r.Cookie(kopiaSessionCookie); err == nil {
+			if cookie, err := r.Cookie(blinkdiskSessionCookie); err == nil {
 				// already in a session, likely a new tab was opened
 				sessionID = cookie.Value
 			} else {
 				sessionID = uuid.NewString()
 
 				http.SetCookie(w, &http.Cookie{
-					Name:  kopiaSessionCookie,
+					Name:  blinkdiskSessionCookie,
 					Value: sessionID,
 					Path:  "/",
 				})

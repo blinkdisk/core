@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// BufSize is the size (in bytes) of the shared copy buffers Kopia uses to copy data.
+// BufSize is the size (in bytes) of the shared copy buffers BlinkDisk uses to copy data.
 const BufSize = 65536
 
 var (

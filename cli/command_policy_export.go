@@ -10,9 +10,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kopia/kopia/internal/impossible"
-	"github.com/kopia/kopia/repo"
-	"github.com/kopia/kopia/snapshot/policy"
+	"github.com/blinkdisk/core/internal/impossible"
+	"github.com/blinkdisk/core/repo"
+	"github.com/blinkdisk/core/snapshot/policy"
 )
 
 type commandPolicyExport struct {
