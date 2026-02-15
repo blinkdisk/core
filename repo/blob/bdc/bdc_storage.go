@@ -19,7 +19,7 @@ func (s *bdcStorage) ConnectionInfo() blob.ConnectionInfo {
 }
 
 func (s *bdcStorage) DisplayName() string {
-	return fmt.Sprintf("BlinkCloud: %v", s.URL)
+	return fmt.Sprintf("CloudBlink: %v", s.URL)
 }
 
 func (s *bdcStorage) String() string {

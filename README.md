@@ -14,4 +14,4 @@ BlinkDisk Core is kept very close to upstream [Kopia](https://github.com/kopia/k
 
 - **Removal of unused features** like Kopija’s built-in UI, server functionality, and other CLI tools not used by the BlinkDisk desktop app.
 - **Rebranding** from Kopia to BlinkDisk for internal consistency and integration into the desktop app.
-- **Feature additions** such as support for the BlinkCloud Proxy, which enables seamless backups through our managed infrastructure.
+- **Feature additions** such as support for the CloudBlink Proxy, which enables seamless backups through our managed infrastructure.
