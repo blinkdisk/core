@@ -30,6 +30,9 @@ const (
 // KopiaRepositoryBlobID is the identifier of a BLOB that describes repository format.
 const KopiaRepositoryBlobID = "kopia.repository"
 
+// legacyRepositoryBlobID is the old identifier used before the rename from blinkdisk to kopia.
+const legacyRepositoryBlobID = "blinkdisk.repository"
+
 // ErrInvalidPassword is returned when repository password is invalid.
 var ErrInvalidPassword = errors.New("invalid repository password") // +checklocksignore
 

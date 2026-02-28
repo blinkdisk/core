@@ -1,6 +1,7 @@
 package format
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"io"
@@ -128,7 +129,15 @@ func (m *Manager) refresh(ctx context.Context) error {
 
 	b, cacheMTime, err := m.readAndCacheRepositoryBlobBytes(ctx, KopiaRepositoryBlobID)
 	if err != nil {
-		return errors.Wrap(err, "unable to read format blob")
+		if errors.Is(err, blob.ErrBlobNotFound) {
+			MigrateLegacyBlobIDs(ctx, m.blobs)
+
+			b, cacheMTime, err = m.readAndCacheRepositoryBlobBytes(ctx, KopiaRepositoryBlobID)
+		}
+
+		if err != nil {
+			return errors.Wrap(err, "unable to read format blob")
+		}
 	}
 
 	j, err := ParseKopiaRepositoryJSON(b)
@@ -495,4 +504,47 @@ func randomBytes(n int) []byte {
 	io.ReadFull(rand.Reader, b) //nolint:errcheck
 
 	return b
+}
+
+// MigrateLegacyBlobIDs renames legacy "blinkdisk.*" format blobs to their
+// current "kopia.*" names. This handles repositories created before the rename.
+func MigrateLegacyBlobIDs(ctx context.Context, st blob.Storage) {
+	if st.IsReadOnly() {
+		return
+	}
+
+	migrateBlobID(ctx, st, legacyRepositoryBlobID, KopiaRepositoryBlobID)
+	migrateBlobID(ctx, st, legacyBlobCfgBlobID, KopiaBlobCfgBlobID)
+}
+
+func migrateBlobID(ctx context.Context, st blob.Storage, oldID, newID blob.ID) {
+	var tmp gather.WriteBuffer
+	defer tmp.Close()
+
+	// If the new blob already exists, nothing to do.
+	if err := st.GetBlob(ctx, newID, 0, -1, &tmp); err == nil {
+		return
+	}
+
+	// Try to read the old blob.
+	if err := st.GetBlob(ctx, oldID, 0, -1, &tmp); err != nil {
+		return
+	}
+
+	// For the repository blob, rewrite the legacy tool URL.
+	if newID == KopiaRepositoryBlobID {
+		data := bytes.ReplaceAll(tmp.ToByteSlice(),
+			[]byte("https://github.com/blinkdisk/core"),
+			[]byte("https://github.com/kopia/kopia"))
+		if err := st.PutBlob(ctx, newID, gather.FromSlice(data), blob.PutOptions{}); err != nil {
+			log(ctx).Warnf("failed to migrate blob %q to %q: %v", oldID, newID, err)
+		}
+
+		return
+	}
+
+	// Copy old → new, keeping the old blob for clients that haven't been updated yet.
+	if err := st.PutBlob(ctx, newID, tmp.Bytes(), blob.PutOptions{}); err != nil {
+		log(ctx).Warnf("failed to migrate blob %q to %q: %v", oldID, newID, err)
+	}
 }

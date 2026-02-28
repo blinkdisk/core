@@ -15,6 +15,9 @@ import (
 // settings for the repository.
 const KopiaBlobCfgBlobID = "kopia.blobcfg"
 
+// legacyBlobCfgBlobID is the old identifier used before the rename from blinkdisk to kopia.
+const legacyBlobCfgBlobID = "blinkdisk.blobcfg"
+
 // BlobStorageConfiguration is the content for `kopia.blobcfg` blob which contains the blob
 // storage configuration options.
 type BlobStorageConfiguration struct {

@@ -35,10 +35,18 @@ func Connect(ctx context.Context, configFile string, st blob.Storage, password s
 
 	if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &formatBytes); err != nil {
 		if errors.Is(err, blob.ErrBlobNotFound) {
-			return ErrRepositoryNotInitialized
-		}
+			format.MigrateLegacyBlobIDs(ctx, st)
 
-		return errors.Wrap(err, "unable to read format blob")
+			if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &formatBytes); err != nil {
+				if errors.Is(err, blob.ErrBlobNotFound) {
+					return ErrRepositoryNotInitialized
+				}
+
+				return errors.Wrap(err, "unable to read format blob")
+			}
+		} else {
+			return errors.Wrap(err, "unable to read format blob")
+		}
 	}
 
 	f, err := format.ParseKopiaRepositoryJSON(formatBytes.ToByteSlice())

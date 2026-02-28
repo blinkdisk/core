@@ -183,10 +183,18 @@ func handleRepoExists(ctx context.Context, rc requestContext) (any, *apiError) {
 
 	if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &tmp); err != nil {
 		if errors.Is(err, blob.ErrBlobNotFound) {
-			return nil, requestError(serverapi.ErrorNotInitialized, "repository not initialized")
-		}
+			format.MigrateLegacyBlobIDs(ctx, st)
 
-		return nil, internalServerError(err)
+			if err := st.GetBlob(ctx, format.KopiaRepositoryBlobID, 0, -1, &tmp); err != nil {
+				if errors.Is(err, blob.ErrBlobNotFound) {
+					return nil, requestError(serverapi.ErrorNotInitialized, "repository not initialized")
+				}
+
+				return nil, internalServerError(err)
+			}
+		} else {
+			return nil, internalServerError(err)
+		}
 	}
 
 	blobData := tmp.ToByteSlice()
