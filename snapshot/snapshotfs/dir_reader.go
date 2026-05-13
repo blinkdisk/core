@@ -10,7 +10,10 @@ import (
 	"github.com/kopia/kopia/snapshot"
 )
 
-const directoryStreamType = "kopia:directory"
+const (
+	directoryStreamType       = "kopia:directory"
+	legacyDirectoryStreamType = "blinkdisk:directory"
+)
 
 // readDirEntries reads all directory entries from the specified reader.
 func readDirEntries(r io.Reader) ([]*snapshot.DirEntry, *fs.DirectorySummary, error) {
@@ -20,9 +23,13 @@ func readDirEntries(r io.Reader) ([]*snapshot.DirEntry, *fs.DirectorySummary, er
 		return nil, nil, errors.Wrap(err, "unable to parse directory object")
 	}
 
-	if dir.StreamType != directoryStreamType {
+	if !isDirectoryStreamType(dir.StreamType) {
 		return nil, nil, errors.New("invalid directory stream type")
 	}
 
 	return dir.Entries, dir.Summary, nil
+}
+
+func isDirectoryStreamType(streamType string) bool {
+	return streamType == directoryStreamType || streamType == legacyDirectoryStreamType
 }
