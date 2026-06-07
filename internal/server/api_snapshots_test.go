@@ -91,8 +91,24 @@ func TestListAndDeleteSnapshots(t *testing.T) {
 	// we have 2 sources at this point
 	require.Len(t, sourceList.Sources, 2)
 
+	// list unique snapshots across all sources
+	resp := &serverapi.SnapshotsResponse{}
+	require.NoError(t, cli.Get(ctx, "snapshots", nil, resp))
+
+	require.Len(t, resp.Snapshots, 4)
+	require.Equal(t, 4, resp.UniqueCount)
+	require.Equal(t, 5, resp.UnfilteredCount)
+
+	// list all snapshots across all sources
+	resp = &serverapi.SnapshotsResponse{}
+	require.NoError(t, cli.Get(ctx, "snapshots?all=1", nil, resp))
+
+	require.Len(t, resp.Snapshots, 5)
+	require.Equal(t, 4, resp.UniqueCount)
+	require.Equal(t, 5, resp.UnfilteredCount)
+
 	// list all snapshots
-	resp, err := serverapi.ListSnapshots(ctx, cli, si1, true)
+	resp, err = serverapi.ListSnapshots(ctx, cli, si1, true)
 	require.NoError(t, err)
 
 	require.Len(t, resp.Snapshots, 4)

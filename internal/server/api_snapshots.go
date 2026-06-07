@@ -16,8 +16,12 @@ import (
 
 func handleListSnapshots(ctx context.Context, rc requestContext) (any, *apiError) {
 	si := getSnapshotSourceFromURL(rc.req.URL)
+	src := &si
+	if si.UserName == "" && si.Host == "" && si.Path == "" {
+		src = nil
+	}
 
-	manifestIDs, err := snapshot.ListSnapshotManifests(ctx, rc.rep, &si, nil)
+	manifestIDs, err := snapshot.ListSnapshotManifests(ctx, rc.rep, src, nil)
 	if err != nil {
 		return nil, internalServerError(err)
 	}
@@ -33,9 +37,11 @@ func handleListSnapshots(ctx context.Context, rc requestContext) (any, *apiError
 		Snapshots: []*serverapi.Snapshot{},
 	}
 
-	pol, _, _, err := policy.GetEffectivePolicy(ctx, rc.rep, si)
-	if err == nil {
-		pol.RetentionPolicy.ComputeRetentionReasons(manifests)
+	if src != nil {
+		pol, _, _, err := policy.GetEffectivePolicy(ctx, rc.rep, si)
+		if err == nil {
+			pol.RetentionPolicy.ComputeRetentionReasons(manifests)
+		}
 	}
 
 	for _, m := range manifests {
