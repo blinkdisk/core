@@ -4,7 +4,9 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -15,6 +17,11 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
+)
+
+const (
+	maxRequestRetries = 3
+	requestTimeout    = 30 * time.Second
 )
 
 func generateRequestID() string {
@@ -28,25 +35,10 @@ func isConnectionError(err error) bool {
 		return false
 	}
 
-	errStr := err.Error()
-
-	if strings.Contains(errStr, "broken pipe") || strings.Contains(errStr, "write: broken pipe") {
-		return true
-	}
-
-	if strings.Contains(errStr, "connection refused") {
-		return true
-	}
-
-	if strings.Contains(errStr, "connection reset") {
-		return true
-	}
-
-	if strings.Contains(errStr, "network is unreachable") {
-		return true
-	}
-
-	if strings.Contains(errStr, "timeout") {
+	if stderrors.Is(err, io.EOF) ||
+		stderrors.Is(err, syscall.EPIPE) ||
+		stderrors.Is(err, syscall.ECONNRESET) ||
+		stderrors.Is(err, syscall.ECONNREFUSED) {
 		return true
 	}
 
@@ -54,8 +46,28 @@ func isConnectionError(err error) bool {
 		return true
 	}
 
-	if netErr, ok := err.(*net.OpError); ok {
-		if netErr.Err == syscall.EPIPE || netErr.Err == syscall.ECONNRESET || netErr.Err == syscall.ECONNREFUSED {
+	var netErr *net.OpError
+	if stderrors.As(err, &netErr) && isConnectionError(netErr.Err) {
+		return true
+	}
+
+	errStr := strings.ToLower(err.Error())
+	for _, marker := range []string{
+		"broken pipe",
+		"connection refused",
+		"connection reset",
+		"connection reset by peer",
+		"connection aborted",
+		"connection closed",
+		"forcibly closed by the remote host",
+		"use of closed network connection",
+		"network is unreachable",
+		"no route to host",
+		"wsasend",
+		"wsarecv",
+		"timeout",
+	} {
+		if strings.Contains(errStr, marker) {
 			return true
 		}
 	}
@@ -63,13 +75,21 @@ func isConnectionError(err error) bool {
 	return false
 }
 
-func (s *bdcStorage) closeConnection() {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *bdcStorage) closeConnection(connToClose *websocket.Conn) {
+	shouldSignal := false
 
-	if s.conn != nil {
-		s.conn.Close()
+	s.mu.Lock()
+
+	if s.conn != nil && (connToClose == nil || s.conn == connToClose) {
+		_ = s.conn.Close()
 		s.conn = nil
+		shouldSignal = true
+	}
+
+	s.mu.Unlock()
+
+	if !shouldSignal {
+		return
 	}
 
 	s.responseMu.Lock()
@@ -136,18 +156,7 @@ func (s *bdcStorage) responseReader() {
 
 		var resp Response
 		if err := conn.ReadJSON(&resp); err != nil {
-			if isConnectionError(err) {
-				s.closeConnection()
-			}
-
-			s.responseMu.Lock()
-			for _, ch := range s.responseChans {
-				select {
-				case ch <- nil:
-				default:
-				}
-			}
-			s.responseMu.Unlock()
+			s.closeConnection(conn)
 			return
 		}
 
@@ -179,78 +188,129 @@ func (s *bdcStorage) responseReader() {
 	}
 }
 
-func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, error) {
+func (s *bdcStorage) registerResponseChannel(requestID string) chan *Response {
+	responseCh := make(chan *Response, 1)
+
+	s.responseMu.Lock()
+	if s.responseChans == nil {
+		s.responseChans = make(map[string]chan *Response)
+	}
+	s.responseChans[requestID] = responseCh
+	s.responseMu.Unlock()
+
+	return responseCh
+}
+
+func (s *bdcStorage) unregisterResponseChannel(requestID string, responseCh chan *Response) {
+	s.responseMu.Lock()
+	if s.responseChans[requestID] == responseCh {
+		delete(s.responseChans, requestID)
+	}
+	close(responseCh)
+	s.responseMu.Unlock()
+}
+
+func (s *bdcStorage) connection(ctx context.Context) (*websocket.Conn, error) {
 	if err := s.connect(ctx); err != nil {
 		return nil, err
 	}
 
-	responseCh := make(chan *Response, 1)
+	s.mu.RLock()
+	conn := s.conn
+	s.mu.RUnlock()
 
-	s.responseMu.Lock()
-	s.responseChans[req.RequestID] = responseCh
-	s.responseMu.Unlock()
+	if conn == nil {
+		return nil, errors.New("not connected")
+	}
+
+	return conn, nil
+}
+
+func (s *bdcStorage) sendRequestAttempt(ctx context.Context, req Request) (*Response, error) {
+	conn, err := s.connection(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	responseCh := s.registerResponseChannel(req.RequestID)
 
 	defer func() {
-		s.responseMu.Lock()
-		delete(s.responseChans, req.RequestID)
-		close(responseCh)
-		s.responseMu.Unlock()
+		s.unregisterResponseChannel(req.RequestID, responseCh)
 	}()
 
-	maxRetries := 3
-	for attempt := 0; attempt < maxRetries; attempt++ {
-		s.mu.RLock()
-		conn := s.conn
-		s.mu.RUnlock()
+	s.writeMu.Lock()
+	err = conn.WriteJSON(req)
+	s.writeMu.Unlock()
 
-		if conn == nil {
-			if err := s.connect(ctx); err != nil {
+	if err != nil {
+		if isConnectionError(err) {
+			s.closeConnection(conn)
+		}
+
+		return nil, errors.Wrap(err, "failed to send request")
+	}
+
+	timer := time.NewTimer(requestTimeout)
+	defer timer.Stop()
+
+	select {
+	case resp := <-responseCh:
+		if resp == nil {
+			return nil, errors.New("connection closed")
+		}
+		if resp.Error != "" {
+			return nil, errors.New(resp.Error)
+		}
+		return resp, nil
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	case <-timer.C:
+		s.closeConnection(conn)
+		return nil, errors.New("request timeout")
+	}
+}
+
+func requestRetryDelay(attempt int) time.Duration {
+	return time.Duration(attempt+1) * time.Second
+}
+
+func sleepBeforeRetry(ctx context.Context, attempt int) error {
+	timer := time.NewTimer(requestRetryDelay(attempt))
+	defer timer.Stop()
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
+	}
+}
+
+func (s *bdcStorage) sendRequest(ctx context.Context, req Request) (*Response, error) {
+	var lastErr error
+
+	for attempt := 0; attempt < maxRequestRetries; attempt++ {
+		attemptReq := req
+		if attemptReq.RequestID == "" || attempt > 0 {
+			attemptReq.RequestID = generateRequestID()
+		}
+
+		resp, err := s.sendRequestAttempt(ctx, attemptReq)
+		if err == nil {
+			return resp, nil
+		}
+
+		lastErr = err
+		if !isConnectionError(err) {
+			return nil, err
+		}
+
+		if attempt < maxRequestRetries-1 {
+			if err := sleepBeforeRetry(ctx, attempt); err != nil {
 				return nil, err
 			}
-			s.mu.RLock()
-			conn = s.conn
-			s.mu.RUnlock()
-		}
-
-		if conn == nil {
-			return nil, errors.New("not connected")
-		}
-
-		s.writeMu.Lock()
-		err := conn.WriteJSON(req)
-		s.writeMu.Unlock()
-
-		if err != nil {
-			if isConnectionError(err) {
-				s.closeConnection()
-
-				if attempt < maxRetries-1 {
-					time.Sleep(time.Duration(attempt+1) * time.Second)
-					continue
-				}
-			}
-			return nil, errors.Wrap(err, "failed to send request")
-		}
-
-		select {
-		case resp := <-responseCh:
-			if resp == nil {
-				if attempt < maxRetries-1 {
-					time.Sleep(time.Duration(attempt+1) * time.Second)
-					continue
-				}
-				return nil, errors.New("connection closed")
-			}
-			if resp.Error != "" {
-				return nil, errors.New(resp.Error)
-			}
-			return resp, nil
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		case <-time.After(30 * time.Second):
-			return nil, errors.New("request timeout")
 		}
 	}
 
-	return nil, errors.New("max retries exceeded")
+	return nil, errors.Wrap(lastErr, "max retries exceeded")
 }
