@@ -54,6 +54,8 @@ type sourceManager struct {
 	name string
 	// +checklocks:sourceMutex
 	emoji string
+	// +checklocks:sourceMutex
+	initialSourceType string
 
 	sourceMutex sync.RWMutex
 	// +checklocks:sourceMutex
@@ -87,13 +89,14 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 	defer s.sourceMutex.RUnlock()
 
 	st := &serverapi.SourceStatus{
-		Name:             s.name,
-		Emoji:            s.emoji,
-		Source:           s.src,
-		Status:           s.state,
-		NextSnapshotTime: s.nextSnapshotTime,
-		SchedulingPolicy: s.pol,
-		LastSnapshot:     s.lastSnapshot,
+		Name:              s.name,
+		Emoji:             s.emoji,
+		InitialSourceType: s.initialSourceType,
+		Source:            s.src,
+		Status:            s.state,
+		NextSnapshotTime:  s.nextSnapshotTime,
+		SchedulingPolicy:  s.pol,
+		LastSnapshot:      s.lastSnapshot,
 	}
 
 	if st.Status == "UPLOADING" {
@@ -463,6 +466,7 @@ func (s *sourceManager) refreshStatus(ctx context.Context) {
 
 	s.name = pol.Name
 	s.emoji = pol.Emoji
+	s.initialSourceType = pol.InitialSourceType
 	s.pol = pol.SchedulingPolicy
 	s.manifestsSinceLastCompleteSnapshot = nil
 	s.lastCompleteSnapshot = nil

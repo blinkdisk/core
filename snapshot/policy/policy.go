@@ -24,6 +24,7 @@ type Policy struct {
 	Labels                    map[string]string         `json:"-"`
 	Name                      string                    `json:"name,omitempty"`
 	Emoji                     string                    `json:"emoji,omitempty"`
+	InitialSourceType         string                    `json:"initialSourceType,omitempty"`
 	RetentionPolicy           RetentionPolicy           `json:"retention,omitempty"`
 	FilesPolicy               FilesPolicy               `json:"files,omitempty"`
 	ErrorHandlingPolicy       ErrorHandlingPolicy       `json:"errorHandling,omitempty"`

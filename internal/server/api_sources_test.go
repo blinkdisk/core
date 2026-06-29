@@ -119,6 +119,7 @@ func TestSourceRefreshesAfterPolicy(t *testing.T) {
 	currentHour := clock.Now().Hour()
 
 	mustCreateSource(t, cli, dir, &policy.Policy{
+		InitialSourceType: "directory",
 		SchedulingPolicy: policy.SchedulingPolicy{
 			TimesOfDay: []policy.TimeOfDay{
 				{Hour: (currentHour + 2) % 24, Minute: 33},
@@ -131,8 +132,10 @@ func TestSourceRefreshesAfterPolicy(t *testing.T) {
 	require.Len(t, sources, 1)
 	require.NotNil(t, sources[0].NextSnapshotTime)
 	require.Equal(t, 33, sources[0].NextSnapshotTime.Minute())
+	require.Equal(t, "directory", sources[0].InitialSourceType)
 
 	mustSetPolicy(t, cli, si, &policy.Policy{
+		InitialSourceType: "file",
 		SchedulingPolicy: policy.SchedulingPolicy{
 			TimesOfDay: []policy.TimeOfDay{
 				{Hour: (currentHour + 2) % 24, Minute: 55},
@@ -149,7 +152,7 @@ func TestSourceRefreshesAfterPolicy(t *testing.T) {
 		require.Len(t, sources, 1)
 		require.NotNil(t, sources[0].NextSnapshotTime)
 
-		if sources[0].NextSnapshotTime.Minute() == 55 {
+		if sources[0].NextSnapshotTime.Minute() == 55 && sources[0].InitialSourceType == "file" {
 			match = true
 			break
 		}

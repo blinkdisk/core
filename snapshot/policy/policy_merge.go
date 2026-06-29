@@ -26,6 +26,10 @@ func MergePolicies(policies []*Policy, si snapshot.SourceInfo) (*Policy, *Defini
 			merged.Emoji = p.Emoji
 		}
 
+		if p.InitialSourceType != "" && merged.InitialSourceType == "" {
+			merged.InitialSourceType = p.InitialSourceType
+		}
+
 		merged.RetentionPolicy.Merge(p.RetentionPolicy, &def.RetentionPolicy, p.Target())
 		merged.FilesPolicy.Merge(p.FilesPolicy, &def.FilesPolicy, p.Target())
 		merged.ErrorHandlingPolicy.Merge(p.ErrorHandlingPolicy, &def.ErrorHandlingPolicy, p.Target())

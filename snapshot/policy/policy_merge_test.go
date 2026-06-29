@@ -22,6 +22,7 @@ var omittedDefinitionFields = map[string]bool{
 	"CompressionPolicyDefinition.NoParentNeverCompress": true,
 	"Definition.Name":                                   true,
 	"Definition.Emoji":                                  true,
+	"Definition.InitialSourceType":                      true,
 }
 
 func TestPolicyDefinition(t *testing.T) {
