@@ -185,6 +185,7 @@ type Snapshot struct {
 	IncompleteReason string               `json:"incomplete,omitempty"`
 	Summary          *fs.DirectorySummary `json:"summary"`
 	RootEntry        string               `json:"rootID"`
+	RootEntryType    snapshot.EntryType   `json:"rootEntryType,omitempty"`
 	RetentionReasons []string             `json:"retention"`
 	Pins             []string             `json:"pins"`
 }

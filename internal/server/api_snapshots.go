@@ -405,6 +405,7 @@ func convertSnapshotManifest(m *snapshot.Manifest) *serverapi.Snapshot {
 
 	if re := m.RootEntry; re != nil {
 		e.Summary = re.DirSummary
+		e.RootEntryType = re.Type
 	}
 
 	return e
