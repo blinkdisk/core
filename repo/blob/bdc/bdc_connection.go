@@ -75,13 +75,14 @@ func isConnectionError(err error) bool {
 	return false
 }
 
-func (s *bdcStorage) closeConnection(connToClose *websocket.Conn) {
+func (s *bdcStorage) closeConnection(connToClose *websocket.Conn) error {
 	shouldSignal := false
+	var err error
 
 	s.mu.Lock()
 
 	if s.conn != nil && (connToClose == nil || s.conn == connToClose) {
-		_ = s.conn.Close()
+		err = s.conn.Close()
 		s.conn = nil
 		shouldSignal = true
 	}
@@ -89,7 +90,7 @@ func (s *bdcStorage) closeConnection(connToClose *websocket.Conn) {
 	s.mu.Unlock()
 
 	if !shouldSignal {
-		return
+		return nil
 	}
 
 	s.responseMu.Lock()
@@ -101,13 +102,19 @@ func (s *bdcStorage) closeConnection(connToClose *websocket.Conn) {
 	}
 	s.responseChans = make(map[string]chan *Response)
 	s.responseMu.Unlock()
+
+	return err
 }
 
 func (s *bdcStorage) connect(ctx context.Context) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.conn != nil && !s.closed {
+	if s.closed {
+		return errors.New("storage is closed")
+	}
+
+	if s.conn != nil {
 		return nil
 	}
 
@@ -133,30 +140,20 @@ func (s *bdcStorage) connect(ctx context.Context) error {
 	}
 
 	s.conn = conn
-	s.responseChans = make(map[string]chan *Response)
 	s.responseReaderDone = make(chan struct{})
 
-	go s.responseReader()
+	go s.responseReader(conn, s.responseReaderDone)
 
 	return nil
 }
 
-func (s *bdcStorage) responseReader() {
-	defer close(s.responseReaderDone)
+func (s *bdcStorage) responseReader(conn *websocket.Conn, done chan struct{}) {
+	defer close(done)
 
 	for {
-		s.mu.RLock()
-		conn := s.conn
-		closed := s.closed
-		s.mu.RUnlock()
-
-		if conn == nil || closed {
-			return
-		}
-
 		var resp Response
 		if err := conn.ReadJSON(&resp); err != nil {
-			s.closeConnection(conn)
+			_ = s.closeConnection(conn)
 			return
 		}
 
@@ -244,7 +241,7 @@ func (s *bdcStorage) sendRequestAttempt(ctx context.Context, req Request) (*Resp
 
 	if err != nil {
 		if isConnectionError(err) {
-			s.closeConnection(conn)
+			_ = s.closeConnection(conn)
 		}
 
 		return nil, errors.Wrap(err, "failed to send request")
@@ -265,7 +262,7 @@ func (s *bdcStorage) sendRequestAttempt(ctx context.Context, req Request) (*Resp
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	case <-timer.C:
-		s.closeConnection(conn)
+		_ = s.closeConnection(conn)
 		return nil, errors.New("request timeout")
 	}
 }

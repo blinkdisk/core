@@ -28,30 +28,27 @@ func (s *bdcStorage) String() string {
 
 func (s *bdcStorage) Close(ctx context.Context) error {
 	s.mu.Lock()
-	defer s.mu.Unlock()
+	if s.closed {
+		s.mu.Unlock()
+		return nil
+	}
 
-	if s.conn != nil && !s.closed {
-		s.closed = true
+	s.closed = true
+	conn := s.conn
+	done := s.responseReaderDone
+	s.mu.Unlock()
 
-		err := s.conn.Close()
+	err := s.closeConnection(conn)
 
+	if done != nil {
 		select {
-		case <-s.responseReaderDone:
+		case <-done:
 		case <-ctx.Done():
 			return ctx.Err()
 		}
-
-		s.responseMu.Lock()
-		for _, ch := range s.responseChans {
-			close(ch)
-		}
-		s.responseChans = make(map[string]chan *Response)
-		s.responseMu.Unlock()
-
-		return err
 	}
 
-	return nil
+	return err
 }
 
 func (s *bdcStorage) FlushCaches(ctx context.Context) error {
