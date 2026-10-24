@@ -732,6 +732,7 @@ func (s *Server) syncSourcesLocked(ctx context.Context) error {
 
 	for src, sm := range oldSourceManagers {
 		sm.waitUntilStopped()
+		sm.removeBackupOutcome(ctx)
 		delete(s.sourceManagers, src)
 	}
 
@@ -1038,6 +1039,7 @@ func (s *Server) deleteSourceManager(ctx context.Context, src snapshot.SourceInf
 
 	sm.stop(ctx)
 	sm.waitUntilStopped()
+	sm.removeBackupOutcome(ctx)
 
 	return true
 }
