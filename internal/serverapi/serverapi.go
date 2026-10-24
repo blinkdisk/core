@@ -50,6 +50,16 @@ type SourcesResponse struct {
 	Sources []*SourceStatus `json:"sources"`
 }
 
+// SourceBackupOutcome is the latest completed backup result, retained across server restarts.
+type SourceBackupOutcome struct {
+	ID           string    `json:"id"`
+	Status       string    `json:"status"`
+	StartTime    time.Time `json:"startTime"`
+	EndTime      time.Time `json:"endTime"`
+	ErrorMessage string    `json:"errorMessage,omitempty"`
+	ErrorCount   int32     `json:"errorCount,omitempty"`
+}
+
 // SourceStatus describes the status of a single source.
 type SourceStatus struct {
 	Name              string                  `json:"name,omitempty"`
@@ -60,6 +70,7 @@ type SourceStatus struct {
 	SchedulingPolicy  policy.SchedulingPolicy `json:"schedule"`
 	LastSnapshot      *snapshot.Manifest      `json:"lastSnapshot,omitempty"`
 	LastSnapshotTask  *uitask.Info            `json:"lastSnapshotTask,omitempty"`
+	LastBackupOutcome *SourceBackupOutcome    `json:"lastBackupOutcome,omitempty"`
 	NextSnapshotTime  *time.Time              `json:"nextSnapshotTime,omitempty"`
 	UploadCounters    *upload.Counters        `json:"upload,omitempty"`
 	CurrentTask       string                  `json:"currentTask,omitempty"`

@@ -79,11 +79,14 @@ type sourceManager struct {
 	// +checklocks:sourceMutex
 	lastSnapshotTask *uitask.Info
 	// +checklocks:sourceMutex
+	lastBackupOutcome *serverapi.SourceBackupOutcome
+	// +checklocks:sourceMutex
 	lastAttemptedSnapshotTime fs.UTCTimestamp
 	// +checklocks:sourceMutex
 	isReadOnly bool
 
-	progress *upload.CountingUploadProgress
+	progress     *upload.CountingUploadProgress
+	outcomeStore sourceBackupOutcomeStore
 }
 
 func (s *sourceManager) Status() *serverapi.SourceStatus {
@@ -100,6 +103,7 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 		SchedulingPolicy:  s.pol,
 		LastSnapshot:      s.lastSnapshot,
 		LastSnapshotTask:  s.lastSnapshotTask,
+		LastBackupOutcome: s.lastBackupOutcome,
 	}
 
 	if st.Status == "UPLOADING" {
@@ -151,16 +155,21 @@ func (s *sourceManager) setCurrentTaskID(taskID string) {
 	s.currentTask = taskID
 }
 
-func (s *sourceManager) finishSnapshotTask() {
+func (s *sourceManager) finishSnapshotTask(ctx context.Context, manifest *snapshot.Manifest) {
 	s.sourceMutex.Lock()
-	defer s.sourceMutex.Unlock()
 
-	if taskInfo, ok := s.server.taskManager().GetTask(s.currentTask); ok {
+	taskInfo, ok := s.server.taskManager().GetTask(s.currentTask)
+	if ok {
 		taskInfo.LogLines = nil
 		s.lastSnapshotTask = &taskInfo
 	}
 
 	s.currentTask = ""
+	s.sourceMutex.Unlock()
+
+	if ok {
+		s.recordBackupOutcome(ctx, taskInfo, manifest)
+	}
 }
 
 func (s *sourceManager) setNextSnapshotTime(t time.Time) {
@@ -185,6 +194,15 @@ func (s *sourceManager) setUploader(u *upload.Uploader) {
 }
 
 func (s *sourceManager) start(ctx context.Context, isLocal bool) {
+	outcome, err := s.outcomeStore.load()
+	if err != nil {
+		userLog(ctx).Errorf("unable to load backup outcome for %v: %v", s.src, err)
+	}
+
+	s.sourceMutex.Lock()
+	s.lastBackupOutcome = outcome
+	s.sourceMutex.Unlock()
+
 	s.refreshStatus(ctx)
 
 	go s.run(ctx, isLocal)
@@ -230,8 +248,15 @@ func (s *sourceManager) runLocal(ctx context.Context) {
 
 			userLog(ctx).Debugw("snapshotting", "source", s.src)
 
-			err := s.server.runSnapshotTask(ctx, s.src, s.snapshotInternal)
-			s.finishSnapshotTask()
+			var manifest snapshot.Manifest
+
+			err := s.server.runSnapshotTask(ctx, s.src, func(ctx context.Context, ctrl uitask.Controller, result *notifydata.ManifestWithError) error {
+				err := s.snapshotInternal(ctx, ctrl, result)
+				manifest = result.Manifest
+
+				return err
+			})
+			s.finishSnapshotTask(ctx, &manifest)
 
 			if err != nil {
 				userLog(ctx).Errorf("snapshot error: %v", err)
@@ -630,6 +655,11 @@ func (t *uitaskProgress) EstimationParameters() upload.EstimationParameters {
 }
 
 func newSourceManager(src snapshot.SourceInfo, server *Server, rep repo.Repository) *sourceManager {
+	var repositoryID []byte
+	if direct, ok := rep.(repo.DirectRepository); ok {
+		repositoryID = direct.UniqueID()
+	}
+
 	m := &sourceManager{
 		src:              src,
 		rep:              rep,
@@ -638,6 +668,7 @@ func newSourceManager(src snapshot.SourceInfo, server *Server, rep repo.Reposito
 		closed:           make(chan struct{}),
 		snapshotRequests: make(chan struct{}, 1),
 		progress:         &upload.CountingUploadProgress{},
+		outcomeStore:     newSourceBackupOutcomeStore(server.options.ConfigFile, repositoryID, src),
 	}
 
 	return m

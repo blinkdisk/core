@@ -6,6 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/kopia/kopia/internal/atomicfile"
 	"github.com/kopia/kopia/internal/gather"
 	"github.com/kopia/kopia/internal/ospath"
 	"github.com/kopia/kopia/repo/blob"
@@ -103,6 +104,10 @@ func Disconnect(ctx context.Context, configFile string) error {
 		if err = os.RemoveAll(cfg.Caching.CacheDirectory); err != nil {
 			log(ctx).Errorf("unable to remove cache directory: %v", err)
 		}
+	}
+
+	if err := os.RemoveAll(atomicfile.MaybePrefixLongFilenameOnWindows(configFile + ".backup-outcomes")); err != nil {
+		log(ctx).Errorf("unable to remove backup outcomes: %v", err)
 	}
 
 	maintenanceLock := configFile + ".mlock"

@@ -224,3 +224,75 @@ func TestSourceRefreshesAfterPolicy(t *testing.T) {
 
 	require.True(t, match)
 }
+
+func TestBackupOutcomeSurvivesServerRestart(t *testing.T) {
+	ctx, env := repotesting.NewEnvironment(t, repotesting.FormatNotImportant)
+	dir := filepath.Join(t.TempDir(), "source")
+	si := env.LocalPathSourceInfo(dir)
+	var outcomeID string
+	start := func(t *testing.T) *apiclient.KopiaAPIClient {
+		t.Helper()
+		info := servertesting.StartServer(t, env, false)
+		cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+			BaseURL: info.BaseURL, Username: servertesting.TestUIUsername, Password: servertesting.TestUIPassword,
+		})
+		require.NoError(t, err)
+		require.NoError(t, cli.FetchCSRFTokenForTesting(ctx))
+		return cli
+	}
+	t.Run("failed backup", func(t *testing.T) {
+		cli := start(t)
+		require.NoError(t, os.Mkdir(dir, 0o755))
+		mustCreateSource(t, cli, dir, &policy.Policy{})
+		require.NoError(t, os.Remove(dir))
+		_, err := serverapi.UploadSnapshots(ctx, cli, &si)
+		require.NoError(t, err)
+		require.Eventually(t, func() bool {
+			sources := mustListSources(t, cli, &si)
+			if len(sources) != 1 || sources[0].Status != "IDLE" || sources[0].LastBackupOutcome == nil {
+				return false
+			}
+			result := sources[0].LastBackupOutcome
+			require.Equal(t, "FAILED", result.Status)
+			require.Contains(t, result.ErrorMessage, dir)
+			outcomeID = result.ID
+			return true
+		}, 15*time.Second, 10*time.Millisecond)
+	})
+	t.Run("restart and successful retry", func(t *testing.T) {
+		cli := start(t)
+		sources := mustListSources(t, cli, &si)
+		require.Len(t, sources, 1)
+		require.Nil(t, sources[0].LastSnapshotTask)
+		require.Nil(t, sources[0].LastSnapshot)
+		require.NotNil(t, sources[0].LastBackupOutcome)
+		require.Equal(t, outcomeID, sources[0].LastBackupOutcome.ID)
+		require.Equal(t, "FAILED", sources[0].LastBackupOutcome.Status)
+		require.NoError(t, os.Mkdir(dir, 0o755))
+		_, err := serverapi.UploadSnapshots(ctx, cli, &si)
+		require.NoError(t, err)
+		require.Eventually(t, func() bool {
+			sources := mustListSources(t, cli, &si)
+			if len(sources) != 1 || sources[0].Status != "IDLE" || sources[0].LastBackupOutcome == nil {
+				return false
+			}
+			result := sources[0].LastBackupOutcome
+			if result.Status != "SUCCESS" {
+				return false
+			}
+			require.NotEqual(t, outcomeID, result.ID)
+			require.Empty(t, result.ErrorMessage)
+			outcomeID = result.ID
+			return true
+		}, 15*time.Second, 10*time.Millisecond)
+	})
+	t.Run("recovery survives restart", func(t *testing.T) {
+		cli := start(t)
+		sources := mustListSources(t, cli, &si)
+		require.Len(t, sources, 1)
+		require.Nil(t, sources[0].LastSnapshotTask)
+		require.NotNil(t, sources[0].LastBackupOutcome)
+		require.Equal(t, outcomeID, sources[0].LastBackupOutcome.ID)
+		require.Equal(t, "SUCCESS", sources[0].LastBackupOutcome.Status)
+	})
+}
