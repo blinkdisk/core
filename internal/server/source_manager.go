@@ -77,6 +77,8 @@ type sourceManager struct {
 	// +checklocks:sourceMutex
 	currentTask string
 	// +checklocks:sourceMutex
+	lastSnapshotTask *uitask.Info
+	// +checklocks:sourceMutex
 	lastAttemptedSnapshotTime fs.UTCTimestamp
 	// +checklocks:sourceMutex
 	isReadOnly bool
@@ -97,6 +99,7 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 		NextSnapshotTime:  s.nextSnapshotTime,
 		SchedulingPolicy:  s.pol,
 		LastSnapshot:      s.lastSnapshot,
+		LastSnapshotTask:  s.lastSnapshotTask,
 	}
 
 	if st.Status == "UPLOADING" {
@@ -108,6 +111,7 @@ func (s *sourceManager) Status() *serverapi.SourceStatus {
 		if s.currentTask != "" {
 			if taskInfo, ok := s.server.taskManager().GetTask(s.currentTask); ok {
 				st.CurrentTaskStatus = string(taskInfo.Status)
+				st.LastSnapshotTask = &taskInfo
 			}
 		}
 	}
@@ -145,6 +149,18 @@ func (s *sourceManager) setCurrentTaskID(taskID string) {
 	defer s.sourceMutex.Unlock()
 
 	s.currentTask = taskID
+}
+
+func (s *sourceManager) finishSnapshotTask() {
+	s.sourceMutex.Lock()
+	defer s.sourceMutex.Unlock()
+
+	if taskInfo, ok := s.server.taskManager().GetTask(s.currentTask); ok {
+		taskInfo.LogLines = nil
+		s.lastSnapshotTask = &taskInfo
+	}
+
+	s.currentTask = ""
 }
 
 func (s *sourceManager) setNextSnapshotTime(t time.Time) {
@@ -214,7 +230,10 @@ func (s *sourceManager) runLocal(ctx context.Context) {
 
 			userLog(ctx).Debugw("snapshotting", "source", s.src)
 
-			if err := s.server.runSnapshotTask(ctx, s.src, s.snapshotInternal); err != nil {
+			err := s.server.runSnapshotTask(ctx, s.src, s.snapshotInternal)
+			s.finishSnapshotTask()
+
+			if err != nil {
 				userLog(ctx).Errorf("snapshot error: %v", err)
 
 				s.backoffBeforeNextSnapshot()
@@ -331,7 +350,6 @@ func (s *sourceManager) snapshotInternal(ctx context.Context, ctrl uitask.Contro
 	s.setStatus("UPLOADING")
 
 	s.setCurrentTaskID(ctrl.CurrentTaskID())
-	defer s.setCurrentTaskID("")
 
 	// check if we got closed while waiting on semaphore
 	select {

@@ -97,6 +97,68 @@ func TestSnapshotCounters(t *testing.T) {
 	require.Equal(t, ut.Counters["Processed Files"], uitask.SimpleCounter(3))
 }
 
+func TestSourceRetainsFailedSnapshotTask(t *testing.T) {
+	ctx, env := repotesting.NewEnvironment(t, repotesting.FormatNotImportant)
+	srvInfo := servertesting.StartServer(t, env, false)
+
+	cli, err := apiclient.NewKopiaAPIClient(apiclient.Options{
+		BaseURL:                             srvInfo.BaseURL,
+		TrustedServerCertificateFingerprint: srvInfo.TrustedServerCertificateFingerprint,
+		Username:                            servertesting.TestUIUsername,
+		Password:                            servertesting.TestUIPassword,
+	})
+	require.NoError(t, err)
+	require.NoError(t, cli.FetchCSRFTokenForTesting(ctx))
+
+	dir := filepath.Join(testutil.TempDirectory(t), "source")
+	require.NoError(t, os.Mkdir(dir, 0o755))
+	si := env.LocalPathSourceInfo(dir)
+	mustCreateSource(t, cli, dir, &policy.Policy{})
+	require.NoError(t, os.Remove(dir))
+
+	_, err = serverapi.UploadSnapshots(ctx, cli, &si)
+	require.NoError(t, err)
+
+	var failed *serverapi.SourceStatus
+	require.Eventually(t, func() bool {
+		sources := mustListSources(t, cli, &si)
+		if len(sources) != 1 {
+			return false
+		}
+
+		failed = sources[0]
+		return failed.Status == "IDLE" && failed.LastSnapshotTask != nil && failed.LastSnapshotTask.Status == uitask.StatusFailed
+	}, 15*time.Second, 10*time.Millisecond)
+
+	require.Nil(t, failed.LastSnapshot)
+	require.Empty(t, failed.CurrentTask)
+	require.Contains(t, failed.LastSnapshotTask.ErrorMessage, "unable to create local filesystem")
+	require.Contains(t, failed.LastSnapshotTask.ErrorMessage, dir)
+	require.NotNil(t, failed.LastSnapshotTask.EndTime)
+	failedTaskID := failed.LastSnapshotTask.TaskID
+
+	// An unrelated task must not replace the source's last attempt.
+	require.NoError(t, os.Mkdir(dir, 0o755))
+	estimate, err := serverapi.Estimate(ctx, cli, &serverapi.EstimateRequest{Root: dir})
+	require.NoError(t, err)
+	waitForTask(t, cli, estimate.TaskID, 15*time.Second)
+	require.Equal(t, failedTaskID, mustListSources(t, cli, &si)[0].LastSnapshotTask.TaskID)
+
+	_, err = serverapi.UploadSnapshots(ctx, cli, &si)
+	require.NoError(t, err)
+	require.Eventually(t, func() bool {
+		sources := mustListSources(t, cli, &si)
+		if len(sources) != 1 {
+			return false
+		}
+
+		status := sources[0]
+		return status.Status == "IDLE" && status.LastSnapshotTask != nil &&
+			status.LastSnapshotTask.TaskID != failedTaskID && status.LastSnapshotTask.Status == uitask.StatusSuccess &&
+			status.LastSnapshotTask.ErrorMessage == "" && status.LastSnapshot != nil
+	}, 15*time.Second, 10*time.Millisecond)
+}
+
 func TestSourceRefreshesAfterPolicy(t *testing.T) {
 	ctx, env := repotesting.NewEnvironment(t, repotesting.FormatNotImportant)
 	srvInfo := servertesting.StartServer(t, env, false)

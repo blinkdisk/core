@@ -59,6 +59,7 @@ type SourceStatus struct {
 	Status            string                  `json:"status"`
 	SchedulingPolicy  policy.SchedulingPolicy `json:"schedule"`
 	LastSnapshot      *snapshot.Manifest      `json:"lastSnapshot,omitempty"`
+	LastSnapshotTask  *uitask.Info            `json:"lastSnapshotTask,omitempty"`
 	NextSnapshotTime  *time.Time              `json:"nextSnapshotTime,omitempty"`
 	UploadCounters    *upload.Counters        `json:"upload,omitempty"`
 	CurrentTask       string                  `json:"currentTask,omitempty"`
